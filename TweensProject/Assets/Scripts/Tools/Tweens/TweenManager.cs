@@ -9,7 +9,19 @@ public class TweenManager : MonoBehaviour
 
     // ----- Singleton ----- \\
 
-    public static TweenManager Instance {get; private set;}
+    private static TweenManager _instance;
+    public static TweenManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject obj = new GameObject(nameof(TweenManager));
+                _instance = obj.AddComponent<TweenManager>();
+            }
+            return _instance;
+        }
+    }
 
     // ----- Objects ----- \\
 
@@ -26,13 +38,13 @@ public class TweenManager : MonoBehaviour
     private void Awake()
     {
         // Singleton
-        if (Instance != null)
+        if (_instance != null)
         {
             Debug.Log(nameof(TweenManager) + " Instance already exist, destorying last added.");
             Destroy(gameObject);
             return;
         }
-        Instance = this;
+        _instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -81,6 +93,6 @@ public class TweenManager : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (Instance == this) Instance = null;
+        if (_instance == this) _instance = null;
     }
 }
