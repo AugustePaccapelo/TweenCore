@@ -4,9 +4,19 @@ using UnityEngine;
 
 // Author : Auguste Paccapelo
 
+[Serializable]
 public abstract class TweenPropertyBase
 {
     // ---------- VARIABLES ---------- \\
+
+    // ----- Objects ----- \\
+
+    protected Tween myTween;
+    public Tween AttachedTween
+    {
+        get => myTween;
+        set => myTween = value;
+    }
 
     // ----- Others ----- \\
 
@@ -21,10 +31,10 @@ public abstract class TweenPropertyBase
         Reflexion, Strategy, ReturnValue
     }
 
-    protected TweenType type = TweenType.Linear;
-    protected TweenEase ease = TweenEase.In;
+    [SerializeField] protected TweenType type = TweenType.Linear;
+    [SerializeField] protected TweenEase ease = TweenEase.In;
 
-    protected float time = 1f;
+    [SerializeField] protected float time = 1f;
     protected float delay = 0f;
 
     protected Func<float, Func<float, float>, float> EaseFunc;
@@ -81,6 +91,8 @@ public abstract class TweenPropertyBase
     /// <param name="property">The TweenProperty to start.</param>
     /// <returns>This TweenPropertyBase.</returns>
     public abstract TweenPropertyBase AddNextProperty(TweenPropertyBase property);
+
+    public abstract TweenPropertyBase SetBaseValues();
 
     protected void TriggerOnFinish() => OnFinish?.Invoke();
     protected void TriggerOnStart() => OnStart?.Invoke();

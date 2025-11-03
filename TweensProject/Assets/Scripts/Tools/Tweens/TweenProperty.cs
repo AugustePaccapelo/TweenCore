@@ -5,18 +5,20 @@ using UnityEngine;
 
 // Author : Auguste Paccapelo
 
+[Serializable]
 public class TweenProperty<TweenValueType> : TweenPropertyBase
 {
     // ---------- VARIABLES ---------- \\
-    
+
     // ----- Others ----- \\
 
-    private TweenValueType _finalValue;
-    private TweenValueType _startValue;
+    [SerializeField] private TweenValueType _startValue;
+    [SerializeField] private TweenValueType _finalValue;
     private TweenValueType _currentValue;
-    public TweenValueType CurrentValue => _currentValue;    
+    public TweenValueType CurrentValue => _currentValue;
 
-    private UnityEngine.Object _obj;
+    [SerializeField] private UnityEngine.Object _obj;
+    [SerializeField] private string _propertyName;
 
     private bool _isPlaying = false;
     private bool _hasStarted = false;
@@ -26,8 +28,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     private PropertyInfo _property;
     private FieldInfo _field;
     private Action<TweenValueType> _function;
-
-    private Tween _myTween;
 
     private List<TweenPropertyBase> _nextProperties = new List<TweenPropertyBase>();
 
@@ -85,10 +85,10 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _currentMethod = MethodUse.Reflexion;
         
-        SetBaseVal(finalVal, duration, tween);
+        SetBaseVal(finalVal, duration, tween, method);
 
         _obj = obj;
-        SetReflexionFiels(method);
+        SetReflexionFiels(_propertyName);
 
         _hasStartValue = false;
     }
@@ -106,20 +106,43 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _currentMethod = MethodUse.Reflexion;
 
-        SetBaseVal(finalVal, duration, tween);
+        SetBaseVal(finalVal, duration, tween, method);
 
         _obj = obj;
-        SetReflexionFiels(method);
+        SetReflexionFiels(_propertyName);
         _startValue = startVal;
 
         _hasStartValue = true;
     }
 
-    private void SetBaseVal(TweenValueType finalVal, float duration, Tween tween)
+    /// <summary>
+    /// An empty constructor just to create an object.
+    /// Properties and fields are assign in the editor.
+    /// </summary>
+    public TweenProperty()
+    {
+        _currentMethod = MethodUse.Reflexion;
+    }
+
+    /// <summary>
+    /// Set the base values when using the empty constructor.
+    /// Using this in a different context may have unexpted results.
+    /// </summary>
+    /// <returns>This TweenPropertyBase.</returns>
+    public override TweenPropertyBase SetBaseValues()
+    {
+        SetType(type);
+        SetEase(ease);
+        SetReflexionFiels(_propertyName);
+        return this;
+    }
+
+    private void SetBaseVal(TweenValueType finalVal, float duration, Tween tween, string propertyName = "")
     {
         _finalValue = finalVal;
         time = duration;
-        _myTween = tween;
+        myTween = tween;
+        _propertyName = propertyName;
         SetType(type);
         SetEase(ease);
     }
@@ -319,6 +342,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
     private void DestroyProperty()
     {
-        _myTween.DestroyTweenProperty(this);
+        myTween.DestroyTweenProperty(this);
     }
 }

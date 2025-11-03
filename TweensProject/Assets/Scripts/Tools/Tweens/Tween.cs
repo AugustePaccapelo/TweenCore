@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // Author : Auguste Paccapelo
 
@@ -72,7 +73,7 @@ public class Tween
     public Tween Play()
     {
         if (_hasStarted) return this;
-
+        
         _hasStarted = true;
         _isPaused = false;
 
@@ -88,7 +89,7 @@ public class Tween
                 _tweenProperties[i-1].AddNextProperty(property);
             }
         }
-        if (!_isParallel) _tweenProperties[0].Start();
+        _tweenProperties[0].Start();
 
         OnStart?.Invoke();
 
@@ -176,15 +177,15 @@ public class Tween
     /// This use reflexion, it use more ressources but is a lot easier to use.
     /// By default startValue is the value when Play() is call.
     /// </summary>
-    /// <typeparam name="ValueType">The type of value (e.g. float, Vector3, ...).</typeparam>
+    /// <typeparam name="TweenValueType">The type of value (e.g. float, Vector3, ...).</typeparam>
     /// <param name="obj">The target object of the tween (e.g. transform)</param>
     /// <param name="method">The method to modify (e.g. "position")</param>
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenProperty<ValueType> NewProperty<ValueType>(UnityEngine.Object obj, string method, ValueType finalVal, float time)
+    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
     {
-        TweenProperty<ValueType> property = new TweenProperty<ValueType>(obj, method, finalVal, time, this);
+        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(obj, method, finalVal, time, this);
         _tweenProperties.Add(property);
         return property;
     }
@@ -193,17 +194,29 @@ public class Tween
     /// Create a new TweenProperty that modify the given method of the given object.
     /// This use reflexion, it use more ressources but is a lot easier to use.
     /// </summary>
-    /// <typeparam name="ValueType">The type of value (e.g. float, Vector3, ...).</typeparam>
+    /// <typeparam name="TweenValueType">The type of value (e.g. float, Vector3, ...).</typeparam>
     /// <param name="obj">The target object of the tween (e.g. transform)</param>
     /// <param name="method">The method to modify (e.g. "position")</param>
     /// <param name="startVal">The start value of the property.</param>
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenProperty<ValueType> NewProperty<ValueType>(UnityEngine.Object obj, string method, ValueType startVal, ValueType finalVal, float time)
+    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenProperty<ValueType> property = new TweenProperty<ValueType>(obj, method, startVal, finalVal, time, this);
+        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(obj, method, startVal, finalVal, time, this);
         _tweenProperties.Add(property);
+        return property;
+    }
+
+    /// <summary>
+    /// Add an existing property to the list of properties.
+    /// </summary>
+    /// <param name="property">The proeprty to add.</param>
+    /// <returns>The property added.</returns>
+    public TweenPropertyBase AddProperty(TweenPropertyBase property)
+    {
+        _tweenProperties.Add(property);
+        property.AttachedTween = this;
         return property;
     }
 
