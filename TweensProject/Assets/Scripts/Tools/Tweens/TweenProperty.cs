@@ -12,6 +12,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
     // ----- Others ----- \\
 
+    [SerializeField] private bool _fromCurrentValue = true;
     [SerializeField] private TweenValueType _startValue;
     [SerializeField] private TweenValueType _finalValue;
     private TweenValueType _currentValue;
@@ -19,7 +20,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
     private bool _isPlaying = false;
     private bool _hasStarted = false;
-    private bool _hasStartValue = false;
 
     private MethodUse _currentMethod;
     private PropertyInfo _property;
@@ -47,7 +47,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
         _startValue = startVal;
 
-        _hasStartValue = true;
+        _fromCurrentValue = false;
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _startValue = startVal;
         _function = function;
 
-        _hasStartValue = true;
+        _fromCurrentValue = false;
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _obj = obj;
         SetReflexionFiels(_propertyName);
 
-        _hasStartValue = false;
+        _fromCurrentValue = false;
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         SetReflexionFiels(_propertyName);
         _startValue = startVal;
 
-        _hasStartValue = true;
+        _fromCurrentValue = false;
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
         _hasStarted = true;
         _isPlaying = true;
-        if (_currentMethod == MethodUse.Reflexion && !_hasStartValue) _startValue = GetObjValue();
+        if (_currentMethod == MethodUse.Reflexion && _fromCurrentValue) _startValue = GetObjValue();
         TriggerOnStart();
     }
 
@@ -290,6 +290,18 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     public TweenProperty<TweenValueType> From(TweenValueType value)
     {
         _startValue = value;
+        _fromCurrentValue = false;
+        return this;
+    }
+
+    /// <summary>
+    /// Use the start value of the property.
+    /// !WARNING! Works only using a Reflexion method.
+    /// </summary>
+    /// <returns>This TweenProperty.</returns>
+    public TweenProperty<TweenValueType> FromCurrent()
+    {
+        _fromCurrentValue = true;
         return this;
     }
 

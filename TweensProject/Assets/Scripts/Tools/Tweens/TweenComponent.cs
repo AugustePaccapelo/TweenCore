@@ -16,6 +16,7 @@ public class TweenComponent : MonoBehaviour
 
     // ----- Others ----- \\
 
+    [SerializeField] private bool _isParallel = true;
     [SerializeReference] private List<TweenPropertyBase> _properties = new List<TweenPropertyBase>();
 
     // ---------- FUNCTIONS ---------- \\
@@ -37,6 +38,7 @@ public class TweenComponent : MonoBehaviour
             property.SetBaseValues();
         }
         TweenManager.Instance.AddTween(_tween);
+        _tween.SetParallel(_isParallel);
         _tween.Play();
     }
 
