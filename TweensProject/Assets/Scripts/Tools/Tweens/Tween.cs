@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 
 // Author : Auguste Paccapelo
 
@@ -18,6 +18,10 @@ public class Tween
     private bool _hasStarted = false;
 
     private bool _isParallel = true;
+
+    private bool _isLoop = false;
+    private int _numTweenFinished = 0;
+    private int _exeptedNumPropertiesLoop;
 
     public event Action OnStart;
     public event Action OnFinish;
@@ -39,6 +43,16 @@ public class Tween
             _tweenProperties[i].Update(deltaTime);
         }
         if (_tweenProperties.Count == 0) Stop();
+
+        if (_numTweenFinished == _exeptedNumPropertiesLoop)
+        {
+            if (!_isParallel) _tweenProperties[0].NewIteration();
+            else
+            {
+                foreach (TweenPropertyBase property in  _tweenProperties) property.NewIteration();
+            }
+            _numTweenFinished = 0;
+        }
 
         return this;
     }
@@ -83,6 +97,7 @@ public class Tween
         for (int i = length; i >= 1; i--)
         {
             property = _tweenProperties[i];
+            property.SetLoop(_isLoop);
             if (_isParallel) property.Start();
             else
             {
@@ -90,6 +105,9 @@ public class Tween
             }
         }
         _tweenProperties[0].Start();
+        _tweenProperties[0].SetLoop(_isLoop);
+
+        _exeptedNumPropertiesLoop = _tweenProperties.Count;
 
         OnStart?.Invoke();
 
@@ -253,6 +271,26 @@ public class Tween
     {
         _isParallel = true;
         return this;
+    }
+
+    /// <summary>
+    /// Set the loop mode, wait for all properties to be finished, and then replay the tween.
+    /// </summary>
+    /// <param name="isLoop">If loop mode.</param>
+    /// <returns>This tween.</returns>
+    public Tween SetLoop(bool isLoop)
+    {
+        _isLoop = isLoop;
+        return this;
+    }
+
+    /// <summary>
+    /// Use to track the number of tweens properties finished for loop mode.
+    /// Do not call this function or it may cause unexpeted results.
+    /// </summary>
+    public void NewPropertyFinishedLoop()
+    {
+        _numTweenFinished++;
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 // Author : Auguste Paccapelo
 
@@ -16,8 +17,14 @@ public class TweenComponent : MonoBehaviour
 
     // ----- Others ----- \\
 
+    [SerializeField] private bool _playOnStart = true;
     [SerializeField] private bool _isParallel = true;
+    [SerializeField] private bool _isLoop = false;
+
     [SerializeReference] private List<TweenPropertyBase> _properties = new List<TweenPropertyBase>();
+
+    [SerializeField] private UnityEvent OnStart;
+    [SerializeField] private UnityEvent OnFinish;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -39,16 +46,39 @@ public class TweenComponent : MonoBehaviour
         }
         TweenManager.Instance.AddTween(_tween);
         _tween.SetParallel(_isParallel);
-        _tween.Play();
-    }
+        _tween.SetLoop(_isLoop);
 
-    private void Update() { }
+        _tween.OnStart += OnTweenStart;
+        _tween.OnFinish += OnTweenFinish;
+
+        if (_playOnStart) Play();
+    }
 
     // ----- My Functions ----- \\
 
     public void AddProperty(TweenPropertyBase property)
     {
         _properties.Add(property);
+    }
+
+    public void Play()
+    {
+        _tween.Play();
+    }
+
+    public void Stop()
+    {
+        _tween.Stop();
+    }
+
+    private void OnTweenStart()
+    {
+        OnStart?.Invoke();
+    }
+
+    private void OnTweenFinish()
+    {
+        OnFinish?.Invoke();
     }
 
     // ----- Destructor ----- \\

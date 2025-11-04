@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Compilation;
 using UnityEngine;
 
 // Author : Auguste Paccapelo
@@ -47,8 +48,9 @@ public abstract class TweenPropertyBase
     [SerializeField, HideInInspector] private int _propertyIndex = 0;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
-    protected float _elapseTime = 0f;
+    protected bool _isLoop = false;
 
+    protected float _elapseTime = 0f;
     public float ElapseTime => _elapseTime;
 
     public event Action OnFinish;
@@ -93,6 +95,12 @@ public abstract class TweenPropertyBase
     public abstract void Stop();
 
     /// <summary>
+    /// Restart the TweenProperty after a loop.
+    /// Don't call this function or you may have unexepted results.
+    /// </summary>
+    public abstract void NewIteration();
+
+    /// <summary>
     /// Add a TweenProperty to start when this TweenProperty is finished.
     /// </summary>
     /// <param name="property">The TweenProperty to start.</param>
@@ -101,8 +109,10 @@ public abstract class TweenPropertyBase
 
     public abstract TweenPropertyBase SetBaseValues();
 
-    protected void TriggerOnFinish() => OnFinish?.Invoke();
-    protected void TriggerOnStart() => OnStart?.Invoke();
+    protected virtual void TriggerOnFinish() => OnFinish?.Invoke();
+    protected virtual void TriggerOnStart() => OnStart?.Invoke();
+
+    public virtual void SetLoop(bool isLoop) => _isLoop = isLoop;
 
     protected void SetTypeFunc(TweenType newType)
     {

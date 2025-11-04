@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 // Author : Auguste Paccapelo
 
@@ -27,6 +28,15 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     private Action<TweenValueType> _function;
 
     private List<TweenPropertyBase> _nextProperties = new List<TweenPropertyBase>();
+
+    [Serializable]
+    private class TweenUnityEvents
+    {
+        public UnityEvent unityOnStart;
+        public UnityEvent unityOnFinish;
+    }
+
+    [SerializeField] private TweenUnityEvents _unityEvents;
 
     public event Action<TweenValueType> OnUpdate;
 
@@ -164,6 +174,11 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _isPlaying = true;
         if (_currentMethod == MethodUse.Reflexion && _fromCurrentValue) _startValue = GetObjValue();
         TriggerOnStart();
+    }
+
+    public override void NewIteration()
+    {
+        _isPlaying = true;
     }
 
     public override void Update(float deltaTime)
@@ -315,7 +330,19 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         return EaseFunc(w, TypeFunc);
     }
-    
+
+    protected override void TriggerOnStart()
+    {
+        base.TriggerOnStart();
+        _unityEvents.unityOnStart?.Invoke();
+    }
+
+    protected override void TriggerOnFinish()
+    {
+        base.TriggerOnFinish();
+        _unityEvents.unityOnFinish?.Invoke();
+    }
+
     /// <summary>
     /// Pause the TweenProperty.
     /// </summary>
@@ -339,14 +366,26 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _isPlaying = false;
         TriggerOnFinish();
+
+        StartNextProperties();
+
+        if (!_isLoop) DestroyProperty();
+        else
+        {
+            myTween.NewPropertyFinishedLoop();
+            _elapseTime = 0;
+        }
+    }
+
+    private void StartNextProperties()
+    {
         int length = _nextProperties.Count - 1;
         for (int i = length; i >= 0; i--)
         {
-            _nextProperties[i].Start();
-            _nextProperties.RemoveAt(i);
+            if (!_isLoop) _nextProperties[i].Start();
+            else _nextProperties[i].NewIteration();
+            //_nextProperties.RemoveAt(i);
         }
-        
-        DestroyProperty();
     }
 
     private void DestroyProperty()

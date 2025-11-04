@@ -13,13 +13,6 @@ public class TweenComponentEditor : Editor
 {
     // ---------- VARIABLES ---------- \\
 
-    // ----- Prefabs & Assets ----- \\
-
-    // ----- Objects ----- \\
-
-    private UnityEngine.Object _lastObjKnown;
-    private UnityEngine.Object _currentObj;
-
     // ----- Others ----- \\
 
     private const string BUTTON_NAME = "Add a new Tween Property";
@@ -36,12 +29,6 @@ public class TweenComponentEditor : Editor
     // ---------- FUNCTIONS ---------- \\
 
     // ----- Buil-in ----- \\
-
-    private void OnEnable() { }
-
-    private void OnDisable() { }
-
-    private void Awake() { }
 
     public override void OnInspectorGUI()
     {
@@ -61,13 +48,9 @@ public class TweenComponentEditor : Editor
 
         TweenComponent comp = (TweenComponent)target;
 
-        //Type supportedType;
-
         foreach (string typeName in _typesMap.Keys)
         {
             Type supportedType = _typesMap[typeName];
-
-            //menu.AddItem(new GUIContent(typeName), false, CreateTweenProperty(supportedType));
 
             menu.AddItem(new GUIContent(typeName), false, () =>
             {
@@ -81,15 +64,5 @@ public class TweenComponentEditor : Editor
 
         menu.ShowAsContext();
     }
-
-    /*private GenericMenu.MenuFunction CreateTweenProperty(Type tweenType)
-    {
-        Type genericType = typeof(TweenProperty<>).MakeGenericType(tweenType);
-        TweenPropertyBase propertyBase = (TweenPropertyBase)Activator.CreateInstance(genericType);
-    }*/
-
-    // ----- Destructor ----- \\
-
-    private void OnDestroy() { }
 }
 #endif

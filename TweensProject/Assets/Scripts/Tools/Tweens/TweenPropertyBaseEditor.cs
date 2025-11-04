@@ -15,8 +15,6 @@ public class TweenPropertyBaseEditor : PropertyDrawer
 {
     // ---------- VARIABLES ---------- \\
 
-    // ----- Prefabs & Assets ----- \\
-
     // ----- Objects ----- \\
 
     private UnityEngine.Object _currentObject;
@@ -87,11 +85,5 @@ public class TweenPropertyBaseEditor : PropertyDrawer
         if (!string.IsNullOrEmpty(prop.stringValue)) heigth += EditorGUIUtility.singleLineHeight * 1.25f;
         return heigth;
     }
-
-    // ----- My Functions ----- \\
-
-    // ----- Destructor ----- \\
-
-    private void OnDestroy() { }
 }
 #endif
