@@ -33,8 +33,8 @@ public class TweenComponent : MonoBehaviour
         _tween = Tween.CreateTween();
         foreach (TweenPropertyBase property in _properties)
         {
-            property.SetBaseValues();
             _tween.AddProperty(property);
+            property.SetBaseValues();
         }
         TweenManager.Instance.AddTween(_tween);
         _tween.Play();

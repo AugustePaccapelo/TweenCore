@@ -667,42 +667,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _properties:
-  - rid: 5929368316495790158
-  - rid: 5929368316495790159
-  - rid: 5929368316495790161
+  - rid: 5929368344930811973
+  - rid: 5929368345066602564
   references:
     version: 2
     RefIds:
-    - rid: 5929368316495790158
+    - rid: 5929368344930811973
       type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
       data:
-        type: 10
-        ease: 0
-        time: 2
+        _obj: {fileID: 1740234257}
+        type: 5
+        ease: 1
+        time: 2.62
+        _propertyName: position
+        _propertyIndex: 0
+        _lastKnownObject: {fileID: 1740234257}
         _startValue: {x: -5, y: 2, z: 0}
         _finalValue: {x: 5, y: -2, z: 0}
-        _obj: {fileID: 1740234257}
-        _propertyName: position
-    - rid: 5929368316495790159
+    - rid: 5929368345066602564
       type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
       data:
-        type: 2
-        ease: 0
-        time: 2
-        _startValue: {x: 11.81, y: 11.81, z: 11.81}
-        _finalValue: {x: 25, y: 25, z: 25}
         _obj: {fileID: 1740234257}
-        _propertyName: localScale
-    - rid: 5929368316495790161
-      type: {class: 'TweenProperty`1[[UnityEngine.Color, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
         type: 0
         ease: 0
-        time: 4
-        _startValue: {r: 1, g: 1, b: 1, a: 1}
-        _finalValue: {r: 0, g: 0, b: 0, a: 0}
-        _obj: {fileID: 1740234255}
-        _propertyName: color
+        time: 1
+        _propertyName: localScale
+        _propertyIndex: 7
+        _lastKnownObject: {fileID: 1740234257}
+        _startValue: {x: 15, y: 15, z: 15}
+        _finalValue: {x: 30, y: 30, z: 30}
 --- !u!4 &1740234257
 Transform:
   m_ObjectHideFlags: 0

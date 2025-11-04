@@ -17,6 +17,9 @@ public class TweenComponentEditor : Editor
 
     // ----- Objects ----- \\
 
+    private UnityEngine.Object _lastObjKnown;
+    private UnityEngine.Object _currentObj;
+
     // ----- Others ----- \\
 
     private const string BUTTON_NAME = "Add a new Tween Property";
@@ -83,8 +86,6 @@ public class TweenComponentEditor : Editor
     {
         Type genericType = typeof(TweenProperty<>).MakeGenericType(tweenType);
         TweenPropertyBase propertyBase = (TweenPropertyBase)Activator.CreateInstance(genericType);
-
-
     }*/
 
     // ----- Destructor ----- \\

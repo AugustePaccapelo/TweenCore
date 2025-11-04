@@ -17,9 +17,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     private TweenValueType _currentValue;
     public TweenValueType CurrentValue => _currentValue;
 
-    [SerializeField] private UnityEngine.Object _obj;
-    [SerializeField] private string _propertyName;
-
     private bool _isPlaying = false;
     private bool _hasStarted = false;
     private bool _hasStartValue = false;
@@ -46,7 +43,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _currentMethod = MethodUse.ReturnValue;
 
-        SetBaseVal(finalVal, time, tween);
+        SetCommonValues(finalVal, time, tween);
 
         _startValue = startVal;
 
@@ -65,7 +62,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _currentMethod = MethodUse.Strategy;
 
-        SetBaseVal(finalVal, duration, tween);
+        SetCommonValues(finalVal, duration, tween);
 
         _startValue = startVal;
         _function = function;
@@ -85,7 +82,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _currentMethod = MethodUse.Reflexion;
         
-        SetBaseVal(finalVal, duration, tween, method);
+        SetCommonValues(finalVal, duration, tween, method);
 
         _obj = obj;
         SetReflexionFiels(_propertyName);
@@ -106,7 +103,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _currentMethod = MethodUse.Reflexion;
 
-        SetBaseVal(finalVal, duration, tween, method);
+        SetCommonValues(finalVal, duration, tween, method);
 
         _obj = obj;
         SetReflexionFiels(_propertyName);
@@ -137,7 +134,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         return this;
     }
 
-    private void SetBaseVal(TweenValueType finalVal, float duration, Tween tween, string propertyName = "")
+    private void SetCommonValues(TweenValueType finalVal, float duration, Tween tween, string propertyName = "")
     {
         _finalValue = finalVal;
         time = duration;
@@ -155,7 +152,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         if (_property == null && _field == null)
         {
             Stop();
-            throw new Exception("No property or field found");
+            Debug.LogError("No property or field found");
         }
     }
 

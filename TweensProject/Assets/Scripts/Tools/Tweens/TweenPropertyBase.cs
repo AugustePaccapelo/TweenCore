@@ -18,6 +18,9 @@ public abstract class TweenPropertyBase
         set => myTween = value;
     }
 
+    [SerializeField] protected UnityEngine.Object _obj;
+    public UnityEngine.Object TargetObject => _obj;
+
     // ----- Others ----- \\
 
     private const float BACK_C1 = 1.70158f;
@@ -39,6 +42,10 @@ public abstract class TweenPropertyBase
 
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
+
+    [SerializeField, HideInInspector] protected string _propertyName;
+    [SerializeField, HideInInspector] private int _propertyIndex = 0;
+    [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
     protected float _elapseTime = 0f;
 
