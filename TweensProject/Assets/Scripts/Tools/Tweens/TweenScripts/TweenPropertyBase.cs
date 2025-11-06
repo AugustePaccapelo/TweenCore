@@ -45,7 +45,7 @@ public abstract class TweenPropertyBase
     protected Func<float, float> TypeFunc;
 
     [SerializeField, HideInInspector] protected string _propertyName;
-    [SerializeField, HideInInspector] private int _propertyIndex = 0;
+    [SerializeField, HideInInspector] protected int _propertyIndex;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
     protected bool _isLoop = false;
@@ -99,6 +99,13 @@ public abstract class TweenPropertyBase
     /// Don't call this function or you may have unexepted results.
     /// </summary>
     public abstract void NewIteration();
+
+    /// <summary>
+    /// Set the property to the final value. 
+    /// You should call Stop() or Pause() if tween is playing.
+    /// </summary>
+    /// <returns>This TweenPropertyBase.</returns>
+    public abstract TweenPropertyBase SetToFinalVals();
 
     /// <summary>
     /// Add a TweenProperty to start when this TweenProperty is finished.

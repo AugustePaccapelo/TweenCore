@@ -41,13 +41,13 @@ public class TweenPropertyBaseEditor : PropertyDrawer
 
         long currentId = property.managedReferenceId;
 
-        if (_currentObject != null)
+        if (property.isExpanded && _currentObject != null)
         {
             SerializedProperty propName = property.FindPropertyRelative("_propertyName");
 
             Rect popupRect = new Rect(position.x, position.y + EditorGUI.GetPropertyHeight(property, label, true) + 2,
                                   position.width, EditorGUIUtility.singleLineHeight);
-            position.height += EditorGUIUtility.singleLineHeight;
+            position.height -= EditorGUIUtility.singleLineHeight;
 
             if (_currentObject != lastObj || !_propertiesNamesMap.ContainsKey(currentId))
             {
@@ -58,6 +58,7 @@ public class TweenPropertyBaseEditor : PropertyDrawer
                 PropertyInfo[] allProperties = _currentObject.GetType().GetProperties(flag);
                 Type genericType = property.managedReferenceValue.GetType().GetGenericArguments()[0];
                 _propertiesNamesMap[currentId] = allProperties.Where(p => p.PropertyType == genericType).Select(p => p.Name).ToArray();
+                if (_propertiesNamesMap[currentId].Length > 0) propName.stringValue = _propertiesNamesMap[currentId][0];
             }
 
             if (_propertiesNamesMap[currentId].Length > 0)
@@ -82,7 +83,7 @@ public class TweenPropertyBaseEditor : PropertyDrawer
     {
         float heigth = EditorGUI.GetPropertyHeight(property);
         SerializedProperty prop = property.FindPropertyRelative("_propertyName");
-        if (!string.IsNullOrEmpty(prop.stringValue)) heigth += EditorGUIUtility.singleLineHeight * 1.25f;
+        //if (!string.IsNullOrEmpty(prop.stringValue)) heigth += EditorGUIUtility.singleLineHeight * 1.25f;
         return heigth;
     }
 }

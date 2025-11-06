@@ -388,6 +388,11 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         }
     }
 
+    public override TweenPropertyBase SetToFinalVals()
+    {
+        return this;
+    }
+
     private void DestroyProperty()
     {
         myTween.DestroyTweenProperty(this);
