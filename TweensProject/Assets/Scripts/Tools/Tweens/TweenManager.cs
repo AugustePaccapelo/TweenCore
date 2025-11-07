@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Author : Auguste Paccapelo
 
@@ -58,7 +59,26 @@ public class TweenManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
     // ----- My Functions ----- \\
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        int length = _tweens.Count;
+        for (int i = length - 1; i >= 0; i--)
+        {
+            if (!_tweens[i].SurviveOnSceneUnload) _tweens[i].Stop();
+        }
+    }
 
     public void PauseAll()
     {

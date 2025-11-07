@@ -13,7 +13,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
     // ----- Others ----- \\
 
-    [SerializeField] private bool _fromCurrentValue = true;
+    [SerializeField] private bool _fromCurrentValue = false;
     [SerializeField] private TweenValueType _startValue;
     [SerializeField] private TweenValueType _finalValue;
     private TweenValueType _currentValue;
@@ -36,7 +36,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         public UnityEvent unityOnFinish;
     }
 
-    [SerializeField] private TweenUnityEvents _unityEvents;
+    [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
 
     public event Action<TweenValueType> OnUpdate;
 
@@ -162,7 +162,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         if (_property == null && _field == null)
         {
             Stop();
-            Debug.LogError("No property or field found");
+            Debug.LogError("No property or field found : " + method);
         }
     }
 

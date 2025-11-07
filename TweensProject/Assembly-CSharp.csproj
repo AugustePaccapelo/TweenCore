@@ -63,10 +63,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Tools\ScriptTemplatesLoaderTool.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\TweenScripts\Tween.cs" />
+    <Compile Include="Assets\Scripts\DefaultScript.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\TweenComponent.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\TweenScripts\TweenProperty.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\EditorScripts\TweenComponentEditor.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\EditorScripts\TweenPropertyBaseEditor.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\TweenScripts\TweenEnums.cs" />
     <Compile Include="Assets\Scripts\Tools\Tweens\TweenManager.cs" />
     <Compile Include="Assets\Scripts\TestTween.cs" />

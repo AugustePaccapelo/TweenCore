@@ -19,6 +19,9 @@ public class Tween
 
     private bool _isParallel = true;
 
+    private bool _surviveOnSceneUnload = false;
+    public bool SurviveOnSceneUnload => _surviveOnSceneUnload;
+
     private bool _isLoop = false;
     private int _numTweenFinished = 0;
     private int _exeptedNumPropertiesLoop;
@@ -301,6 +304,24 @@ public class Tween
     public Tween Chain()
     {
         _isParallel = false;
+        return this;
+    }
+
+    public Tween SurviveOnSceneLoad()
+    {
+        _surviveOnSceneUnload = true;
+        return this;
+    }
+
+    public Tween KillOnSceneUnLoad()
+    {
+        _surviveOnSceneUnload = false;
+        return this;
+    }
+
+    public Tween SetSurviveOnUnload(bool survive)
+    {
+        _surviveOnSceneUnload = survive;
         return this;
     }
 }
