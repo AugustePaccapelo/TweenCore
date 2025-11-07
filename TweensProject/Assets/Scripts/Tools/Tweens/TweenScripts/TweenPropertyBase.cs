@@ -51,6 +51,10 @@ public abstract class TweenPropertyBase
 
     protected bool _isLoop = false;
 
+    protected bool _isPlaying = false;
+    protected bool _hasStarted = false;
+    public bool HasStarted => _hasStarted;
+
     protected float _elapseTime = 0f;
     public float ElapseTime => _elapseTime;
 

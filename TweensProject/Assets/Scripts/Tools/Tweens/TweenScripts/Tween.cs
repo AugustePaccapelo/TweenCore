@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Diagnostics;
 
 // Author : Auguste Paccapelo
 
@@ -19,12 +19,13 @@ public class Tween
 
     private bool _isParallel = true;
 
+    private bool _destroyWhenFinish = true;
     private bool _surviveOnSceneUnload = false;
     public bool SurviveOnSceneUnload => _surviveOnSceneUnload;
 
     private bool _isLoop = false;
     private int _numTweenFinished = 0;
-    private int _exeptedNumPropertiesLoop;
+    private int _exeptedNumProperties;
 
     public event Action OnStart;
     public event Action OnFinish;
@@ -45,16 +46,19 @@ public class Tween
         {
             _tweenProperties[i].Update(deltaTime);
         }
-        if (_tweenProperties.Count == 0) Stop();
 
-        if (_numTweenFinished == _exeptedNumPropertiesLoop)
+        if (_numTweenFinished == _exeptedNumProperties)
         {
-            if (!_isParallel) _tweenProperties[0].NewIteration();
+            if (!_isLoop) Stop();
             else
             {
-                foreach (TweenPropertyBase property in  _tweenProperties) property.NewIteration();
+                if (!_isParallel) _tweenProperties[0].NewIteration();
+                else
+                {
+                    foreach (TweenPropertyBase property in _tweenProperties) property.NewIteration();
+                }
+                _numTweenFinished = 0;
             }
-            _numTweenFinished = 0;
         }
 
         return this;
@@ -90,7 +94,8 @@ public class Tween
     public Tween Play()
     {
         if (_hasStarted) return this;
-        
+
+        _numTweenFinished = 0;
         _hasStarted = true;
         _isPaused = false;
 
@@ -107,10 +112,13 @@ public class Tween
                 _tweenProperties[i-1].AddNextProperty(property);
             }
         }
-        _tweenProperties[0].Start();
-        _tweenProperties[0].SetLoop(_isLoop);
+        if (length > 0)
+        {
+            _tweenProperties[0].Start();
+            _tweenProperties[0].SetLoop(_isLoop);
+        }
 
-        _exeptedNumPropertiesLoop = _tweenProperties.Count;
+        _exeptedNumProperties = _tweenProperties.Count;
 
         OnStart?.Invoke();
 
@@ -127,8 +135,8 @@ public class Tween
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.DestroyTweenProperty(...).Play();).</returns>
     public Tween DestroyTweenProperty(TweenPropertyBase property)
     {
-        if (_tweenProperties.Contains(property)) _tweenProperties.Remove(property);
-        else throw new ArgumentException("The tween does not contain the given property to destroy");
+        if (!_tweenProperties.Contains(property)) throw new ArgumentException("The tween does not contain the given property to destroy");
+        if (_destroyWhenFinish) _tweenProperties.Remove(property);
         return this;
     }
 
@@ -138,13 +146,15 @@ public class Tween
     /// </summary>
     public void Stop()
     {
+        _hasStarted = false;
+        _isPaused = false;
         int length = _tweenProperties.Count - 1;
         for (int i = length; i >= 0; i --)
         {
-            _tweenProperties[i].Stop();
+            if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop();
         }
         OnFinish?.Invoke();
-        TweenManager.Instance.RemoveTween(this);
+        if (_destroyWhenFinish) TweenManager.Instance.RemoveTween(this);
     }
 
     /// <summary>
@@ -291,7 +301,7 @@ public class Tween
     /// Use to track the number of tweens properties finished for loop mode.
     /// Do not call this function or it may cause unexpeted results.
     /// </summary>
-    public void NewPropertyFinishedLoop()
+    public void NewPropertyFinished()
     {
         _numTweenFinished++;
     }
@@ -334,6 +344,36 @@ public class Tween
     public Tween SetSurviveOnUnload(bool survive)
     {
         _surviveOnSceneUnload = survive;
+        return this;
+    }
+
+    /// <summary>
+    /// This tween and properties attached will be destroyed when finished.
+    /// </summary>
+    /// <returns>This Tween.</returns>
+    public Tween DestroyWhenFinish()
+    {
+        _destroyWhenFinish = true;
+        return this;
+    }
+
+    /// <summary>
+    /// This tween and propreties attached will not be destroyed when finished.
+    /// </summary>
+    /// <returns>This Tween.</returns>
+    public Tween DontDestroyWhenFinish()
+    {
+        _destroyWhenFinish = false;
+        return this;
+    }
+
+    /// <summary>
+    /// Set if this tween and properties attached should be destroyed when finished.
+    /// </summary>
+    /// <returns>This Tween.</returns>
+    public Tween SetDestroyWhenFinish(bool destroy)
+    {
+        _destroyWhenFinish = destroy;
         return this;
     }
 }

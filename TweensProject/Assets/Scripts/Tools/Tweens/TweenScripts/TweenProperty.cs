@@ -19,9 +19,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     private TweenValueType _currentValue;
     public TweenValueType CurrentValue => _currentValue;
 
-    private bool _isPlaying = false;
-    private bool _hasStarted = false;
-
     private MethodUse _currentMethod;
     private PropertyInfo _property;
     private FieldInfo _field;
@@ -364,12 +361,11 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
         StartNextProperties();
 
+        myTween.NewPropertyFinished();
+        _elapseTime = 0;
+        _hasStarted = false;
+
         if (!_isLoop) DestroyProperty();
-        else
-        {
-            myTween.NewPropertyFinishedLoop();
-            _elapseTime = 0;
-        }
     }
 
     private void StartNextProperties()
@@ -379,7 +375,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         {
             if (!_isLoop) _nextProperties[i].Start();
             else _nextProperties[i].NewIteration();
-            //_nextProperties.RemoveAt(i);
         }
     }
 

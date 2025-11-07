@@ -908,6 +908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5f56b22ad5bbc4b85b238f93d3d1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  comp: {fileID: 747174025}
 --- !u!212 &747174024
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -977,12 +978,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playOnStart: 1
   _isParallel: 0
-  _isLoop: 1
+  _isLoop: 0
+  _DestroyedWhenFinished: 0
   _surviveOnUnload: 1
   _properties:
   - rid: 5929368407574577219
   - rid: 5929368407709581379
-  - rid: 5929368407709581381
   OnStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1034,29 +1035,9 @@ MonoBehaviour:
         _propertyName: localScale
         _propertyIndex: 7
         _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 1
-        _startValue: {x: 0, y: 0, z: 0}
+        _fromCurrentValue: 0
+        _startValue: {x: 1, y: 1, z: 1}
         _finalValue: {x: 2, y: 2, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 5929368407709581381
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 747174022}
-        type: 0
-        ease: 0
-        time: 1
-        _propertyName: position
-        _propertyIndex: 0
-        _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 1
-        _startValue: {x: 0, y: 0, z: 0}
-        _finalValue: {x: 2.32, y: -1.84, z: 0}
         _unityEvents:
           unityOnStart:
             m_PersistentCalls:
@@ -1461,7 +1442,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1740234255
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1547,6 +1528,7 @@ MonoBehaviour:
   _playOnStart: 1
   _isParallel: 1
   _isLoop: 0
+  _DestroyedWhenFinished: 1
   _surviveOnUnload: 0
   _properties:
   - rid: 5929368384325812307

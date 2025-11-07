@@ -20,6 +20,7 @@ public class TweenComponent : MonoBehaviour
     [SerializeField] private bool _playOnStart = true;
     [SerializeField] private bool _isParallel = true;
     [SerializeField] private bool _isLoop = false;
+    [SerializeField] private bool _DestroyedWhenFinished = true;
     [SerializeField] private bool _surviveOnUnload = false;
 
     [SerializeReference] private List<TweenPropertyBase> _properties = new List<TweenPropertyBase>();
@@ -41,12 +42,12 @@ public class TweenComponent : MonoBehaviour
     {
         _tween = Tween.CreateTween()
             .SetParallel(_isParallel).SetLoop(_isLoop)
-            .SetSurviveOnUnload(_surviveOnUnload);
-
+            .SetSurviveOnUnload(_surviveOnUnload)
+            .SetDestroyWhenFinish(_DestroyedWhenFinished);
+        
         foreach (TweenPropertyBase property in _properties)
         {
             _tween.AddProperty(property);
-            Debug.Log(property.PropertyName);
             property.SetBaseValues();
         }
         TweenManager.Instance.AddTween(_tween);

@@ -52,7 +52,7 @@ public class TweenManager : MonoBehaviour
     private void FixedUpdate()
     {
         if (!_isPlaying) return;
-
+        
         for (int i = _tweens.Count - 1; i >= 0; i--)
         {
             _tweens[i].Update(Time.fixedDeltaTime);
