@@ -46,6 +46,7 @@ public class TweenComponent : MonoBehaviour
         foreach (TweenPropertyBase property in _properties)
         {
             _tween.AddProperty(property);
+            Debug.Log(property.PropertyName);
             property.SetBaseValues();
         }
         TweenManager.Instance.AddTween(_tween);

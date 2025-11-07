@@ -45,6 +45,7 @@ public abstract class TweenPropertyBase
     protected Func<float, float> TypeFunc;
 
     [SerializeField, HideInInspector] protected string _propertyName;
+    public string PropertyName => _propertyName;
     [SerializeField, HideInInspector] protected int _propertyIndex;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
@@ -113,7 +114,11 @@ public abstract class TweenPropertyBase
     /// <param name="property">The TweenProperty to start.</param>
     /// <returns>This TweenPropertyBase.</returns>
     public abstract TweenPropertyBase AddNextProperty(TweenPropertyBase property);
-
+    /// <summary>
+    /// Set the base values when using the empty constructor.
+    /// Using this in a different context may have unexpted results.
+    /// </summary>
+    /// <returns>This TweenPropertyBase.</returns>
     public abstract TweenPropertyBase SetBaseValues();
 
     protected virtual void TriggerOnFinish() => OnFinish?.Invoke();

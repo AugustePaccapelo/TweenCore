@@ -30,11 +30,11 @@ public class TweenPropertyBaseEditor : PropertyDrawer
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         EditorGUI.BeginProperty(position, label, property);
-        
-        _currentObject = (UnityEngine.Object)property.FindPropertyRelative("_obj").boxedValue;
+
+        _currentObject = property.FindPropertyRelative("_obj").objectReferenceValue;
 
         SerializedProperty propLastObj = property.FindPropertyRelative("_lastKnownObject");
-        UnityEngine.Object lastObj = (UnityEngine.Object)propLastObj.boxedValue;
+        UnityEngine.Object lastObj = propLastObj.objectReferenceValue;
         
         SerializedProperty propIndex = property.FindPropertyRelative("_propertyIndex");
         int currentIndex = propIndex.intValue;
@@ -51,14 +51,19 @@ public class TweenPropertyBaseEditor : PropertyDrawer
 
             if (_currentObject != lastObj || !_propertiesNamesMap.ContainsKey(currentId))
             {
-                propLastObj.boxedValue = _currentObject;
+                propLastObj.objectReferenceValue = _currentObject;
 
                 BindingFlags flag = BindingFlags.Instance | BindingFlags.Public;
 
                 PropertyInfo[] allProperties = _currentObject.GetType().GetProperties(flag);
                 Type genericType = property.managedReferenceValue.GetType().GetGenericArguments()[0];
                 _propertiesNamesMap[currentId] = allProperties.Where(p => p.PropertyType == genericType).Select(p => p.Name).ToArray();
-                if (_propertiesNamesMap[currentId].Length > 0) propName.stringValue = _propertiesNamesMap[currentId][0];
+
+                if (_propertiesNamesMap[currentId].Length > 0 && _currentObject != lastObj)
+                {
+                    propName.stringValue = _propertiesNamesMap[currentId][0];
+                    propIndex.intValue = 0;
+                }
             }
 
             if (_propertiesNamesMap[currentId].Length > 0)
@@ -68,6 +73,9 @@ public class TweenPropertyBaseEditor : PropertyDrawer
                 {
                     propName.stringValue = _propertiesNamesMap[currentId][newIndex];
                     propIndex.intValue = newIndex;
+
+                    property.serializedObject.ApplyModifiedProperties();
+                    EditorUtility.SetDirty(property.serializedObject.targetObject);
                 }
             }
         }
@@ -76,14 +84,15 @@ public class TweenPropertyBaseEditor : PropertyDrawer
             propLastObj.boxedValue = null;
             propIndex.intValue = 0;
         }
+
         EditorGUI.PropertyField(position, property, label, true);
+        EditorGUI.EndProperty();
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         float heigth = EditorGUI.GetPropertyHeight(property);
         SerializedProperty prop = property.FindPropertyRelative("_propertyName");
-        //if (!string.IsNullOrEmpty(prop.stringValue)) heigth += EditorGUIUtility.singleLineHeight * 1.25f;
         return heigth;
     }
 }

@@ -307,18 +307,30 @@ public class Tween
         return this;
     }
 
+    /// <summary>
+    /// The tween will then survive when the scene unloads.
+    /// </summary>
+    /// <returns>This Tween.</returns>
     public Tween SurviveOnSceneLoad()
     {
         _surviveOnSceneUnload = true;
         return this;
     }
 
+    /// <summary>
+    /// The tween will not survive when the scene unloads.
+    /// </summary>
+    /// <returns>This Tween.</returns>
     public Tween KillOnSceneUnLoad()
     {
         _surviveOnSceneUnload = false;
         return this;
     }
 
+    /// <summary>
+    /// Set if the tween should survive or not on scene unloads.
+    /// </summary>
+    /// <returns>This Tween.</returns>
     public Tween SetSurviveOnUnload(bool survive)
     {
         _surviveOnSceneUnload = survive;

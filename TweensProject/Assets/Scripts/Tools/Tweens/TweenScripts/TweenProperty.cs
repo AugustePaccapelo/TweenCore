@@ -131,11 +131,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _currentMethod = MethodUse.Reflexion;
     }
 
-    /// <summary>
-    /// Set the base values when using the empty constructor.
-    /// Using this in a different context may have unexpted results.
-    /// </summary>
-    /// <returns>This TweenPropertyBase.</returns>
     public override TweenPropertyBase SetBaseValues()
     {
         SetType(type);
