@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Compilation;
 using UnityEngine;
 
 // Author : Auguste Paccapelo
@@ -58,8 +57,10 @@ public abstract class TweenPropertyBase
     protected float _elapseTime = 0f;
     public float ElapseTime => _elapseTime;
 
-    public event Action OnFinish;
     public event Action OnStart;
+    public event Action OnUpdate;
+    public event Action OnFinish;
+    public event Action OnLoopFinish;
 
     protected static readonly Dictionary<Type, Func<object, object, float, object>> lerpsFunc = new Dictionary<Type, Func<object, object, float, object>>()
     {
@@ -125,8 +126,10 @@ public abstract class TweenPropertyBase
     /// <returns>This TweenPropertyBase.</returns>
     public abstract TweenPropertyBase SetBaseValues();
 
-    protected virtual void TriggerOnFinish() => OnFinish?.Invoke();
     protected virtual void TriggerOnStart() => OnStart?.Invoke();
+    protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke();
+    protected virtual void TriggerOnFinish() => OnFinish?.Invoke();
+    protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke();
 
     public virtual void SetLoop(bool isLoop) => _isLoop = isLoop;
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 // Author : Auguste Paccapelo
 
@@ -28,7 +27,9 @@ public class Tween
     private int _exeptedNumProperties;
 
     public event Action OnStart;
+    public event Action OnUpdate;
     public event Action OnFinish;
+    public event Action OnLoopFinish;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -41,7 +42,9 @@ public class Tween
     public Tween Update(float deltaTime)
     {
         if (_isPaused) return this;
-        
+
+        OnUpdate?.Invoke();
+
         for (int i = _tweenProperties.Count - 1; i >= 0; i--)
         {
             _tweenProperties[i].Update(deltaTime);
@@ -52,6 +55,8 @@ public class Tween
             if (!_isLoop) Stop();
             else
             {
+                OnLoopFinish?.Invoke();
+
                 if (!_isParallel) _tweenProperties[0].NewIteration();
                 else
                 {
@@ -60,7 +65,7 @@ public class Tween
                 _numTweenFinished = 0;
             }
         }
-
+        
         return this;
     }
 

@@ -30,12 +30,15 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     private class TweenUnityEvents
     {
         public UnityEvent unityOnStart;
+        public UnityEvent unityOnUpdate;
+        public UnityEvent<TweenValueType> unityOnUpdateValue;
         public UnityEvent unityOnFinish;
+        public UnityEvent unityOnLoopFinish;
     }
 
     [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
 
-    public event Action<TweenValueType> OnUpdate;
+    public event Action<TweenValueType> OnUpdateValue;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -186,7 +189,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         if (lerpsFunc.ContainsKey(typeof(TweenValueType)))
         {
             _currentValue = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, _finalValue, w);
-            OnUpdate?.Invoke(_currentValue);
+            OnUpdateValue?.Invoke(_currentValue);
         }
         else
         { 
@@ -206,6 +209,8 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
             default:
                 throw new NotImplementedException();
         }
+
+        TriggerOnUpdate();
 
         if (elapse >= time) Stop();
     }
@@ -329,10 +334,24 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _unityEvents.unityOnStart?.Invoke();
     }
 
+    protected override void TriggerOnUpdate()
+    {
+        base.TriggerOnUpdate();
+        OnUpdateValue?.Invoke(_currentValue);
+        _unityEvents.unityOnUpdate?.Invoke();
+        _unityEvents.unityOnUpdateValue?.Invoke(_currentValue);
+    }
+
     protected override void TriggerOnFinish()
     {
         base.TriggerOnFinish();
         _unityEvents.unityOnFinish?.Invoke();
+    }
+
+    protected override void TriggerOnLoopFinish()
+    {
+        base.TriggerOnLoopFinish();
+        _unityEvents.unityOnLoopFinish?.Invoke();
     }
 
     /// <summary>
@@ -357,7 +376,7 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     public override void Stop()
     {
         _isPlaying = false;
-        TriggerOnFinish();
+        
 
         StartNextProperties();
 
@@ -365,7 +384,15 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _elapseTime = 0;
         _hasStarted = false;
 
-        if (!_isLoop) DestroyProperty();
+        if (!_isLoop)
+        {
+            TriggerOnFinish();
+            DestroyProperty();
+        }
+        else
+        {
+            TriggerOnLoopFinish();
+        }
     }
 
     private void StartNextProperties()
