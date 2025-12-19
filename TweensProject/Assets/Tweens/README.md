@@ -2,12 +2,12 @@
 
 Author : Auguste Paccapelo
 
-If you come here because nothing works, first make sure that the script TweenManager is attached to a GameObject in the game and is active.
-
 ----------
 
 System used to make animations on objects, for exemple to move an object from a point to another.
 You can choose to use Reflexion, a Function, or get the value and change it your self.
+
+Include a TweenComponent to make any tween from the editor without any code. They only use reflexion.
 
 ----------
 
