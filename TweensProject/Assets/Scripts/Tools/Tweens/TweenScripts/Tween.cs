@@ -98,31 +98,39 @@ public class Tween
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Play().Pause();).</returns>
     public Tween Play()
     {
+        // Can't start 2 times
         if (_hasStarted) return this;
 
+        // Set values
         _numTweenFinished = 0;
         _hasStarted = true;
         _isPaused = false;
 
         TweenPropertyBase property;
-        int length = _tweenProperties.Count-1;
 
-        for (int i = length; i >= 1; i--)
+        int numProperties = _tweenProperties.Count;
+
+        // Iterrate on each property
+        for (int i = 0; i < numProperties; i++)
         {
             property = _tweenProperties[i];
             property.SetLoop(_isLoop);
+            // If parallel, start all properties
             if (_isParallel) property.Start();
-            else
+            // If chain, build the chain and skip last
+            else if (i < numProperties - 1)
             {
-                _tweenProperties[i-1].AddNextProperty(property);
+                property.AddNextProperty(_tweenProperties[i + 1]);
             }
         }
-        if (length > 0)
+
+        // If in chain, start first property after the chain is built
+        if (!_isParallel && numProperties > 0)
         {
             _tweenProperties[0].Start();
-            _tweenProperties[0].SetLoop(_isLoop);
         }
 
+        // Tracking of finished properties
         _exeptedNumProperties = _tweenProperties.Count;
 
         OnStart?.Invoke();
