@@ -1,4 +1,4 @@
-# CustomUnityTween - Documentation
+# TweenCore - Documentation
 
 Author : Auguste Paccapelo
 
