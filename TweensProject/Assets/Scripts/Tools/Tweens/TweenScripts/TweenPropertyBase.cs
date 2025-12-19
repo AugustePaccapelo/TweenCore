@@ -38,7 +38,7 @@ public abstract class TweenPropertyBase
     [SerializeField] protected TweenEase ease = TweenEase.In;
 
     [SerializeField] protected float time = 1f;
-    protected float delay = 0f;
+    [SerializeField] protected float delay = 0f;
 
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
