@@ -151,13 +151,19 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
     private void SetReflexionFiels(string method)
     {
+        if (_obj == null)
+        {
+            Debug.LogError("Given object to tween is null");
+            return;
+        }
+
         _property = _obj.GetType().GetProperty(method);
-        if (_property == null)
-            _field = _obj.GetType().GetField(method);
+        if (_property == null) _field = _obj.GetType().GetField(method);
+
         if (_property == null && _field == null)
         {
-            Stop();
             Debug.LogError("No property or field found : " + method);
+            return;
         }
     }
 
@@ -169,6 +175,11 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
         _isPlaying = true;
         if (_currentMethod == MethodUse.Reflexion && _fromCurrentValue) _startValue = GetObjValue();
         TriggerOnStart();
+
+        if (_currentMethod == MethodUse.Reflexion && _obj == null)
+        {
+            Stop();
+        }
     }
 
     public override void NewIteration()
@@ -228,7 +239,11 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
 
     private TweenValueType GetObjValue()
     {
-        object value = _property != null ? _property.GetValue(_obj) : _field.GetValue(_obj);
+        object value = default;
+
+        if (_property != null) value = _property.GetValue(_obj);
+        else if (_field != null) value = _field.GetValue(_obj);
+
         return (TweenValueType)value;
     }
 
@@ -377,7 +392,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _isPlaying = false;
         
-
         StartNextProperties();
 
         myTween.NewPropertyFinished();
