@@ -2,26 +2,26 @@
 
 Author : Auguste Paccapelo
 
-If you come here because nothing works, first make sure that the script TweenManager is attached to a GameObject in the game and is active.
-
 ----------
 
-System used to make animations on objects, for exemple to move an object from a point to another.
-You can choose to use Reflexion, a Function, or get the value and change it your self.
+System used to make animations on objects, for example to move an object from a point to another.
+You can choose to use Reflection, a Function, or get the value and change it yourself.
+
+Include a TweenComponent to make any tween from the editor without any code. They only use Reflection.
 
 ----------
 
 Class : 
 TweenManager : Need to be in the game, manage all tweens.
 Tween : Contain and manage one or multiple TweenProperty.
-TweenProperty<TweenValueType> : Calcul the current value of type TweenValueType, and if wanted set the given property or field.
-TweenPropertyBase : Bastract class, parent of TweenProperty<TweenValueType> to manage multiple properties of different TweenValueTypes.
+TweenProperty<TweenValueType> : Calculates the current value of type TweenValueType, and if wanted set the given property or field.
+TweenPropertyBase : Abstract class, parent of TweenProperty<TweenValueType> to manage multiple properties of different TweenValueTypes.
 
 ----------
 
-Exemples of uses : 
-- Reflexion : 
-- - Exemple 1 :
+examples of uses : 
+- Reflection : 
+- - example 1 :
 
 Tween tween = Tween.CreateTween();
 TweenProperty<Vector3> property = tween.NewProperty(transform, "position", Vector3.zero, new Vector3(5, 2, 0), 2f);
@@ -30,7 +30,7 @@ property.SetType(TweenType.Bounce);
 
 tween.Play();
 
-- - Exemple 2 :
+- - example 2 :
 
 Tween tween = Tween.CreateTween();
 tween.NewProperty(transform, TweenTarget.Transform.GLOBAL_POSITION, new Vector3(5, 2, 0), 2f)
@@ -122,4 +122,4 @@ Currently supported types :
 C# :
 float, double, int, uint, long, ulong, decimal
 Unity :
-Vector2, Vector3, Vector3, Quaternion, Color, Color32
+Vector2, Vector3, Vector4, Quaternion, Color, Color32
