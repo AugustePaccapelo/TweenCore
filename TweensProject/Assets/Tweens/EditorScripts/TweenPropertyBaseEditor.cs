@@ -29,62 +29,69 @@ public class TweenPropertyBaseEditor : PropertyDrawer
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
+        // Call each editor frame
         EditorGUI.BeginProperty(position, label, property);
 
+        // Get the object to tween
         _currentObject = property.FindPropertyRelative("_obj").objectReferenceValue;
 
+        // Get the last object known
         SerializedProperty propLastObj = property.FindPropertyRelative("_lastKnownObject");
         UnityEngine.Object lastObj = propLastObj.objectReferenceValue;
         
+        // Index of the property choosed
         SerializedProperty propIndex = property.FindPropertyRelative("_propertyIndex");
         int currentIndex = propIndex.intValue;
 
+        // 
         long currentId = property.managedReferenceId;
 
-        if (property.isExpanded && _currentObject != null)
+        if (property.isExpanded)
         {
-            SerializedProperty propName = property.FindPropertyRelative("_propertyName");
-
-            Rect popupRect = new Rect(position.x, position.y + EditorGUI.GetPropertyHeight(property, label, true) + 2,
-                                  position.width, EditorGUIUtility.singleLineHeight);
-            position.height -= EditorGUIUtility.singleLineHeight;
-
-            if (_currentObject != lastObj || !_propertiesNamesMap.ContainsKey(currentId))
+            if (_currentObject != null)
             {
-                propLastObj.objectReferenceValue = _currentObject;
+                SerializedProperty propName = property.FindPropertyRelative("_propertyName");
 
-                BindingFlags flag = BindingFlags.Instance | BindingFlags.Public;
+                Rect popupRect = new Rect(position.x, position.y + EditorGUI.GetPropertyHeight(property, label, true) + 2,
+                                      position.width, EditorGUIUtility.singleLineHeight);
+                position.height -= EditorGUIUtility.singleLineHeight;
 
-                PropertyInfo[] allProperties = _currentObject.GetType().GetProperties(flag);
-                Type genericType = property.managedReferenceValue.GetType().GetGenericArguments()[0];
-                _propertiesNamesMap[currentId] = allProperties.Where(p => p.PropertyType == genericType).Select(p => p.Name).ToArray();
-
-                if (_propertiesNamesMap[currentId].Length > 0 && _currentObject != lastObj)
+                if (_currentObject != lastObj || !_propertiesNamesMap.ContainsKey(currentId))
                 {
-                    propName.stringValue = _propertiesNamesMap[currentId][0];
-                    propIndex.intValue = 0;
+                    propLastObj.objectReferenceValue = _currentObject;
+
+                    BindingFlags flag = BindingFlags.Instance | BindingFlags.Public;
+
+                    PropertyInfo[] allProperties = _currentObject.GetType().GetProperties(flag);
+                    Type genericType = property.managedReferenceValue.GetType().GetGenericArguments()[0];
+                    _propertiesNamesMap[currentId] = allProperties.Where(p => p.PropertyType == genericType).Select(p => p.Name).ToArray();
+
+                    if (_propertiesNamesMap[currentId].Length > 0 && _currentObject != lastObj)
+                    {
+                        propName.stringValue = _propertiesNamesMap[currentId][0];
+                        propIndex.intValue = 0;
+                    }
+                }
+
+                if (_propertiesNamesMap[currentId].Length > 0)
+                {
+                    int newIndex = EditorGUI.Popup(popupRect, currentIndex, _propertiesNamesMap[currentId]);
+                    if (newIndex != currentIndex)
+                    {
+                        propName.stringValue = _propertiesNamesMap[currentId][newIndex];
+                        propIndex.intValue = newIndex;
+
+                        property.serializedObject.ApplyModifiedProperties();
+                        EditorUtility.SetDirty(property.serializedObject.targetObject);
+                    }
                 }
             }
-
-            if (_propertiesNamesMap[currentId].Length > 0)
+            else
             {
-                int newIndex = EditorGUI.Popup(popupRect, currentIndex, _propertiesNamesMap[currentId]);
-                if (newIndex != currentIndex)
-                {
-                    propName.stringValue = _propertiesNamesMap[currentId][newIndex];
-                    propIndex.intValue = newIndex;
-
-                    property.serializedObject.ApplyModifiedProperties();
-                    EditorUtility.SetDirty(property.serializedObject.targetObject);
-                }
+                propLastObj.boxedValue = null;
+                propIndex.intValue = 0;
             }
         }
-        else
-        {
-            propLastObj.boxedValue = null;
-            propIndex.intValue = 0;
-        }
-
         EditorGUI.PropertyField(position, property, label, true);
         EditorGUI.EndProperty();
     }
