@@ -377,7 +377,6 @@ public class TweenProperty<TweenValueType> : TweenPropertyBase
     {
         _isPlaying = false;
         
-
         StartNextProperties();
 
         myTween.NewPropertyFinished();
