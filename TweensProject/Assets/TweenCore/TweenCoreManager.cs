@@ -4,21 +4,21 @@ using UnityEngine.SceneManagement;
 
 // Author : Auguste Paccapelo
 
-public class TweenManager : MonoBehaviour
+public class TweenCoreManager : MonoBehaviour
 {
     // ---------- VARIABLES ---------- \\
 
     // ----- Singleton ----- \\
 
-    private static TweenManager _instance;
-    public static TweenManager Instance
+    private static TweenCoreManager _instance;
+    public static TweenCoreManager Instance
     {
         get
         {
             if (_instance == null)
             {
-                GameObject obj = new GameObject(nameof(TweenManager));
-                _instance = obj.AddComponent<TweenManager>();
+                GameObject obj = new GameObject(nameof(TweenCoreManager));
+                _instance = obj.AddComponent<TweenCoreManager>();
             }
             return _instance;
         }
@@ -26,7 +26,7 @@ public class TweenManager : MonoBehaviour
 
     // ----- Objects ----- \\
 
-    private List<Tween> _tweens = new List<Tween>();
+    private List<TweenCore> _tweens = new List<TweenCore>();
 
     // ----- Others ----- \\
 
@@ -41,7 +41,7 @@ public class TweenManager : MonoBehaviour
         // Singleton
         if (_instance != null)
         {
-            Debug.Log(nameof(TweenManager) + " Instance already exist, destorying last added.");
+            Debug.Log(nameof(TweenCoreManager) + " Instance already exist, destorying last added.");
             Destroy(gameObject);
             return;
         }
@@ -99,12 +99,12 @@ public class TweenManager : MonoBehaviour
         }
     }
 
-    public void AddTween(Tween tween)
+    public void AddTween(TweenCore tween)
     {
         if (!_tweens.Contains(tween)) _tweens.Add(tween);
     }
 
-    public void RemoveTween(Tween tween)
+    public void RemoveTween(TweenCore tween)
     {
         if (_tweens.Contains(tween)) _tweens.Remove(tween);
     }

@@ -61,18 +61,18 @@
     <Analyzer Include="C:\Logiciels\Programmations\Unity\Editor\6000.0.59f2\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\TweenCore\EditorScripts\TweenComponentEditor.cs" />
     <Compile Include="Assets\Scripts\Tools\ScriptTemplatesLoaderTool.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenPropertyBase.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenProperty.cs" />
+    <Compile Include="Assets\TweenCore\TweenCoreComponent.cs" />
+    <Compile Include="Assets\TweenCore\EditorScripts\TweenCorePropertyBaseEditor.cs" />
     <Compile Include="Assets\Scripts\DefaultScript.cs" />
-    <Compile Include="Assets\TweenCore\TweenManager.cs" />
-    <Compile Include="Assets\TweenCore\EditorScripts\TweenPropertyBaseEditor.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\Tween.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenEnums.cs" />
-    <Compile Include="Assets\TweenCore\TweenComponent.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreProperty.cs" />
+    <Compile Include="Assets\TweenCore\TweenCoreManager.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenCore.cs" />
+    <Compile Include="Assets\TweenCore\EditorScripts\TweenCoreComponentEditor.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreEnums.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\TestTween.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenCorePropertyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

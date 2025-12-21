@@ -10,8 +10,8 @@ using UnityEngine;
 
 // Author : Auguste Paccapelo
 
-[CustomPropertyDrawer(typeof(TweenPropertyBase), true)]
-public class TweenPropertyBaseEditor : PropertyDrawer
+[CustomPropertyDrawer(typeof(TweenCorePropertyBase), true)]
+public class TweenCorePropertyBaseEditor : PropertyDrawer
 {
     // ----- CLASS ----- \\
     private class TweenPropertyEditorContext

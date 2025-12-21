@@ -9,8 +9,8 @@ using UnityEngine;
 
 // Author : Auguste Paccapelo
 
-[CustomEditor(typeof(TweenComponent))]
-public class TweenComponentEditor : Editor
+[CustomEditor(typeof(TweenCoreComponent))]
+public class TweenCoreComponentEditor : Editor
 {
     // ---------- VARIABLES ---------- \\
 
@@ -91,7 +91,7 @@ public class TweenComponentEditor : Editor
     {
         GenericMenu menu = new GenericMenu();
 
-        TweenComponent comp = (TweenComponent)target;
+        TweenCoreComponent comp = (TweenCoreComponent)target;
 
         foreach (string typeName in _typesMap.Keys)
         {
@@ -99,8 +99,8 @@ public class TweenComponentEditor : Editor
 
             menu.AddItem(new GUIContent(typeName), false, () =>
             {
-                Type genericType = typeof(TweenProperty<>).MakeGenericType(supportedType);
-                TweenPropertyBase propertyBase = (TweenPropertyBase)Activator.CreateInstance(genericType);
+                Type genericType = typeof(TweenCoreProperty<>).MakeGenericType(supportedType);
+                TweenCorePropertyBase propertyBase = (TweenCorePropertyBase)Activator.CreateInstance(genericType);
 
                 comp.AddProperty(propertyBase);
                 EditorUtility.SetDirty(comp);

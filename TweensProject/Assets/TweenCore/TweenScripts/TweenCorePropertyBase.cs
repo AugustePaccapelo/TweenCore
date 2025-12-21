@@ -5,14 +5,14 @@ using UnityEngine;
 // Author : Auguste Paccapelo
 
 [Serializable]
-public abstract class TweenPropertyBase
+public abstract class TweenCorePropertyBase
 {
     // ---------- VARIABLES ---------- \\
 
     // ----- Objects ----- \\
 
-    protected Tween myTween;
-    public Tween AttachedTween
+    protected TweenCore myTween;
+    public TweenCore AttachedTween
     {
         get => myTween;
         set => myTween = value;
@@ -34,28 +34,28 @@ public abstract class TweenPropertyBase
         Reflexion, Strategy, ReturnValue
     }
 
-    [SerializeField] protected TweenType type = TweenType.Linear;
-    [SerializeField] protected TweenEase ease = TweenEase.In;
+    [SerializeField] protected TweenCoreType type = TweenCoreType.Linear;
+    [SerializeField] protected TweenCoreEase ease = TweenCoreEase.In;
 
-    [SerializeField] protected float time = 1f;
+    [SerializeField] protected float duration = 1f;
     [SerializeField] protected float delay = 0f;
 
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
 
-    [SerializeField, HideInInspector] protected string _propertyName;
-    public string PropertyName => _propertyName;
-    [SerializeField, HideInInspector] protected int _propertyIndex;
+    [SerializeField, HideInInspector] protected string propertyName;
+    public string PropertyName => propertyName;
+    [SerializeField, HideInInspector] protected int propertyIndex;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
-    protected bool _isLoop = false;
+    protected bool isLoop = false;
 
-    protected bool _isPlaying = false;
-    protected bool _hasStarted = false;
-    public bool HasStarted => _hasStarted;
+    protected bool isPlaying = false;
+    protected bool hasStarted = false;
+    public bool HasStarted => hasStarted;
 
-    protected float _elapseTime = 0f;
-    public float ElapseTime => _elapseTime;
+    protected float elapseTime = 0f;
+    public float ElapseTime => elapseTime;
 
     public event Action OnStart;
     public event Action OnUpdate;
@@ -111,82 +111,82 @@ public abstract class TweenPropertyBase
     /// You should call Stop() or Pause() if tween is playing.
     /// </summary>
     /// <returns>This TweenPropertyBase.</returns>
-    public abstract TweenPropertyBase SetToFinalVals();
+    public abstract TweenCorePropertyBase SetToFinalVals();
 
     /// <summary>
     /// Add a TweenProperty to start when this TweenProperty is finished.
     /// </summary>
     /// <param name="property">The TweenProperty to start.</param>
     /// <returns>This TweenPropertyBase.</returns>
-    public abstract TweenPropertyBase AddNextProperty(TweenPropertyBase property);
+    public abstract TweenCorePropertyBase AddNextProperty(TweenCorePropertyBase property);
     /// <summary>
     /// Set the base values when using the empty constructor.
     /// Using this in a different context may have unexpted results.
     /// </summary>
     /// <returns>This TweenPropertyBase.</returns>
-    public abstract TweenPropertyBase SetBaseValues();
+    public abstract TweenCorePropertyBase SetBaseValues();
 
     protected virtual void TriggerOnStart() => OnStart?.Invoke();
     protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke();
     protected virtual void TriggerOnFinish() => OnFinish?.Invoke();
     protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke();
 
-    public virtual void SetLoop(bool isLoop) => _isLoop = isLoop;
+    public virtual void SetLoop(bool isLoop) => this.isLoop = isLoop;
 
-    protected void SetTypeFunc(TweenType newType)
+    protected void SetTypeFunc(TweenCoreType newType)
     {
         switch (newType)
         {
-            case TweenType.Linear:
+            case TweenCoreType.Linear:
                 TypeFunc = Linear;
                 break;
-            case TweenType.Quad:
+            case TweenCoreType.Quad:
                 TypeFunc = Quad;
                 break;
-            case TweenType.Cubic:
+            case TweenCoreType.Cubic:
                 TypeFunc = Cubic;
                 break;
-            case TweenType.Quart:
+            case TweenCoreType.Quart:
                 TypeFunc = Quart;
                 break;
-            case TweenType.Quint:
+            case TweenCoreType.Quint:
                 TypeFunc = Quint;
                 break;
-            case TweenType.Back:
+            case TweenCoreType.Back:
                 TypeFunc = Back;
                 break;
-            case TweenType.Elastic:
+            case TweenCoreType.Elastic:
                 TypeFunc = Elastic;
                 break;
-            case TweenType.Bounce:
+            case TweenCoreType.Bounce:
                 TypeFunc = Bounce;
                 break;
-            case TweenType.Circ:
+            case TweenCoreType.Circ:
                 TypeFunc = Circ;
                 break;
-            case TweenType.Sine:
+            case TweenCoreType.Sine:
                 TypeFunc = Sine;
                 break;
-            case TweenType.Expo:
+            case TweenCoreType.Expo:
                 TypeFunc = Expo;
                 break;
         }
     }
 
-    protected void SetEaseFunc(TweenEase newEase)
+    protected void SetEaseFunc(TweenCoreEase newEase)
     {
         switch (newEase)
         {
-            case TweenEase.In:
+            case TweenCoreEase.In:
                 EaseFunc = In;
                 break;
-            case TweenEase.Out:
+            case TweenCoreEase.Out:
                 EaseFunc = Out;
                 break;
-            case TweenEase.InOut:
+            case TweenCoreEase.InOut:
                 EaseFunc = InOut;
                 break;
-            case TweenEase.OutIn:
+            case TweenCoreEase.OutIn:
                 EaseFunc = OutIn;
                 break;
         }

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 // Author : Auguste Paccapelo
 
-public class TweenComponent : MonoBehaviour
+public class TweenCoreComponent : MonoBehaviour
 {
     // ---------- VARIABLES ---------- \\
 
@@ -12,8 +12,8 @@ public class TweenComponent : MonoBehaviour
 
     // ----- Objects ----- \\
 
-    private Tween _tween;
-    public Tween Tween => _tween;
+    private TweenCore _tween;
+    public TweenCore Tween => _tween;
 
     // ----- Others ----- \\
 
@@ -23,7 +23,7 @@ public class TweenComponent : MonoBehaviour
     [SerializeField] private bool _DestroyedWhenFinished = true;
     [SerializeField] private bool _surviveOnUnload = false;
 
-    [SerializeReference] private List<TweenPropertyBase> _properties = new List<TweenPropertyBase>();
+    [SerializeReference] private List<TweenCorePropertyBase> _properties = new List<TweenCorePropertyBase>();
 
     [SerializeField] private UnityEvent OnStart;
     [SerializeField] private UnityEvent OnFinish;
@@ -40,17 +40,17 @@ public class TweenComponent : MonoBehaviour
 
     private void Start()
     {
-        _tween = Tween.CreateTween()
+        _tween = TweenCore.CreateTween()
             .SetParallel(_isParallel).SetLoop(_isLoop)
             .SetSurviveOnUnload(_surviveOnUnload)
             .SetDestroyWhenFinish(_DestroyedWhenFinished);
         
-        foreach (TweenPropertyBase property in _properties)
+        foreach (TweenCorePropertyBase property in _properties)
         {
             _tween.AddProperty(property);
             property.SetBaseValues();
         }
-        TweenManager.Instance.AddTween(_tween);
+        TweenCoreManager.Instance.AddTween(_tween);
 
         _tween.OnStart += OnTweenStart;
         _tween.OnFinish += OnTweenFinish;
@@ -60,7 +60,7 @@ public class TweenComponent : MonoBehaviour
 
     // ----- My Functions ----- \\
 
-    public void AddProperty(TweenPropertyBase property)
+    public void AddProperty(TweenCorePropertyBase property)
     {
         _properties.Add(property);
     }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 // Author : Auguste Paccapelo
 
-public class Tween
+public class TweenCore
 {
     // ---------- VARIABLES ---------- \\
 
     // ----- Objects ----- \\
 
-    private List<TweenPropertyBase> _tweenProperties = new List<TweenPropertyBase>();
+    private List<TweenCorePropertyBase> _tweenProperties = new List<TweenCorePropertyBase>();
 
     // ----- Others ----- \\
 
@@ -39,7 +39,7 @@ public class Tween
     /// </summary>
     /// <param name="deltaTime">Time since last call.</param>
     /// <returns>This tween.</returns>
-    public Tween Update(float deltaTime)
+    public TweenCore Update(float deltaTime)
     {
         if (_isPaused) return this;
 
@@ -60,7 +60,7 @@ public class Tween
                 if (!_isParallel) _tweenProperties[0].NewIteration();
                 else
                 {
-                    foreach (TweenPropertyBase property in _tweenProperties) property.NewIteration();
+                    foreach (TweenCorePropertyBase property in _tweenProperties) property.NewIteration();
                 }
                 _numTweenFinished = 0;
             }
@@ -73,7 +73,7 @@ public class Tween
     /// Pause the tween and all properties attached.
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Pause().Resume();).</returns>
-    public Tween Pause()
+    public TweenCore Pause()
     {
         _isPaused = true;
 
@@ -84,7 +84,7 @@ public class Tween
     /// Resume the tween and all properties attached at the state it was paused.
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Resume().Pause();).</returns>
-    public Tween Resume()
+    public TweenCore Resume()
     {
         _isPaused = false;
 
@@ -96,7 +96,7 @@ public class Tween
     /// In parrele mode, all properties start at the same time, in chain mode only one is executed at the time.
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Play().Pause();).</returns>
-    public Tween Play()
+    public TweenCore Play()
     {
         // Can't start 2 times
         if (_hasStarted) return this;
@@ -106,7 +106,7 @@ public class Tween
         _hasStarted = true;
         _isPaused = false;
 
-        TweenPropertyBase property;
+        TweenCorePropertyBase property;
 
         int numProperties = _tweenProperties.Count;
 
@@ -146,7 +146,7 @@ public class Tween
     /// </summary>
     /// <param name="property">The property to destroy.</param>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.DestroyTweenProperty(...).Play();).</returns>
-    public Tween DestroyTweenProperty(TweenPropertyBase property)
+    public TweenCore DestroyTweenProperty(TweenCorePropertyBase property)
     {
         if (!_tweenProperties.Contains(property)) throw new ArgumentException("The tween does not contain the given property to destroy");
         if (_destroyWhenFinish) _tweenProperties.Remove(property);
@@ -167,7 +167,7 @@ public class Tween
             if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop();
         }
         OnFinish?.Invoke();
-        if (_destroyWhenFinish) TweenManager.Instance.RemoveTween(this);
+        if (_destroyWhenFinish) TweenCoreManager.Instance.RemoveTween(this);
     }
 
     /// <summary>
@@ -175,10 +175,10 @@ public class Tween
     /// A Tween handle one or multiples TweenProperty.
     /// </summary>
     /// <returns>The tween created.</returns>
-    public static Tween CreateTween()
+    public static TweenCore CreateTween()
     {
-        Tween tween = new Tween();
-        TweenManager.Instance.AddTween(tween);
+        TweenCore tween = new TweenCore();
+        TweenCoreManager.Instance.AddTween(tween);
         return tween;
     }
 
@@ -191,9 +191,9 @@ public class Tween
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(TweenValueType startVal, TweenValueType finalVal, float time)
+    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(startVal, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(startVal, finalVal, time, this);
         _tweenProperties.Add(property);
         return property;
     }
@@ -209,9 +209,9 @@ public class Tween
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float time)
+    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(function, startVal, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(function, startVal, finalVal, time, this);
         _tweenProperties.Add(property);
         return property;
     }
@@ -227,9 +227,9 @@ public class Tween
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
+    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
     {
-        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(obj, method, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, finalVal, time, this);
         _tweenProperties.Add(property);
         return property;
     }
@@ -245,9 +245,9 @@ public class Tween
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
+    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(obj, method, startVal, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, startVal, finalVal, time, this);
         _tweenProperties.Add(property);
         return property;
     }
@@ -257,7 +257,7 @@ public class Tween
     /// </summary>
     /// <param name="property">The proeprty to add.</param>
     /// <returns>The property added.</returns>
-    public TweenPropertyBase AddProperty(TweenPropertyBase property)
+    public TweenCorePropertyBase AddProperty(TweenCorePropertyBase property)
     {
         _tweenProperties.Add(property);
         property.AttachedTween = this;
@@ -270,7 +270,7 @@ public class Tween
     /// </summary>
     /// <param name="isParallel">If is in parallel.</param>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetParallel(true).Play();).</returns>
-    public Tween SetParallel(bool isParallel)
+    public TweenCore SetParallel(bool isParallel)
     {
         _isParallel = isParallel;
         return this;
@@ -282,7 +282,7 @@ public class Tween
     /// </summary>
     /// <param name="isChain">If is in chain.</param>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetChain(true).Play();).</returns>
-    public Tween SetChain(bool isChain)
+    public TweenCore SetChain(bool isChain)
     {
         _isParallel = !isChain;
         return this;
@@ -293,7 +293,7 @@ public class Tween
     /// Parallel is true by default;
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetChain(true).Play();).</returns>
-    public Tween Parallel()
+    public TweenCore Parallel()
     {
         _isParallel = true;
         return this;
@@ -304,7 +304,7 @@ public class Tween
     /// </summary>
     /// <param name="isLoop">If loop mode.</param>
     /// <returns>This tween.</returns>
-    public Tween SetLoop(bool isLoop)
+    public TweenCore SetLoop(bool isLoop)
     {
         _isLoop = isLoop;
         return this;
@@ -324,7 +324,7 @@ public class Tween
     /// Parallel is true by default;
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetChain(true).Play();).</returns>
-    public Tween Chain()
+    public TweenCore Chain()
     {
         _isParallel = false;
         return this;
@@ -334,7 +334,7 @@ public class Tween
     /// The tween will then survive when the scene unloads.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public Tween SurviveOnSceneLoad()
+    public TweenCore SurviveOnSceneLoad()
     {
         _surviveOnSceneUnload = true;
         return this;
@@ -344,7 +344,7 @@ public class Tween
     /// The tween will not survive when the scene unloads.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public Tween KillOnSceneUnLoad()
+    public TweenCore KillOnSceneUnLoad()
     {
         _surviveOnSceneUnload = false;
         return this;
@@ -354,7 +354,7 @@ public class Tween
     /// Set if the tween should survive or not on scene unloads.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public Tween SetSurviveOnUnload(bool survive)
+    public TweenCore SetSurviveOnUnload(bool survive)
     {
         _surviveOnSceneUnload = survive;
         return this;
@@ -364,7 +364,7 @@ public class Tween
     /// This tween and properties attached will be destroyed when finished.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public Tween DestroyWhenFinish()
+    public TweenCore DestroyWhenFinish()
     {
         _destroyWhenFinish = true;
         return this;
@@ -374,7 +374,7 @@ public class Tween
     /// This tween and propreties attached will not be destroyed when finished.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public Tween DontDestroyWhenFinish()
+    public TweenCore DontDestroyWhenFinish()
     {
         _destroyWhenFinish = false;
         return this;
@@ -384,7 +384,7 @@ public class Tween
     /// Set if this tween and properties attached should be destroyed when finished.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public Tween SetDestroyWhenFinish(bool destroy)
+    public TweenCore SetDestroyWhenFinish(bool destroy)
     {
         _destroyWhenFinish = destroy;
         return this;

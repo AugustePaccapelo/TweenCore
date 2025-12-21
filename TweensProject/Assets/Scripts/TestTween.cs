@@ -35,13 +35,13 @@ public class TestTween : MonoBehaviour
         _startPos = _startObj.transform.position;
         _endPos = _endObj.transform.position;
 
-        Tween tween = Tween.CreateTween();
+        TweenCore tween = TweenCore.CreateTween();
         tween.NewProperty(_target.transform, "position", _endPos, _time).From(_startPos)
-            .SetType(TweenType.Bounce)
-            .SetEase(TweenEase.In);
+            .SetType(TweenCoreType.Bounce)
+            .SetEase(TweenCoreEase.In);
 
         tween.NewProperty(f => _target.transform.localScale = f, Vector2.zero, Vector2.one, _time * 2)
-            .SetType(TweenType.Elastic).SetEase(TweenEase.Out)
+            .SetType(TweenCoreType.Elastic).SetEase(TweenCoreEase.Out)
             .SetDelay(1f);
 
         tween.Chain()

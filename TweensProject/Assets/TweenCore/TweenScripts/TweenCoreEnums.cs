@@ -1,16 +1,16 @@
 // Author : Auguste Paccapelo
 
-public enum TweenEase
+public enum TweenCoreEase
 {
     In, Out, InOut, OutIn, Custom
 }
 
-public enum TweenType
+public enum TweenCoreType
 {
     Linear, Sine, Cubic, Quint, Circ, Elastic, Quad, Quart, Expo, Back, Bounce, Custom
 }
 
-public static class TweenTarget
+public static class TweenCoreTarget
 {
     public static class Transform
     {

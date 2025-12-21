@@ -981,11 +981,7 @@ MonoBehaviour:
   _isLoop: 0
   _DestroyedWhenFinished: 0
   _surviveOnUnload: 1
-  _properties:
-  - rid: 5929368407574577219
-  - rid: 5929368407709581379
-  - rid: 7641270910422614083
-  - rid: 7641270935230873667
+  _properties: []
   OnStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1006,127 +1002,7 @@ MonoBehaviour:
         m_CallState: 2
   references:
     version: 2
-    RefIds:
-    - rid: 5929368407574577219
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 747174022}
-        type: 4
-        ease: 0
-        time: 2.5
-        delay: 0
-        _propertyName: position
-        _propertyIndex: 0
-        _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 0
-        _startValue: {x: -5, y: 2, z: 0}
-        _finalValue: {x: 7.5, y: -3, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 5929368407709581379
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 747174022}
-        type: 10
-        ease: 0
-        time: 1
-        delay: 0
-        _propertyName: localScale
-        _propertyIndex: 7
-        _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 0
-        _startValue: {x: 1, y: 1, z: 1}
-        _finalValue: {x: 2, y: 2, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 7641270910422614083
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 747174022}
-        type: 0
-        ease: 0
-        time: 1
-        delay: 3
-        _propertyName: position
-        _propertyIndex: 0
-        _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 1
-        _startValue: {x: 0, y: 0, z: 0}
-        _finalValue: {x: 0, y: 0, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 7641270935230873667
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 0}
-        type: 0
-        ease: 0
-        time: 1
-        delay: 0
-        _propertyName: 
-        _propertyIndex: 0
-        _lastKnownObject: {fileID: 0}
-        _fromCurrentValue: 0
-        _startValue: {x: 0, y: 0, z: 0}
-        _finalValue: {x: 0, y: 0, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
+    RefIds: []
 --- !u!1 &807011426
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,8 +1489,8 @@ MonoBehaviour:
   _DestroyedWhenFinished: 1
   _surviveOnUnload: 0
   _properties:
-  - rid: 5929368384325812307
-  - rid: 5929368384325812308
+  - rid: -2
+  - rid: -2
   OnStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1624,66 +1500,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5929368384325812307
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 1740234257}
-        type: 0
-        ease: 0
-        time: 1
-        delay: 0
-        _propertyName: position
-        _propertyIndex: 0
-        _lastKnownObject: {fileID: 1740234257}
-        _fromCurrentValue: 1
-        _startValue: {x: 0, y: 0, z: 0}
-        _finalValue: {x: 0, y: 0, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 5929368384325812308
-      type: {class: 'TweenProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        _obj: {fileID: 1740234257}
-        type: 0
-        ease: 0
-        time: 1
-        delay: 0
-        _propertyName: position
-        _propertyIndex: 0
-        _lastKnownObject: {fileID: 1740234257}
-        _fromCurrentValue: 1
-        _startValue: {x: 0, y: 0, z: 0}
-        _finalValue: {x: 0, y: 0, z: 0}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &1779092431
 GameObject:
   m_ObjectHideFlags: 0

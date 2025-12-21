@@ -11,9 +11,9 @@ public class DefaultScript : MonoBehaviour
 
     // ----- Objects ----- \\
 
-    private Tween _myTween;
+    private TweenCore _myTween;
 
-    [SerializeField] private TweenComponent comp;
+    [SerializeField] private TweenCoreComponent comp;
 
     // ----- Others ----- \\
 
@@ -32,9 +32,9 @@ public class DefaultScript : MonoBehaviour
 
     private void Start()
     {
-        _myTween = Tween.CreateTween().SurviveOnSceneLoad();
+        _myTween = TweenCore.CreateTween().SurviveOnSceneLoad();
         _myTween.NewProperty(TweenFunc, Vector3.zero, new Vector3(5, 5, 0), 2f)
-            .SetEase(TweenEase.Out).SetType(TweenType.Elastic);
+            .SetEase(TweenCoreEase.Out).SetType(TweenCoreType.Elastic);
         //StartCoroutine(TweenCoroutine());
     }
 
