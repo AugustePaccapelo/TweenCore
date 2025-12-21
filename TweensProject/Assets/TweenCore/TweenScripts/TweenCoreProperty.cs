@@ -197,28 +197,15 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         float elapse = Mathf.Clamp(elapseTime - delay, 0, duration);
         float w = Mathf.Clamp01(elapse / duration);
         w = RealWeight(w);
+
         if (lerpsFunc.ContainsKey(typeof(TweenValueType)))
         {
-            _currentValue = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, _finalValue, w);
-            OnUpdateValue?.Invoke(_currentValue);
+            TweenValueType value = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, _finalValue, w);
+            SetValue(value);
         }
         else
         { 
             throw new ArgumentException("The ValueType given is not supported (" + typeof(TweenValueType) + ").");
-        }
-
-        switch (_currentMethod)
-        {
-            case MethodUse.Reflexion:
-                ReflexionMethod();
-                break;
-            case MethodUse.Strategy:
-                StrategyMethod();
-                break;
-            case MethodUse.ReturnValue:
-                break;
-            default:
-                throw new NotImplementedException();
         }
 
         TriggerOnUpdate();
@@ -392,6 +379,8 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     {
         isPlaying = false;
         
+        SetToFinalVals();
+
         StartNextProperties();
 
         myTween.NewPropertyFinished();
@@ -419,8 +408,31 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         }
     }
 
+    private void SetValue(TweenValueType value)
+    {
+        _currentValue = value;
+
+        switch (_currentMethod)
+        {
+            case MethodUse.Reflexion:
+                ReflexionMethod();
+                break;
+            case MethodUse.Strategy:
+                StrategyMethod();
+                break;
+            case MethodUse.ReturnValue:
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+
+        OnUpdateValue?.Invoke(_currentValue);
+    }
+
     public override TweenCorePropertyBase SetToFinalVals()
     {
+        SetValue(_finalValue);
+
         return this;
     }
 
