@@ -35,11 +35,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     [Serializable]
     private class TweenUnityEvents
     {
-        public UnityEvent unityOnStart;
-        public UnityEvent unityOnUpdate;
-        public UnityEvent<TweenValueType> unityOnUpdateValue;
-        public UnityEvent unityOnFinish;
-        public UnityEvent unityOnLoopFinish;
+        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnStart;
+        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnUpdate;
+        public UnityEvent<TweenCoreProperty<TweenValueType>, TweenValueType> unityOnUpdateValue;
+        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnFinish;
+        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnLoopFinish;
     }
 
     [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
@@ -341,27 +341,27 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     protected override void TriggerOnStart()
     {
         base.TriggerOnStart();
-        _unityEvents.unityOnStart?.Invoke();
+        _unityEvents.unityOnStart?.Invoke(this);
     }
 
     protected override void TriggerOnUpdate()
     {
         base.TriggerOnUpdate();
         OnUpdateValue?.Invoke(this, _currentValue);
-        _unityEvents.unityOnUpdate?.Invoke();
-        _unityEvents.unityOnUpdateValue?.Invoke(_currentValue);
+        _unityEvents.unityOnUpdate?.Invoke(this);
+        _unityEvents.unityOnUpdateValue?.Invoke(this, _currentValue);
     }
 
     protected override void TriggerOnFinish()
     {
         base.TriggerOnFinish();
-        _unityEvents.unityOnFinish?.Invoke();
+        _unityEvents.unityOnFinish?.Invoke(this);
     }
 
     protected override void TriggerOnLoopFinish()
     {
         base.TriggerOnLoopFinish();
-        _unityEvents.unityOnLoopFinish?.Invoke();
+        _unityEvents.unityOnLoopFinish?.Invoke(this);
     }
 
     /// <summary>
@@ -392,14 +392,12 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         StartNextProperties();
 
-        myTween.NewPropertyFinished();
         elapseTime = 0;
         hasStarted = false;
 
         if (!isLoop)
         {
             TriggerOnFinish();
-            DestroyProperty();
         }
         else
         {
@@ -443,10 +441,5 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         SetValue(_finalValue);
 
         return this;
-    }
-
-    private void DestroyProperty()
-    {
-        myTween.DestroyTweenProperty(this);
     }
 }

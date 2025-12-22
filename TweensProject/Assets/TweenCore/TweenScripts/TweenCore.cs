@@ -157,19 +157,20 @@ public class TweenCore
         return this;
     }
 
-    /// <summary>
-    /// Destroy the given property.
-    /// !WARNING! This does not stop the property, 
-    /// it will no longer be updated, but the TweenPropertyBase.OnFinish event will not be called.
-    /// To Stop and Destroy a property use TweenPropertyBase.Stop();.
-    /// </summary>
-    /// <param name="property">The property to destroy.</param>
-    /// <returns>This tween, so you can chained the methods calls (e.g. tween.DestroyTweenProperty(...).Play();).</returns>
-    public TweenCore DestroyTweenProperty(TweenCorePropertyBase property)
+    private void DestroyTweenProperty(TweenCorePropertyBase property)
     {
         if (!_tweenProperties.Contains(property)) throw new ArgumentException("The tween does not contain the given property to destroy");
-        if (_destroyOnFinish) _tweenProperties.Remove(property);
-        return this;
+        _tweenProperties.Remove(property);
+    }
+
+    private void NewPropertyFinished(TweenCorePropertyBase property)
+    {
+        _numPropertiesFinished++;
+
+        if (_destroyOnFinish)
+        {
+            DestroyTweenProperty(property);
+        }
     }
 
     /// <summary>
@@ -216,7 +217,7 @@ public class TweenCore
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(TweenValueType startVal, TweenValueType finalVal, float time)
     {
         TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(startVal, finalVal, time, this);
-        _tweenProperties.Add(property);
+        AddProperty(property);
         return property;
     }
 
@@ -234,7 +235,7 @@ public class TweenCore
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float time)
     {
         TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(function, startVal, finalVal, time, this);
-        _tweenProperties.Add(property);
+        AddProperty(property);
         return property;
     }
 
@@ -252,7 +253,7 @@ public class TweenCore
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
     {
         TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, finalVal, time, this);
-        _tweenProperties.Add(property);
+        AddProperty(property);
         return property;
     }
 
@@ -270,22 +271,16 @@ public class TweenCore
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
     {
         TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, startVal, finalVal, time, this);
-        _tweenProperties.Add(property);
+        AddProperty(property);
         return property;
     }
 
-    /// <summary>
-    /// Add an existing property to the list of properties.
-    /// </summary>
-    /// <param name="property">The proeprty to add.</param>
-    /// <returns>The property added.</returns>
-    public TweenCorePropertyBase AddProperty(TweenCorePropertyBase property)
+    private void AddProperty(TweenCorePropertyBase property)
     {
         _tweenProperties.Add(property);
-        property.AttachedTween = this;
-        return property;
+        property.OnFinish += NewPropertyFinished;
     }
-
+    
     /// <summary>
     /// Set the Parallel or Chain mode, if Parallel all tweensProperties Play at the same time, in Chain only one can play at the time.
     /// Parallel is true by default;
@@ -330,15 +325,6 @@ public class TweenCore
     {
         _isLoop = isLoop;
         return this;
-    }
-
-    /// <summary>
-    /// Use to track the number of tweens properties finished for loop mode.
-    /// Do not call this function or it may cause unexpeted results.
-    /// </summary>
-    public void NewPropertyFinished()
-    {
-        _numPropertiesFinished++;
     }
 
     /// <summary>

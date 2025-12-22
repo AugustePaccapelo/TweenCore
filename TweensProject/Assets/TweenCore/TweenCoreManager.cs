@@ -31,6 +31,7 @@ public class TweenCoreManager : MonoBehaviour
     // ----- Others ----- \\
 
     private bool _isPlaying = true;
+    public bool IsPlaying => _isPlaying;
 
     // ---------- FUNCTIONS ---------- \\
 

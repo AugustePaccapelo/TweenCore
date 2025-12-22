@@ -11,13 +11,6 @@ public abstract class TweenCorePropertyBase
 
     // ----- Objects ----- \\
 
-    protected TweenCore myTween;
-    public TweenCore AttachedTween
-    {
-        get => myTween;
-        set => myTween = value;
-    }
-
     [SerializeField] protected UnityEngine.Object _obj;
     public UnityEngine.Object TargetObject => _obj;
 
