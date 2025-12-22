@@ -13,6 +13,7 @@ public class TweenCore
 
     // ----- Others ----- \\
 
+    private bool _isPlaying = false;
     private bool _isPaused = true;
     private bool _hasStarted = false;
 
@@ -41,7 +42,7 @@ public class TweenCore
     /// <returns>This tween.</returns>
     public TweenCore Update(float deltaTime)
     {
-        if (_isPaused) return this;
+        if (!_isPlaying || _isPaused) return this;
 
         OnUpdate?.Invoke();
 
@@ -105,6 +106,7 @@ public class TweenCore
         _numTweenFinished = 0;
         _hasStarted = true;
         _isPaused = false;
+        _isPlaying = true;
 
         TweenCorePropertyBase property;
 
@@ -161,6 +163,8 @@ public class TweenCore
     {
         _hasStarted = false;
         _isPaused = false;
+        _isPlaying = false;
+
         int length = _tweenProperties.Count - 1;
         for (int i = length; i >= 0; i --)
         {

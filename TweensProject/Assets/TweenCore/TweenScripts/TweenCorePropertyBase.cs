@@ -51,6 +51,7 @@ public abstract class TweenCorePropertyBase
     protected bool isLoop = false;
 
     protected bool isPlaying = false;
+    protected bool isPaused = true;
     protected bool hasStarted = false;
     public bool HasStarted => hasStarted;
 

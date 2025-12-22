@@ -172,7 +172,9 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         if (hasStarted) return;
 
         hasStarted = true;
+        isPaused = false;
         isPlaying = true;
+
         if (_currentMethod == MethodUse.Reflexion && _fromCurrentValue) _startValue = GetObjValue();
         TriggerOnStart();
 
@@ -189,7 +191,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public override void Update(float deltaTime)
     {
-        if (!isPlaying) return;
+        if (!isPlaying || isPaused) return;
 
         elapseTime += deltaTime;
         if (elapseTime <= delay) return;
@@ -361,7 +363,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// </summary>
     public void Pause()
     {
-        isPlaying = false;
+        isPaused = true;
     }
 
     /// <summary>
@@ -369,7 +371,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// </summary>
     public void Resume()
     {
-        isPlaying = true;
+        isPaused = false;
     }
 
     /// <summary>
@@ -378,6 +380,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     public override void Stop()
     {
         isPlaying = false;
+        isPaused = true;
         
         SetToFinalVals();
 
