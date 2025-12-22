@@ -11,8 +11,8 @@ public abstract class TweenCorePropertyBase
 
     // ----- Objects ----- \\
 
-    [SerializeField] protected UnityEngine.Object _obj;
-    public UnityEngine.Object TargetObject => _obj;
+    [SerializeField] protected UnityEngine.Object obj;
+    public UnityEngine.Object TargetObject => obj;
 
     // ----- Others ----- \\
 

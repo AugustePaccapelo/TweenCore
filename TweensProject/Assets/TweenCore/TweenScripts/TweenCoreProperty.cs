@@ -55,11 +55,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="finalVal">The end value.</param>
     /// <param name="time">The duration.</param>
     /// <param name="tween">The attached tween.</param>
-    public TweenCoreProperty(TweenValueType startVal, TweenValueType finalVal, float time, TweenCore tween)
+    public TweenCoreProperty(TweenValueType startVal, TweenValueType finalVal, float time)
     {
         _currentMethod = MethodUse.ReturnValue;
 
-        SetCommonValues(finalVal, time, tween);
+        SetCommonValues(finalVal, time);
 
         _startValue = startVal;
 
@@ -74,11 +74,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="finalVal">The end value.</param>
     /// <param name="duration">The duration.</param>
     /// <param name="tween">The attached tween.</param>
-    public TweenCoreProperty(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float duration, TweenCore tween)
+    public TweenCoreProperty(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float duration)
     {
         _currentMethod = MethodUse.Strategy;
 
-        SetCommonValues(finalVal, duration, tween);
+        SetCommonValues(finalVal, duration);
 
         _startValue = startVal;
         _function = function;
@@ -94,13 +94,13 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="finalVal">The end value.</param>
     /// <param name="duration">The duration.</param>
     /// <param name="tween">The attached tween.</param>
-    public TweenCoreProperty(UnityEngine.Object obj, string method, TweenValueType finalVal, float duration, TweenCore tween)
+    public TweenCoreProperty(UnityEngine.Object obj, string method, TweenValueType finalVal, float duration)
     {
         _currentMethod = MethodUse.Reflexion;
         
-        SetCommonValues(finalVal, duration, tween, method);
+        SetCommonValues(finalVal, duration, method);
 
-        _obj = obj;
+        base.obj = obj;
         SetReflexionFiels(propertyName);
 
         _fromCurrentValue = false;
@@ -115,13 +115,13 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="finalVal">The end value.</param>
     /// <param name="duration">The duration.</param>
     /// <param name="tween">The attached tween.</param>
-    public TweenCoreProperty(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float duration, TweenCore tween)
+    public TweenCoreProperty(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float duration)
     {
         _currentMethod = MethodUse.Reflexion;
 
-        SetCommonValues(finalVal, duration, tween, method);
+        SetCommonValues(finalVal, duration, method);
 
-        _obj = obj;
+        base.obj = obj;
         SetReflexionFiels(propertyName);
         _startValue = startVal;
 
@@ -145,11 +145,10 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         return this;
     }
 
-    private void SetCommonValues(TweenValueType finalVal, float duration, TweenCore tween, string propertyName = "")
+    private void SetCommonValues(TweenValueType finalVal, float duration, string propertyName = "")
     {
         _finalValue = finalVal;
         base.duration = duration;
-        myTween = tween;
         base.propertyName = propertyName;
         SetType(type);
         SetEase(ease);
@@ -157,14 +156,14 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private void SetReflexionFiels(string method)
     {
-        if (_obj == null)
+        if (obj == null)
         {
             Debug.LogError("Given object to tween is null");
             return;
         }
 
-        _property = _obj.GetType().GetProperty(method);
-        if (_property == null) _field = _obj.GetType().GetField(method);
+        _property = obj.GetType().GetProperty(method);
+        if (_property == null) _field = obj.GetType().GetField(method);
 
         if (_property == null && _field == null)
         {
@@ -184,7 +183,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         if (_currentMethod == MethodUse.Reflexion && _fromCurrentValue) _startValue = GetObjValue();
         TriggerOnStart();
 
-        if (_currentMethod == MethodUse.Reflexion && _obj == null)
+        if (_currentMethod == MethodUse.Reflexion && obj == null)
         {
             Stop();
         }
@@ -228,16 +227,16 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private void ReflexionMethod()
     {
-        if (_property != null) _property.SetValue(_obj, _currentValue);
-        else _field.SetValue(_obj, _currentValue);
+        if (_property != null) _property.SetValue(obj, _currentValue);
+        else _field.SetValue(obj, _currentValue);
     }
 
     private TweenValueType GetObjValue()
     {
         object value = default;
 
-        if (_property != null) value = _property.GetValue(_obj);
-        else if (_field != null) value = _field.GetValue(_obj);
+        if (_property != null) value = _property.GetValue(obj);
+        else if (_field != null) value = _field.GetValue(obj);
 
         return (TweenValueType)value;
     }

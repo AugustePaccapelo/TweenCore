@@ -977,20 +977,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playOnStart: 1
-  _isParallel: 0
+  _isParallel: 1
   _isLoop: 0
-  _DestroyedWhenFinished: 0
-  _surviveOnUnload: 1
-  _properties: []
+  _DestroyedWhenFinished: 1
+  _surviveOnUnload: 0
+  _properties:
+  - rid: 7641270970823999560
+  - rid: 7641270970823999561
+  - rid: 7641270970823999562
+  - rid: 7641270970823999563
   OnStart:
     m_PersistentCalls:
       m_Calls: []
   OnFinish:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 747174023}
-        m_TargetAssemblyTypeName: DefaultScript, Assembly-CSharp
-        m_MethodName: PlayTween
+      - m_Target: {fileID: 747174025}
+        m_TargetAssemblyTypeName: TweenCoreComponent, Assembly-CSharp
+        m_MethodName: Play
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1002,7 +1006,127 @@ MonoBehaviour:
         m_CallState: 2
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7641270970823999560
+      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
+      data:
+        obj: {fileID: 747174022}
+        type: 10
+        ease: 1
+        duration: 2
+        delay: 0
+        propertyName: position
+        propertyIndex: 0
+        _lastKnownObject: {fileID: 747174022}
+        _fromCurrentValue: 0
+        _startValue: {x: -2.5, y: -2.5, z: -2.5}
+        _finalValue: {x: 2.5, y: 2.5, z: 2.5}
+        _unityEvents:
+          unityOnStart:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdate:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdateValue:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnFinish:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnLoopFinish:
+            m_PersistentCalls:
+              m_Calls: []
+    - rid: 7641270970823999561
+      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
+      data:
+        obj: {fileID: 747174022}
+        type: 5
+        ease: 0
+        duration: 1
+        delay: 2
+        propertyName: localScale
+        propertyIndex: 7
+        _lastKnownObject: {fileID: 747174022}
+        _fromCurrentValue: 0
+        _startValue: {x: 1, y: 1, z: 1}
+        _finalValue: {x: 3, y: 3, z: 3}
+        _unityEvents:
+          unityOnStart:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdate:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdateValue:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnFinish:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnLoopFinish:
+            m_PersistentCalls:
+              m_Calls: []
+    - rid: 7641270970823999562
+      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
+      data:
+        obj: {fileID: 747174022}
+        type: 0
+        ease: 0
+        duration: 1
+        delay: 3
+        propertyName: localScale
+        propertyIndex: 7
+        _lastKnownObject: {fileID: 747174022}
+        _fromCurrentValue: 0
+        _startValue: {x: 3, y: 3, z: 3}
+        _finalValue: {x: 1, y: 1, z: 1}
+        _unityEvents:
+          unityOnStart:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdate:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdateValue:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnFinish:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnLoopFinish:
+            m_PersistentCalls:
+              m_Calls: []
+    - rid: 7641270970823999563
+      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
+      data:
+        obj: {fileID: 747174022}
+        type: 0
+        ease: 0
+        duration: 1
+        delay: 4
+        propertyName: position
+        propertyIndex: 0
+        _lastKnownObject: {fileID: 747174022}
+        _fromCurrentValue: 0
+        _startValue: {x: 2.5, y: 2.5, z: 2.5}
+        _finalValue: {x: 0, y: 0, z: 0}
+        _unityEvents:
+          unityOnStart:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdate:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdateValue:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnFinish:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnLoopFinish:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &807011426
 GameObject:
   m_ObjectHideFlags: 0

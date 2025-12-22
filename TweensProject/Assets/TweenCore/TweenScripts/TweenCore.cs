@@ -166,11 +166,16 @@ public class TweenCore
     private void NewPropertyFinished(TweenCorePropertyBase property)
     {
         _numPropertiesFinished++;
-
+        
         if (_destroyOnFinish)
         {
             DestroyTweenProperty(property);
         }
+    }
+
+    private void NewPropertyFinishedIteration(TweenCorePropertyBase property)
+    {
+        _numPropertiesFinished++;
     }
 
     /// <summary>
@@ -216,7 +221,7 @@ public class TweenCore
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(startVal, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(startVal, finalVal, time);
         AddProperty(property);
         return property;
     }
@@ -234,7 +239,7 @@ public class TweenCore
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(function, startVal, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(function, startVal, finalVal, time);
         AddProperty(property);
         return property;
     }
@@ -252,7 +257,7 @@ public class TweenCore
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, finalVal, time);
         AddProperty(property);
         return property;
     }
@@ -270,15 +275,17 @@ public class TweenCore
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
     public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, startVal, finalVal, time, this);
+        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, startVal, finalVal, time);
         AddProperty(property);
         return property;
     }
 
-    private void AddProperty(TweenCorePropertyBase property)
+    public TweenCore AddProperty(TweenCorePropertyBase property)
     {
         _tweenProperties.Add(property);
         property.OnFinish += NewPropertyFinished;
+        property.OnLoopFinish += NewPropertyFinishedIteration;
+        return this;
     }
     
     /// <summary>

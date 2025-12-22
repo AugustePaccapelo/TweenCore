@@ -41,7 +41,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         public TweenPropertyEditorContext(SerializedProperty property = null)
         {
             if (property == null) return;
-
+            
             InitSerializedProperties(property);
             InitVariables();
         }
@@ -56,10 +56,10 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             if (property == null) return;
 
             this.property = property;
-            propCurrentObject = property.FindPropertyRelative("_obj");
+            propCurrentObject = property.FindPropertyRelative("obj");
             propLastKnownObject = property.FindPropertyRelative("_lastKnownObject");
-            propCurrentPropertyChoosedIndex = property.FindPropertyRelative("_propertyIndex");
-            propPropertyChoosedName = property.FindPropertyRelative("_propertyName");
+            propCurrentPropertyChoosedIndex = property.FindPropertyRelative("propertyIndex");
+            propPropertyChoosedName = property.FindPropertyRelative("propertyName");
         }
 
         public void InitVariables()
@@ -109,7 +109,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
         if (!property.isExpanded) return heigth;
 
-        SerializedProperty propCurrentObj = property.FindPropertyRelative("_obj");
+        SerializedProperty propCurrentObj = property.FindPropertyRelative("obj");
 
         long propId = property.managedReferenceId;
 
