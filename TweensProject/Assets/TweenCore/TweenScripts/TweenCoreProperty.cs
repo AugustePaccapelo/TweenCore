@@ -14,8 +14,14 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     // ----- Others ----- \\
 
     [SerializeField] private bool _fromCurrentValue = false;
+    public bool FromCurrentValue => _fromCurrentValue;
+
     [SerializeField] private TweenValueType _startValue;
+    public TweenValueType StartValue => _startValue;
+
     [SerializeField] private TweenValueType _finalValue;
+    public TweenValueType FinalValue => _finalValue;
+
     private TweenValueType _currentValue;
     public TweenValueType CurrentValue => _currentValue;
 

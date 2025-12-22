@@ -14,18 +14,32 @@ public class TweenCore
     // ----- Others ----- \\
 
     private bool _isPlaying = false;
+    public bool IsPlaying => _isPlaying;
+
     private bool _isPaused = true;
+    public bool IsPaused => _isPaused;
+
     private bool _hasStarted = false;
+    public bool HasStarted => _hasStarted;
 
     private bool _isParallel = true;
+    public bool IsParallel => _isParallel;
 
-    private bool _destroyWhenFinish = true;
+    private bool _isLoop = false;
+    public bool IsLoop => _isLoop;
+
+    private bool _destroyOnFinish = true;
+    public bool DestroyOnFinish => _destroyOnFinish;
+
     private bool _surviveOnSceneUnload = false;
     public bool SurviveOnSceneUnload => _surviveOnSceneUnload;
 
-    private bool _isLoop = false;
-    private int _numTweenFinished = 0;
+    private int _numPropertiesFinished = 0;
     private int _exeptedNumProperties;
+    public int NumProperties => _tweenProperties.Count;
+
+    private float _elapseTime = 0f;
+    public float ElapseTime => _elapseTime;
 
     public event Action OnStart;
     public event Action OnUpdate;
@@ -45,13 +59,14 @@ public class TweenCore
         if (!_isPlaying || _isPaused) return this;
 
         OnUpdate?.Invoke();
+        _elapseTime += deltaTime;
 
         for (int i = _tweenProperties.Count - 1; i >= 0; i--)
         {
             _tweenProperties[i].Update(deltaTime);
         }
 
-        if (_numTweenFinished == _exeptedNumProperties)
+        if (_numPropertiesFinished == _exeptedNumProperties)
         {
             if (!_isLoop) Stop();
             else
@@ -63,7 +78,7 @@ public class TweenCore
                 {
                     foreach (TweenCorePropertyBase property in _tweenProperties) property.NewIteration();
                 }
-                _numTweenFinished = 0;
+                _numPropertiesFinished = 0;
             }
         }
         
@@ -103,10 +118,12 @@ public class TweenCore
         if (_hasStarted) return this;
 
         // Set values
-        _numTweenFinished = 0;
+        _numPropertiesFinished = 0;
         _hasStarted = true;
         _isPaused = false;
         _isPlaying = true;
+
+        _elapseTime = 0;
 
         TweenCorePropertyBase property;
 
@@ -151,7 +168,7 @@ public class TweenCore
     public TweenCore DestroyTweenProperty(TweenCorePropertyBase property)
     {
         if (!_tweenProperties.Contains(property)) throw new ArgumentException("The tween does not contain the given property to destroy");
-        if (_destroyWhenFinish) _tweenProperties.Remove(property);
+        if (_destroyOnFinish) _tweenProperties.Remove(property);
         return this;
     }
 
@@ -164,6 +181,7 @@ public class TweenCore
         _hasStarted = false;
         _isPaused = false;
         _isPlaying = false;
+        _elapseTime = 0;
 
         int length = _tweenProperties.Count - 1;
         for (int i = length; i >= 0; i --)
@@ -171,7 +189,7 @@ public class TweenCore
             if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop();
         }
         OnFinish?.Invoke();
-        if (_destroyWhenFinish) TweenCoreManager.Instance.RemoveTween(this);
+        if (_destroyOnFinish) TweenCoreManager.Instance.RemoveTween(this);
     }
 
     /// <summary>
@@ -320,7 +338,7 @@ public class TweenCore
     /// </summary>
     public void NewPropertyFinished()
     {
-        _numTweenFinished++;
+        _numPropertiesFinished++;
     }
 
     /// <summary>
@@ -370,7 +388,7 @@ public class TweenCore
     /// <returns>This Tween.</returns>
     public TweenCore DestroyWhenFinish()
     {
-        _destroyWhenFinish = true;
+        _destroyOnFinish = true;
         return this;
     }
 
@@ -380,7 +398,7 @@ public class TweenCore
     /// <returns>This Tween.</returns>
     public TweenCore DontDestroyWhenFinish()
     {
-        _destroyWhenFinish = false;
+        _destroyOnFinish = false;
         return this;
     }
 
@@ -390,7 +408,7 @@ public class TweenCore
     /// <returns>This Tween.</returns>
     public TweenCore SetDestroyWhenFinish(bool destroy)
     {
-        _destroyWhenFinish = destroy;
+        _destroyOnFinish = destroy;
         return this;
     }
 }

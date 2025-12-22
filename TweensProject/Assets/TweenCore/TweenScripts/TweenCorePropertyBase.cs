@@ -35,23 +35,35 @@ public abstract class TweenCorePropertyBase
     }
 
     [SerializeField] protected TweenCoreType type = TweenCoreType.Linear;
+    public TweenCoreType Type => type;
+
     [SerializeField] protected TweenCoreEase ease = TweenCoreEase.In;
+    public TweenCoreEase Ease => ease;
 
     [SerializeField] protected float duration = 1f;
+    public float Duration => duration;
+
     [SerializeField] protected float delay = 0f;
+    public float Delay => delay;
 
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
 
     [SerializeField, HideInInspector] protected string propertyName;
     public string PropertyName => propertyName;
+
     [SerializeField, HideInInspector] protected int propertyIndex;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
     protected bool isLoop = false;
+    public bool IsLoop => isLoop;
 
     protected bool isPlaying = false;
+    public bool IsPlaying => isPlaying;
+
     protected bool isPaused = true;
+    public bool IsPaused => isPaused;
+
     protected bool hasStarted = false;
     public bool HasStarted => hasStarted;
 
