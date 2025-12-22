@@ -41,10 +41,10 @@ public class TweenCore
     private float _elapseTime = 0f;
     public float ElapseTime => _elapseTime;
 
-    public event Action OnStart;
-    public event Action OnUpdate;
-    public event Action OnFinish;
-    public event Action OnLoopFinish;
+    public event Action<TweenCore> OnStart;
+    public event Action<TweenCore> OnUpdate;
+    public event Action<TweenCore> OnFinish;
+    public event Action<TweenCore> OnLoopFinish;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -58,7 +58,7 @@ public class TweenCore
     {
         if (!_isPlaying || _isPaused) return this;
 
-        OnUpdate?.Invoke();
+        OnUpdate?.Invoke(this);
         _elapseTime += deltaTime;
 
         for (int i = _tweenProperties.Count - 1; i >= 0; i--)
@@ -71,7 +71,7 @@ public class TweenCore
             if (!_isLoop) Stop();
             else
             {
-                OnLoopFinish?.Invoke();
+                OnLoopFinish?.Invoke(this);
 
                 if (!_isParallel) _tweenProperties[0].NewIteration();
                 else
@@ -125,6 +125,8 @@ public class TweenCore
 
         _elapseTime = 0;
 
+        OnStart?.Invoke(this);
+
         TweenCorePropertyBase property;
 
         int numProperties = _tweenProperties.Count;
@@ -151,8 +153,6 @@ public class TweenCore
 
         // Tracking of finished properties
         _exeptedNumProperties = _tweenProperties.Count;
-
-        OnStart?.Invoke();
 
         return this;
     }
@@ -188,7 +188,7 @@ public class TweenCore
         {
             if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop();
         }
-        OnFinish?.Invoke();
+        OnFinish?.Invoke(this);
         if (_destroyOnFinish) TweenCoreManager.Instance.RemoveTween(this);
     }
 

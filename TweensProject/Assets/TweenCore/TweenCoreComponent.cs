@@ -25,8 +25,8 @@ public class TweenCoreComponent : MonoBehaviour
 
     [SerializeReference] private List<TweenCorePropertyBase> _properties = new List<TweenCorePropertyBase>();
 
-    [SerializeField] private UnityEvent OnStart;
-    [SerializeField] private UnityEvent OnFinish;
+    [SerializeField] private UnityEvent<TweenCore> OnStart;
+    [SerializeField] private UnityEvent<TweenCore> OnFinish;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -75,14 +75,14 @@ public class TweenCoreComponent : MonoBehaviour
         _tween.Stop();
     }
 
-    private void OnTweenStart()
+    private void OnTweenStart(TweenCore tween)
     {
-        OnStart?.Invoke();
+        OnStart?.Invoke(tween);
     }
 
-    private void OnTweenFinish()
+    private void OnTweenFinish(TweenCore tween)
     {
-        OnFinish?.Invoke();
+        OnFinish?.Invoke(tween);
     }
 
     // ----- Destructor ----- \\

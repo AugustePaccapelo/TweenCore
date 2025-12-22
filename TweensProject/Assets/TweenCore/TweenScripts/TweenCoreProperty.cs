@@ -44,7 +44,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
 
-    public event Action<TweenValueType> OnUpdateValue;
+    public event Action<TweenCoreProperty<TweenValueType>, TweenValueType> OnUpdateValue;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -347,7 +347,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     protected override void TriggerOnUpdate()
     {
         base.TriggerOnUpdate();
-        OnUpdateValue?.Invoke(_currentValue);
+        OnUpdateValue?.Invoke(this, _currentValue);
         _unityEvents.unityOnUpdate?.Invoke();
         _unityEvents.unityOnUpdateValue?.Invoke(_currentValue);
     }
@@ -435,7 +435,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
                 throw new NotImplementedException();
         }
 
-        OnUpdateValue?.Invoke(_currentValue);
+        OnUpdateValue?.Invoke(this, _currentValue);
     }
 
     public override TweenCorePropertyBase SetToFinalVals()

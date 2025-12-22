@@ -70,10 +70,10 @@ public abstract class TweenCorePropertyBase
     protected float elapseTime = 0f;
     public float ElapseTime => elapseTime;
 
-    public event Action OnStart;
-    public event Action OnUpdate;
-    public event Action OnFinish;
-    public event Action OnLoopFinish;
+    public event Action<TweenCorePropertyBase> OnStart;
+    public event Action<TweenCorePropertyBase> OnUpdate;
+    public event Action<TweenCorePropertyBase> OnFinish;
+    public event Action<TweenCorePropertyBase> OnLoopFinish;
 
     protected static readonly Dictionary<Type, Func<object, object, float, object>> lerpsFunc = new Dictionary<Type, Func<object, object, float, object>>()
     {
@@ -139,10 +139,10 @@ public abstract class TweenCorePropertyBase
     /// <returns>This TweenPropertyBase.</returns>
     public abstract TweenCorePropertyBase SetBaseValues();
 
-    protected virtual void TriggerOnStart() => OnStart?.Invoke();
-    protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke();
-    protected virtual void TriggerOnFinish() => OnFinish?.Invoke();
-    protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke();
+    protected virtual void TriggerOnStart() => OnStart?.Invoke(this);
+    protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke(this);
+    protected virtual void TriggerOnFinish() => OnFinish?.Invoke(this);
+    protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke(this);
 
     public virtual void SetLoop(bool isLoop) => this.isLoop = isLoop;
 
