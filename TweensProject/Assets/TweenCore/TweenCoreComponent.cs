@@ -70,9 +70,19 @@ public class TweenCoreComponent : MonoBehaviour
         _tween.Play();
     }
 
-    public void Stop()
+    public void StopAndSetToFinalValue()
     {
-        _tween.Stop();
+        _tween.Stop(true);
+    }
+
+    public void StopAndDontChangeValue()
+    {
+        _tween.Stop(false);
+    }
+
+    public void Test(bool test = true)
+    {
+
     }
 
     private void OnTweenStart(TweenCore tween)

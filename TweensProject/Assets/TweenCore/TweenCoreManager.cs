@@ -40,7 +40,7 @@ public class TweenCoreManager : MonoBehaviour
     private void Awake()
     {
         // Singleton
-        if (_instance != null)
+        if (_instance != null && _instance != this)
         {
             Debug.Log(nameof(TweenCoreManager) + " Instance already exist, destorying last added.");
             Destroy(gameObject);
@@ -50,13 +50,13 @@ public class TweenCoreManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (!_isPlaying) return;
         
         for (int i = _tweens.Count - 1; i >= 0; i--)
         {
-            _tweens[i].Update(Time.fixedDeltaTime);
+            _tweens[i].Update(Time.deltaTime);
         }
     }
 
