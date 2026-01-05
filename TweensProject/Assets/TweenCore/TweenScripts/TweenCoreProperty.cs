@@ -39,7 +39,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnUpdate;
         public UnityEvent<TweenCoreProperty<TweenValueType>, TweenValueType> unityOnUpdateValue;
         public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnFinish;
-        //public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnLoopFinish;
     }
 
     [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
@@ -188,11 +187,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
             Stop();
         }
     }
-
-    //public override void NewIteration()
-    //{
-    //    isPlaying = true;
-    //}
 
     public override void Update(float deltaTime)
     {
@@ -357,12 +351,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         _unityEvents.unityOnFinish?.Invoke(this);
     }
 
-    //protected override void TriggerOnLoopFinish()
-    //{
-    //    base.TriggerOnLoopFinish();
-    //    _unityEvents.unityOnLoopFinish?.Invoke(this);
-    //}
-
     /// <summary>
     /// Pause the TweenProperty.
     /// </summary>
@@ -395,15 +383,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         elapseTime = 0;
         hasStarted = false;
 
-        //if (!isLoop)
-        //{
-        //    TriggerOnFinish();
-        //}
-        //else
-        //{
-        //    TriggerOnLoopFinish();
-        //}
-
         TriggerOnFinish();
     }
 
@@ -412,8 +391,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         int length = _nextProperties.Count;
         for (int i = 0; i < length; i++)
         {
-            //if (!isLoop) _nextProperties[i].Start();
-            //else _nextProperties[i].NewIteration();
             _nextProperties[i].Start();
         }        
     }

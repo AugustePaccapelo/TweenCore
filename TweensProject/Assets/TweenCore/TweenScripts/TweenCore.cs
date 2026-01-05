@@ -73,12 +73,6 @@ public class TweenCore
             {
                 OnLoopFinish?.Invoke(this);
 
-                //if (!_isParallel) _tweenProperties[0].NewIteration();
-                //else
-                //{
-                //    foreach (TweenCorePropertyBase property in _tweenProperties) property.NewIteration();
-                //}
-
                 if (!_isParallel) _tweenProperties[0].Start();
                 else
                 {
@@ -142,7 +136,7 @@ public class TweenCore
         for (int i = 0; i < numProperties; i++)
         {
             property = _tweenProperties[i];
-            //property.SetLoop(_isLoop);
+            
             // If parallel, start all properties
             if (_isParallel) property.Start();
             // If chain, build the chain and skip last
@@ -179,11 +173,6 @@ public class TweenCore
             DestroyTweenProperty(property);
         }
     }
-
-    //private void NewPropertyFinishedIteration(TweenCorePropertyBase property)
-    //{
-    //    _numPropertiesFinished++;
-    //}
 
     /// <summary>
     /// Stop and then destroy all Tween Properties and then it self.
