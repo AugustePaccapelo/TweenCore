@@ -978,7 +978,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playOnStart: 1
   _isParallel: 1
-  _isLoop: 0
+  _isLoop: 1
   _DestroyedWhenFinished: 1
   _surviveOnUnload: 0
   _properties:
@@ -1034,9 +1034,6 @@ MonoBehaviour:
           unityOnFinish:
             m_PersistentCalls:
               m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
     - rid: 7641270970823999561
       type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
       data:
@@ -1062,9 +1059,6 @@ MonoBehaviour:
             m_PersistentCalls:
               m_Calls: []
           unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
             m_PersistentCalls:
               m_Calls: []
     - rid: 7641270970823999562
@@ -1094,9 +1088,6 @@ MonoBehaviour:
           unityOnFinish:
             m_PersistentCalls:
               m_Calls: []
-          unityOnLoopFinish:
-            m_PersistentCalls:
-              m_Calls: []
     - rid: 7641270970823999563
       type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
       data:
@@ -1122,9 +1113,6 @@ MonoBehaviour:
             m_PersistentCalls:
               m_Calls: []
           unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnLoopFinish:
             m_PersistentCalls:
               m_Calls: []
 --- !u!1 &807011426

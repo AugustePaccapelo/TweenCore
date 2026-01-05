@@ -73,11 +73,18 @@ public class TweenCore
             {
                 OnLoopFinish?.Invoke(this);
 
-                if (!_isParallel) _tweenProperties[0].NewIteration();
+                //if (!_isParallel) _tweenProperties[0].NewIteration();
+                //else
+                //{
+                //    foreach (TweenCorePropertyBase property in _tweenProperties) property.NewIteration();
+                //}
+
+                if (!_isParallel) _tweenProperties[0].Start();
                 else
                 {
-                    foreach (TweenCorePropertyBase property in _tweenProperties) property.NewIteration();
+                    foreach (TweenCorePropertyBase property in _tweenProperties) property.Start();
                 }
+
                 _numPropertiesFinished = 0;
             }
         }
@@ -135,7 +142,7 @@ public class TweenCore
         for (int i = 0; i < numProperties; i++)
         {
             property = _tweenProperties[i];
-            property.SetLoop(_isLoop);
+            //property.SetLoop(_isLoop);
             // If parallel, start all properties
             if (_isParallel) property.Start();
             // If chain, build the chain and skip last
@@ -167,22 +174,22 @@ public class TweenCore
     {
         _numPropertiesFinished++;
         
-        if (_destroyOnFinish)
+        if (!_isLoop && _destroyOnFinish)
         {
             DestroyTweenProperty(property);
         }
     }
 
-    private void NewPropertyFinishedIteration(TweenCorePropertyBase property)
-    {
-        _numPropertiesFinished++;
-    }
+    //private void NewPropertyFinishedIteration(TweenCorePropertyBase property)
+    //{
+    //    _numPropertiesFinished++;
+    //}
 
     /// <summary>
     /// Stop and then destroy all Tween Properties and then it self.
     /// OnFinish event is called here after all properties are stopped.
     /// </summary>
-    public void Stop()
+    public void Stop(bool setToFinalValue = true)
     {
         _hasStarted = false;
         _isPaused = false;
@@ -192,7 +199,7 @@ public class TweenCore
         int length = _tweenProperties.Count - 1;
         for (int i = length; i >= 0; i --)
         {
-            if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop();
+            if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop(setToFinalValue);
         }
         OnFinish?.Invoke(this);
         if (_destroyOnFinish) TweenCoreManager.Instance.RemoveTween(this);
@@ -284,7 +291,7 @@ public class TweenCore
     {
         _tweenProperties.Add(property);
         property.OnFinish += NewPropertyFinished;
-        property.OnLoopFinish += NewPropertyFinishedIteration;
+        //property.OnLoopFinish += NewPropertyFinishedIteration;
         return this;
     }
     

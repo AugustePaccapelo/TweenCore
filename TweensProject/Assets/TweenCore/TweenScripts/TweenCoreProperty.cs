@@ -39,7 +39,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnUpdate;
         public UnityEvent<TweenCoreProperty<TweenValueType>, TweenValueType> unityOnUpdateValue;
         public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnFinish;
-        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnLoopFinish;
+        //public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnLoopFinish;
     }
 
     [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
@@ -189,10 +189,10 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         }
     }
 
-    public override void NewIteration()
-    {
-        isPlaying = true;
-    }
+    //public override void NewIteration()
+    //{
+    //    isPlaying = true;
+    //}
 
     public override void Update(float deltaTime)
     {
@@ -357,11 +357,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         _unityEvents.unityOnFinish?.Invoke(this);
     }
 
-    protected override void TriggerOnLoopFinish()
-    {
-        base.TriggerOnLoopFinish();
-        _unityEvents.unityOnLoopFinish?.Invoke(this);
-    }
+    //protected override void TriggerOnLoopFinish()
+    //{
+    //    base.TriggerOnLoopFinish();
+    //    _unityEvents.unityOnLoopFinish?.Invoke(this);
+    //}
 
     /// <summary>
     /// Pause the TweenProperty.
@@ -382,36 +382,40 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <summary>
     /// Stop and Destroy the TweenProperty.
     /// </summary>
-    public override void Stop()
+    /// <param name="setToFinalValue"></param>
+    public override void Stop(bool setToFinalValue = true)
     {
+        if (setToFinalValue) SetToFinalVals();
+
         isPlaying = false;
         isPaused = true;
-        
-        SetToFinalVals();
 
         StartNextProperties();
 
         elapseTime = 0;
         hasStarted = false;
 
-        if (!isLoop)
-        {
-            TriggerOnFinish();
-        }
-        else
-        {
-            TriggerOnLoopFinish();
-        }
+        //if (!isLoop)
+        //{
+        //    TriggerOnFinish();
+        //}
+        //else
+        //{
+        //    TriggerOnLoopFinish();
+        //}
+
+        TriggerOnFinish();
     }
 
     private void StartNextProperties()
     {
-        int length = _nextProperties.Count - 1;
-        for (int i = length; i >= 0; i--)
+        int length = _nextProperties.Count;
+        for (int i = 0; i < length; i++)
         {
-            if (!isLoop) _nextProperties[i].Start();
-            else _nextProperties[i].NewIteration();
-        }
+            //if (!isLoop) _nextProperties[i].Start();
+            //else _nextProperties[i].NewIteration();
+            _nextProperties[i].Start();
+        }        
     }
 
     private void SetValue(TweenValueType value)

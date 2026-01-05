@@ -48,8 +48,8 @@ public abstract class TweenCorePropertyBase
     [SerializeField, HideInInspector] protected int propertyIndex;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
 
-    protected bool isLoop = false;
-    public bool IsLoop => isLoop;
+    //protected bool isLoop = false;
+    //public bool IsLoop => isLoop;
 
     protected bool isPlaying = false;
     public bool IsPlaying => isPlaying;
@@ -66,7 +66,7 @@ public abstract class TweenCorePropertyBase
     public event Action<TweenCorePropertyBase> OnStart;
     public event Action<TweenCorePropertyBase> OnUpdate;
     public event Action<TweenCorePropertyBase> OnFinish;
-    public event Action<TweenCorePropertyBase> OnLoopFinish;
+    //public event Action<TweenCorePropertyBase> OnLoopFinish;
 
     protected static readonly Dictionary<Type, Func<object, object, float, object>> lerpsFunc = new Dictionary<Type, Func<object, object, float, object>>()
     {
@@ -104,13 +104,13 @@ public abstract class TweenCorePropertyBase
     /// <summary>
     /// Stop and destroy the TweenProperty, OnFinish is called here.
     /// </summary>
-    public abstract void Stop();
+    public abstract void Stop(bool setToFinalValue = true);
 
     /// <summary>
     /// Restart the TweenProperty after a loop.
     /// Don't call this function or you may have unexepted results.
     /// </summary>
-    public abstract void NewIteration();
+    //public abstract void NewIteration();
 
     /// <summary>
     /// Set the property to the final value. 
@@ -135,9 +135,9 @@ public abstract class TweenCorePropertyBase
     protected virtual void TriggerOnStart() => OnStart?.Invoke(this);
     protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke(this);
     protected virtual void TriggerOnFinish() => OnFinish?.Invoke(this);
-    protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke(this);
+    //protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke(this);
 
-    public virtual void SetLoop(bool isLoop) => this.isLoop = isLoop;
+    //public virtual void SetLoop(bool isLoop) => this.isLoop = isLoop;
 
     protected void SetTypeFunc(TweenCoreType newType)
     {
