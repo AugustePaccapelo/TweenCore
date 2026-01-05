@@ -47,6 +47,11 @@ public class TweenCoreComponent : MonoBehaviour
             .SetSurviveOnUnload(_surviveOnUnload)
             .SetDestroyWhenFinish(_DestroyedWhenFinished);
         
+        if (_surviveOnUnload)
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
         foreach (TweenCorePropertyBase property in _properties)
         {
             _tween.AddProperty(property);
