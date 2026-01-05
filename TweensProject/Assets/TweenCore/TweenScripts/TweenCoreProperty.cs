@@ -179,12 +179,20 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         isPaused = false;
         isPlaying = true;
 
-        if (_currentMethod == MethodUse.Reflexion && _fromCurrentValue) _startValue = GetObjValue();
-        TriggerOnStart();
-
-        if (_currentMethod == MethodUse.Reflexion && obj == null)
+        if (_currentMethod == MethodUse.Reflexion)
         {
-            Stop();
+            if (obj == null)
+            {
+                TriggerOnStart();
+                Stop(false);
+                return;
+            }
+
+            if (_fromCurrentValue)
+            {
+                _startValue = GetObjValue();
+                TriggerOnStart();
+            }
         }
     }
 
