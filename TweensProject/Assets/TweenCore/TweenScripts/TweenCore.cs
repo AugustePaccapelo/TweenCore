@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // Author : Auguste Paccapelo
 
@@ -35,8 +36,11 @@ public class TweenCore
     public bool SurviveOnSceneUnload => _surviveOnSceneUnload;
 
     private int _numPropertiesFinished = 0;
+    public int NumPropertiesFinished => _numPropertiesFinished;
+
     private int _exeptedNumProperties;
-    public int NumProperties => _tweenProperties.Count;
+    //public int NumProperties => _tweenProperties.Count;
+    public int NumProperties => _exeptedNumProperties;
 
     private float _elapseTime = 0f;
     public float ElapseTime => _elapseTime;
@@ -72,14 +76,13 @@ public class TweenCore
             else
             {
                 OnLoopFinish?.Invoke(this);
+                _numPropertiesFinished = 0;
 
                 if (!_isParallel) _tweenProperties[0].Start();
                 else
                 {
                     foreach (TweenCorePropertyBase property in _tweenProperties) property.Start();
                 }
-
-                _numPropertiesFinished = 0;
             }
         }
         

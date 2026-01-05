@@ -191,8 +191,14 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
             if (_fromCurrentValue)
             {
                 _startValue = GetObjValue();
-                TriggerOnStart();
             }
+        }
+
+        TriggerOnStart();
+
+        if (duration == 0f)
+        {
+            Stop(true);
         }
     }
 
@@ -204,7 +210,17 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         if (elapseTime <= delay) return;
 
         float elapse = Mathf.Clamp(elapseTime - delay, 0, duration);
-        float w = Mathf.Clamp01(elapse / duration);
+        float w;
+
+        if (duration != 0)
+        {
+             w = Mathf.Clamp01(elapse / duration);
+        }
+        else
+        {
+            w = 1;
+        }
+
         w = RealWeight(w);
 
         if (lerpsFunc.ContainsKey(typeof(TweenValueType)))

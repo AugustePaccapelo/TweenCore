@@ -977,7 +977,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playOnStart: 1
-  _isParallel: 1
+  _isParallel: 0
   _isLoop: 1
   _DestroyedWhenFinished: 1
   _surviveOnUnload: 0
@@ -989,21 +989,15 @@ MonoBehaviour:
   OnStart:
     m_PersistentCalls:
       m_Calls: []
+  OnUpdate:
+    m_PersistentCalls:
+      m_Calls: []
   OnFinish:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 747174025}
-        m_TargetAssemblyTypeName: TweenCoreComponent, Assembly-CSharp
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  OnLoopFinish:
+    m_PersistentCalls:
+      m_Calls: []
   references:
     version: 2
     RefIds:
@@ -1041,7 +1035,7 @@ MonoBehaviour:
         type: 5
         ease: 0
         duration: 1
-        delay: 2
+        delay: 0
         propertyName: localScale
         propertyIndex: 7
         _lastKnownObject: {fileID: 747174022}
@@ -1068,7 +1062,7 @@ MonoBehaviour:
         type: 0
         ease: 0
         duration: 1
-        delay: 3
+        delay: 0
         propertyName: localScale
         propertyIndex: 7
         _lastKnownObject: {fileID: 747174022}
@@ -1095,7 +1089,7 @@ MonoBehaviour:
         type: 0
         ease: 0
         duration: 1
-        delay: 4
+        delay: 0
         propertyName: position
         propertyIndex: 0
         _lastKnownObject: {fileID: 747174022}
@@ -1221,12 +1215,12 @@ MonoBehaviour:
   OnStart:
     m_PersistentCalls:
       m_Calls: []
-  OnFinish:
+  OnUpdate:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 823911220}
         m_TargetAssemblyTypeName: TweenCoreComponent, Assembly-CSharp
-        m_MethodName: Play
+        m_MethodName: Tkt
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1236,6 +1230,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnFinish:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoopFinish:
+    m_PersistentCalls:
+      m_Calls: []
   references:
     version: 2
     RefIds:
@@ -1244,8 +1244,8 @@ MonoBehaviour:
       data:
         obj: {fileID: 823911223}
         type: 10
-        ease: 1
-        duration: 2
+        ease: 0
+        duration: 0
         delay: 0
         propertyName: position
         propertyIndex: 0
@@ -1859,7 +1859,13 @@ MonoBehaviour:
   OnStart:
     m_PersistentCalls:
       m_Calls: []
+  OnUpdate:
+    m_PersistentCalls:
+      m_Calls: []
   OnFinish:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoopFinish:
     m_PersistentCalls:
       m_Calls: []
   references:
