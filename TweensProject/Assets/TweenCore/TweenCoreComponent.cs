@@ -20,7 +20,9 @@ public class TweenCoreComponent : MonoBehaviour
     [SerializeField] private bool _playOnStart = true;
     [SerializeField] private bool _isParallel = true;
     [SerializeField] private bool _isLoop = false;
-    [SerializeField] private bool _DestroyedWhenFinished = true;
+    [SerializeField] private bool _isInfinite = false;
+    [SerializeField] private int _numIteration = 1;
+    [SerializeField] private bool _DestroyWhenFinished = true;
     [SerializeField] private bool _surviveOnUnload = false;
 
     [SerializeReference] private List<TweenCorePropertyBase> _properties = new List<TweenCorePropertyBase>();
@@ -38,15 +40,20 @@ public class TweenCoreComponent : MonoBehaviour
 
     private void OnDisable() { }
 
-    private void Awake() { }
+    private void Awake()
+    {
+        _tween = TweenCore.CreateTween();
+    }
 
     private void Start()
     {
-        _tween = TweenCore.CreateTween()
-            .SetParallel(_isParallel).SetLoop(_isLoop)
+        if (_isLoop && _isInfinite) _numIteration = -1;
+
+        _tween.SetLoop(_isLoop, _numIteration)
+            .SetParallel(_isParallel)
             .SetSurviveOnUnload(_surviveOnUnload)
-            .SetDestroyWhenFinish(_DestroyedWhenFinished);
-        
+            .SetDestroyWhenFinish(_DestroyWhenFinished);
+
         if (_surviveOnUnload)
         {
             DontDestroyOnLoad(gameObject);

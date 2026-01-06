@@ -2,12 +2,12 @@
 
 public enum TweenCoreEase
 {
-    In, Out, InOut, OutIn, Custom
+    In, Out, InOut, OutIn, Custom, CustomCurve
 }
 
 public enum TweenCoreType
 {
-    Linear, Sine, Cubic, Quint, Circ, Elastic, Quad, Quart, Expo, Back, Bounce, Custom
+    Linear, Sine, Cubic, Quint, Circ, Elastic, Quad, Quart, Expo, Back, Bounce, Custom, CustomCurve
 }
 
 public static class TweenCoreTarget

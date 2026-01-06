@@ -42,6 +42,9 @@ public abstract class TweenCorePropertyBase
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
 
+    [SerializeField] protected AnimationCurve easeAnimationCurve = AnimationCurve.Linear(0, 0, 1, 1);
+    [SerializeField] protected AnimationCurve typeAnimationCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
     [SerializeField, HideInInspector] protected string propertyName;
     public string PropertyName => propertyName;
 
@@ -115,6 +118,7 @@ public abstract class TweenCorePropertyBase
     /// <param name="property">The TweenProperty to start.</param>
     /// <returns>This TweenPropertyBase.</returns>
     public abstract TweenCorePropertyBase AddNextProperty(TweenCorePropertyBase property);
+
     /// <summary>
     /// Set the base values when using the empty constructor.
     /// Using this in a different context may have unexpted results.
@@ -125,9 +129,6 @@ public abstract class TweenCorePropertyBase
     protected virtual void TriggerOnStart() => OnStart?.Invoke(this);
     protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke(this);
     protected virtual void TriggerOnFinish() => OnFinish?.Invoke(this);
-    //protected virtual void TriggerOnLoopFinish() => OnLoopFinish?.Invoke(this);
-
-    //public virtual void SetLoop(bool isLoop) => this.isLoop = isLoop;
 
     protected void SetTypeFunc(TweenCoreType newType)
     {

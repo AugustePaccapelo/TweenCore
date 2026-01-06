@@ -36,7 +36,7 @@ public class TestTween : MonoBehaviour
         _endPos = _endObj.transform.position;
 
         TweenCore tween = TweenCore.CreateTween();
-        tween.NewProperty(_target.transform, "position", _endPos, _time).From(_startPos)
+        TweenCoreProperty<Vector3> testProp = tween.NewProperty(_target.transform, "position", _endPos, _time).From(_startPos)
             .SetType(TweenCoreType.Bounce)
             .SetEase(TweenCoreEase.In);
 

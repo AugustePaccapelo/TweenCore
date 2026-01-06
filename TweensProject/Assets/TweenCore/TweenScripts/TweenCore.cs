@@ -39,11 +39,17 @@ public class TweenCore
     public int NumPropertiesFinished => _numPropertiesFinished;
 
     private int _exeptedNumProperties;
-    //public int NumProperties => _tweenProperties.Count;
+
     public int NumProperties => _exeptedNumProperties;
 
     private float _elapseTime = 0f;
     public float ElapseTime => _elapseTime;
+
+    private int _numIteration = -1;
+    public int NumIteration => _numIteration;
+
+    private int _currentIteration = 0;
+    public int CurrentIteration => _currentIteration;
 
     public event Action<TweenCore> OnStart;
     public event Action<TweenCore> OnUpdate;
@@ -72,21 +78,31 @@ public class TweenCore
 
         if (_numPropertiesFinished == _exeptedNumProperties)
         {
-            if (!_isLoop) Stop();
+            _currentIteration++;
+            
+            if (_isLoop && (_numIteration < 0 || _currentIteration < _numIteration))
+            {
+                RestartTween();
+            }
             else
             {
-                OnLoopFinish?.Invoke(this);
-                _numPropertiesFinished = 0;
-
-                if (!_isParallel) _tweenProperties[0].Start();
-                else
-                {
-                    foreach (TweenCorePropertyBase property in _tweenProperties) property.Start();
-                }
+                Stop();
             }
         }
         
         return this;
+    }
+
+    private void RestartTween()
+    {
+        OnLoopFinish?.Invoke(this);
+        _numPropertiesFinished = 0;
+
+        if (!_isParallel) _tweenProperties[0].Start();
+        else
+        {
+            foreach (TweenCorePropertyBase property in _tweenProperties) property.Start();
+        }
     }
 
     /// <summary>
@@ -123,6 +139,7 @@ public class TweenCore
 
         // Set values
         _numPropertiesFinished = 0;
+        _currentIteration = 0;
         _hasStarted = true;
         _isPaused = false;
         _isPlaying = true;
@@ -158,6 +175,11 @@ public class TweenCore
         // Tracking of finished properties
         _exeptedNumProperties = _tweenProperties.Count;
 
+        if (_isLoop && _numIteration == 0)
+        {
+            Stop();
+        }
+
         return this;
     }
 
@@ -187,6 +209,8 @@ public class TweenCore
         _isPaused = false;
         _isPlaying = false;
         _elapseTime = 0;
+        _currentIteration = 0;
+        _numPropertiesFinished = 0;
 
         int length = _tweenProperties.Count - 1;
         for (int i = length; i >= 0; i --)
@@ -326,10 +350,12 @@ public class TweenCore
     /// Set the loop mode, wait for all properties to be finished, and then replay the tween.
     /// </summary>
     /// <param name="isLoop">If loop mode.</param>
+    /// <param name="numIteration"> Number of iteration, negative for infinte. </param>
     /// <returns>This tween.</returns>
-    public TweenCore SetLoop(bool isLoop)
+    public TweenCore SetLoop(bool isLoop, int numIteration = -1)
     {
         _isLoop = isLoop;
+        _numIteration = numIteration;
         return this;
     }
 

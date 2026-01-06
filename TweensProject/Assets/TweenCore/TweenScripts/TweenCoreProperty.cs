@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Mono.Cecil;
+using Unity.VisualScripting;
 
 // Author : Auguste Paccapelo
 
@@ -138,8 +140,24 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public override TweenCorePropertyBase SetBaseValues()
     {
-        SetType(type);
-        SetEase(ease);
+        if (type == TweenCoreType.CustomCurve)
+        {
+            SetType(typeAnimationCurve);
+        }
+        else
+        {
+            SetType(type);
+        }
+        
+        if (ease == TweenCoreEase.CustomCurve)
+        {
+            SetEase(easeAnimationCurve);
+        }
+        else
+        {
+            SetEase(ease);
+        }
+
         SetReflexionFiels(propertyName);
         return this;
     }
@@ -277,6 +295,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetType(...).SetEase(...);).</returns>
     public TweenCoreProperty<TweenValueType> SetType(TweenCoreType newType)
     {
+        if (newType == TweenCoreType.Custom || newType == TweenCoreType.CustomCurve)
+        {
+            throw new Exception("Need to give the a function or an AnimCurve for a custom type.");
+        }
+
         type = newType;
         SetTypeFunc(type);
         return this;
@@ -285,12 +308,62 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <summary>
     /// Set a custom tween Type, must be a function that return a float and have et float in parameters.
     /// </summary>
+    /// <param name="newType">The wanted tween type.</param>
     /// <param name="customType">The function of the custome type, must return a float and take a float in parameters.</param>
     /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomType(...).SetEase(...);).</returns>
-    public TweenCoreProperty<TweenValueType> SetCustomType(Func<float, float> customType)
+    public TweenCoreProperty<TweenValueType> SetType(TweenCoreType newType, Func<float, float> customType)
+    {
+        if (newType != TweenCoreType.Custom)
+        {
+            SetType(newType);
+            return this;
+        }
+
+        TypeFunc = customType;
+        type = TweenCoreType.Custom;
+        return this;
+    }
+
+    /// <summary>
+    /// Set a custom tween Type, must be a function that return a float and have et float in parameters.
+    /// </summary>
+    /// <param name="customType">The function of the custome type, must return a float and take a float in parameters.</param>
+    /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomType(...).SetEase(...);).</returns>
+    public TweenCoreProperty<TweenValueType> SetType(Func<float, float> customType)
     {
         TypeFunc = customType;
         type = TweenCoreType.Custom;
+        return this;
+    }
+
+    /// <summary>
+    /// Set a custom type, must be a function that return a float and have a type function and a float in parameters.
+    /// </summary>
+    /// <param name="newType">The wanted Tween Type.</param>
+    /// <param name="animationCurve">The animation curve to use as type.</param>
+    /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomEase(...).SetEase(...);).</returns>
+    public TweenCoreProperty<TweenValueType> SetType(TweenCoreType newType, AnimationCurve animationCurve)
+    {
+        if (newType != TweenCoreType.CustomCurve)
+        {
+            SetType(newType);
+            return this;
+        }
+
+        type = TweenCoreType.CustomCurve;
+        typeAnimationCurve = animationCurve;
+        return this;
+    }
+
+    /// <summary>
+    /// Set a custom type, must be a function that return a float and have a type function and a float in parameters.
+    /// </summary>
+    /// <param name="animationCurve">The animation curve to use as type.</param>
+    /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomEase(...).SetEase(...);).</returns>
+    public TweenCoreProperty<TweenValueType> SetType(AnimationCurve animationCurve)
+    {
+        type = TweenCoreType.CustomCurve;
+        typeAnimationCurve = animationCurve;
         return this;
     }
 
@@ -301,8 +374,33 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetEase(...).SetType(...);).</returns>
     public TweenCoreProperty<TweenValueType> SetEase(TweenCoreEase newEase)
     {
+        if (newEase == TweenCoreEase.Custom || newEase == TweenCoreEase.CustomCurve)
+        {
+            throw new Exception("Need to give the a function or an AnimCurve for a custom ease.");
+        }
+
         ease = newEase;
         SetEaseFunc(ease);
+        return this;
+    }
+
+    /// <summary>
+    /// Set a custom ease, must be a function that return a float and have a type function and a float in parameters.
+    /// </summary>
+    /// <param name="newEase">The wanted Tween Ease.</param>
+    /// <param name="customEase">The function of the custom ease, 
+    /// must return a float and take a Type function and a float in parameters.</param>
+    /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomEase(...).SetType(...);).</returns>
+    public TweenCoreProperty<TweenValueType> SetEase(TweenCoreEase newEase, Func<float, Func<float, float>, float> customEase)
+    {
+        if (newEase != TweenCoreEase.Custom)
+        {
+            SetEase(newEase);
+            return this;
+        }
+
+        ease = TweenCoreEase.Custom;
+        EaseFunc = customEase;
         return this;
     }
 
@@ -312,10 +410,41 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="customEase">The function of the custom ease, 
     /// must return a float and take a Type function and a float in parameters.</param>
     /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomEase(...).SetType(...);).</returns>
-    public TweenCoreProperty<TweenValueType> SetCustomEase(Func<float, Func<float, float>, float> customEase)
+    public TweenCoreProperty<TweenValueType> SetEase(Func<float, Func<float, float>, float> customEase)
     {
         ease = TweenCoreEase.Custom;
         EaseFunc = customEase;
+        return this;
+    }
+
+    /// <summary>
+    /// Set a custom ease, must be a function that return a float and have a type function and a float in parameters.
+    /// </summary>
+    /// <param name="newEase">The wanted Tween Ease.</param>
+    /// <param name="animationCurve">The animation curve to use as ease.</param>
+    /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomEase(...).SetType(...);).</returns>
+    public TweenCoreProperty<TweenValueType> SetEase(TweenCoreEase newEase, AnimationCurve animationCurve)
+    {
+        if (newEase != TweenCoreEase.CustomCurve)
+        {
+            SetEase(newEase);
+            return this;
+        }
+
+        ease = TweenCoreEase.CustomCurve;
+        easeAnimationCurve = animationCurve;
+        return this;
+    }
+
+    /// <summary>
+    /// Set a custom ease, must be a function that return a float and have a type function and a float in parameters.
+    /// </summary>
+    /// <param name="animationCurve">The animation curve to use as ease.</param>
+    /// <returns>This TweenProperty to chain the methods calls (e.g. property.SetCustomEase(...).SetType(...);).</returns>
+    public TweenCoreProperty<TweenValueType> SetEase(AnimationCurve animationCurve)
+    {
+        ease = TweenCoreEase.CustomCurve;
+        easeAnimationCurve = animationCurve;
         return this;
     }
 
@@ -352,6 +481,27 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private float RealWeight(float w)
     {
+        // The ease is a curve
+        if (ease == TweenCoreEase.CustomCurve)
+        {
+            if (type == TweenCoreType.CustomCurve)
+            {
+                //Type is a curve
+                return easeAnimationCurve.Evaluate(typeAnimationCurve.Evaluate(w));
+            }
+            
+            // Type is a func
+            return easeAnimationCurve.Evaluate(TypeFunc(w));
+        }
+        
+        // The ease is a func
+        if (type == TweenCoreType.CustomCurve)
+        {
+            // Type is a curve
+            return EaseFunc(w, typeAnimationCurve.Evaluate);
+        }
+
+        // Type is a func
         return EaseFunc(w, TypeFunc);
     }
 
