@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,10 +28,16 @@ public class TweenCoreComponent : MonoBehaviour
 
     [SerializeReference] private List<TweenCorePropertyBase> _properties = new List<TweenCorePropertyBase>();
 
-    [SerializeField] private UnityEvent<TweenCore> OnStart;
-    [SerializeField] private UnityEvent<TweenCore> OnUpdate;
-    [SerializeField] private UnityEvent<TweenCore> OnFinish;
-    [SerializeField] private UnityEvent<TweenCore> OnLoopFinish;
+    [Serializable]
+    private class TweenUnityEvents
+    {
+        public UnityEvent<TweenCore> OnStart;
+        public UnityEvent<TweenCore> OnUpdate;
+        public UnityEvent<TweenCore> OnFinish;
+        public UnityEvent<TweenCore> OnLoopFinish;
+    }
+
+    [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -98,22 +105,22 @@ public class TweenCoreComponent : MonoBehaviour
 
     private void OnTweenStart(TweenCore tween)
     {
-        OnStart?.Invoke(tween);
+        _unityEvents.OnStart?.Invoke(tween);
     }
 
     private void OnTweenUpdate(TweenCore tween)
     {
-        OnUpdate?.Invoke(tween);
+        _unityEvents.OnUpdate?.Invoke(tween);
     }
 
     private void OnTweenFinish(TweenCore tween)
     {
-        OnFinish?.Invoke(tween);
+        _unityEvents.OnFinish?.Invoke(tween);
     }
 
     private void OnTweenLoopFinish(TweenCore tween)
     {
-        OnLoopFinish?.Invoke(tween);
+        _unityEvents.OnLoopFinish?.Invoke(tween);
     }
 
     // ----- Destructor ----- \\

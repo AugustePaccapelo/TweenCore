@@ -988,18 +988,19 @@ MonoBehaviour:
   - rid: 7641270970823999561
   - rid: 7641270970823999562
   - rid: 7641270970823999563
-  OnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFinish:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoopFinish:
-    m_PersistentCalls:
-      m_Calls: []
+  _unityEvents:
+    OnStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinish:
+      m_PersistentCalls:
+        m_Calls: []
+    OnLoopFinish:
+      m_PersistentCalls:
+        m_Calls: []
   references:
     version: 2
     RefIds:
@@ -1011,6 +1012,7 @@ MonoBehaviour:
         ease: 1
         duration: 2
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1062,7 +1064,6 @@ MonoBehaviour:
         propertyName: position
         propertyIndex: 0
         _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 0
         _startValue: {x: -2.5, y: -2.5, z: -2.5}
         _finalValue: {x: 2.5, y: 2.5, z: 2.5}
         _unityEvents:
@@ -1086,6 +1087,7 @@ MonoBehaviour:
         ease: 0
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1137,7 +1139,6 @@ MonoBehaviour:
         propertyName: localScale
         propertyIndex: 7
         _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 0
         _startValue: {x: 1, y: 1, z: 1}
         _finalValue: {x: 3, y: 3, z: 3}
         _unityEvents:
@@ -1161,6 +1162,7 @@ MonoBehaviour:
         ease: 0
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1212,7 +1214,6 @@ MonoBehaviour:
         propertyName: localScale
         propertyIndex: 7
         _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 0
         _startValue: {x: 3, y: 3, z: 3}
         _finalValue: {x: 1, y: 1, z: 1}
         _unityEvents:
@@ -1236,6 +1237,7 @@ MonoBehaviour:
         ease: 0
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1287,7 +1289,6 @@ MonoBehaviour:
         propertyName: position
         propertyIndex: 0
         _lastKnownObject: {fileID: 747174022}
-        _fromCurrentValue: 0
         _startValue: {x: 2.5, y: 2.5, z: 2.5}
         _finalValue: {x: 0, y: 0, z: 0}
         _unityEvents:
@@ -1408,18 +1409,19 @@ MonoBehaviour:
   - rid: 7641270970823999561
   - rid: 7641270970823999562
   - rid: 7641270970823999563
-  OnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFinish:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoopFinish:
-    m_PersistentCalls:
-      m_Calls: []
+  _unityEvents:
+    OnStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinish:
+      m_PersistentCalls:
+        m_Calls: []
+    OnLoopFinish:
+      m_PersistentCalls:
+        m_Calls: []
   references:
     version: 2
     RefIds:
@@ -1431,6 +1433,7 @@ MonoBehaviour:
         ease: 0
         duration: 0
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1482,7 +1485,6 @@ MonoBehaviour:
         propertyName: position
         propertyIndex: 0
         _lastKnownObject: {fileID: 823911223}
-        _fromCurrentValue: 0
         _startValue: {x: -2.5, y: -2.5, z: -2.5}
         _finalValue: {x: 2.5, y: 2.5, z: 2.5}
         _unityEvents:
@@ -1506,6 +1508,7 @@ MonoBehaviour:
         ease: 0
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1557,7 +1560,6 @@ MonoBehaviour:
         propertyName: localScale
         propertyIndex: 7
         _lastKnownObject: {fileID: 823911223}
-        _fromCurrentValue: 0
         _startValue: {x: 1, y: 1, z: 1}
         _finalValue: {x: 3, y: 3, z: 3}
         _unityEvents:
@@ -1581,6 +1583,7 @@ MonoBehaviour:
         ease: 0
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1632,7 +1635,6 @@ MonoBehaviour:
         propertyName: localScale
         propertyIndex: 7
         _lastKnownObject: {fileID: 823911223}
-        _fromCurrentValue: 0
         _startValue: {x: 3, y: 3, z: 3}
         _finalValue: {x: 1, y: 1, z: 1}
         _unityEvents:
@@ -1656,6 +1658,7 @@ MonoBehaviour:
         ease: 0
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -1707,7 +1710,6 @@ MonoBehaviour:
         propertyName: position
         propertyIndex: 0
         _lastKnownObject: {fileID: 823911223}
-        _fromCurrentValue: 0
         _startValue: {x: 2.5, y: 2.5, z: 2.5}
         _finalValue: {x: 0, y: 0, z: 0}
         _unityEvents:
@@ -2234,18 +2236,19 @@ MonoBehaviour:
   _properties:
   - rid: -2
   - rid: -2
-  OnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFinish:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoopFinish:
-    m_PersistentCalls:
-      m_Calls: []
+  _unityEvents:
+    OnStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinish:
+      m_PersistentCalls:
+        m_Calls: []
+    OnLoopFinish:
+      m_PersistentCalls:
+        m_Calls: []
   references:
     version: 2
     RefIds:
@@ -2406,7 +2409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playOnStart: 1
   _isParallel: 0
-  _isLoop: 1
+  _isLoop: 0
   _isInfinite: 1
   _numIteration: 5
   _DestroyWhenFinished: 1
@@ -2414,18 +2417,19 @@ MonoBehaviour:
   _properties:
   - rid: 2870472041420554307
   - rid: 2870472041420554309
-  OnStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFinish:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoopFinish:
-    m_PersistentCalls:
-      m_Calls: []
+  _unityEvents:
+    OnStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinish:
+      m_PersistentCalls:
+        m_Calls: []
+    OnLoopFinish:
+      m_PersistentCalls:
+        m_Calls: []
   references:
     version: 2
     RefIds:
@@ -2437,6 +2441,7 @@ MonoBehaviour:
         ease: 5
         duration: 1
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -2488,7 +2493,6 @@ MonoBehaviour:
         propertyName: eulerAngles
         propertyIndex: 2
         _lastKnownObject: {fileID: 2053049825}
-        _fromCurrentValue: 0
         _startValue: {x: 0, y: 0, z: 0}
         _finalValue: {x: 0, y: 0, z: 360}
         _unityEvents:
@@ -2512,6 +2516,7 @@ MonoBehaviour:
         ease: 0
         duration: 0.5
         delay: 0
+        fromCurrentValue: 0
         easeAnimationCurve:
           serializedVersion: 2
           m_Curve:
@@ -2563,7 +2568,6 @@ MonoBehaviour:
         propertyName: eulerAngles
         propertyIndex: 2
         _lastKnownObject: {fileID: 2053049825}
-        _fromCurrentValue: 0
         _startValue: {x: 0, y: 0, z: 0}
         _finalValue: {x: 0, y: 0, z: 0}
         _unityEvents:

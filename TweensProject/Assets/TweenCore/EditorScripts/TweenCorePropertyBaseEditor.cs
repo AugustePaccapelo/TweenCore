@@ -5,8 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
+using static UnityEditor.PlayerSettings;
 
 // Author : Auguste Paccapelo
 
@@ -28,15 +31,53 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         public SerializedProperty propCurrentPropertyChoosedIndex;
         public SerializedProperty propPropertyChoosedName;
 
+        public SerializedProperty propTweenType;
+        public SerializedProperty propTweenEase;
+        public SerializedProperty propDuration;
+        public SerializedProperty propDelay;
+        public SerializedProperty propTypeAnimCurve;
+        public SerializedProperty propEaseAnimCurve;
+        public SerializedProperty propFromCurrentValue;
+        public SerializedProperty propStartValue;
+        public SerializedProperty propEndValue;
+        public SerializedProperty propUnityEvents;
+
         public int currentPropertyChoosedIndex;
         public long referenceId;
 
         // Unity Editor related \\
 
-        public Rect position;
+        public Rect Position
+        {
+            get => _position;
+
+            set
+            {
+                _position = value;
+                _propertyPos = _position;
+                _propertyPos.height = EditorGUIUtility.singleLineHeight;
+            }
+        }
+
+        private Rect _position;
+
+        public Rect PropertyPos => _propertyPos;
+
+        private Rect _propertyPos;
         public GUIContent label;
 
         // ----- FUNCTIONS ----- \\
+
+        public void DrawProperty(SerializedProperty property)
+        {
+            NewLine();
+            EditorGUI.PropertyField(_propertyPos, property, true);
+        }
+
+        public void NewLine()
+        {
+            _propertyPos.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+        }
 
         public TweenPropertyEditorContext(SerializedProperty property = null)
         {
@@ -60,6 +101,17 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             propLastKnownObject = property.FindPropertyRelative("_lastKnownObject");
             propCurrentPropertyChoosedIndex = property.FindPropertyRelative("propertyIndex");
             propPropertyChoosedName = property.FindPropertyRelative("propertyName");
+
+            propTweenType = property.FindPropertyRelative("type");
+            propTweenEase = property.FindPropertyRelative("ease");
+            propDuration = property.FindPropertyRelative("duration");
+            propDelay = property.FindPropertyRelative("delay");
+            propTypeAnimCurve = property.FindPropertyRelative("typeAnimationCurve");
+            propEaseAnimCurve = property.FindPropertyRelative("easeAnimationCurve");
+            propFromCurrentValue = property.FindPropertyRelative("fromCurrentValue");
+            propStartValue = property.FindPropertyRelative("_startValue");
+            propEndValue = property.FindPropertyRelative("_finalValue");
+            propUnityEvents = property.FindPropertyRelative("_unityEvents");
         }
 
         public void InitVariables()
@@ -78,6 +130,8 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     // ---------- VARIABLES ---------- \\
 
+    private float Line => EditorGUIUtility.singleLineHeight;
+
     private Dictionary<long, string[]> _propertiesNamesMap = new Dictionary<long, string[]>();
 
     // ---------- FUNCTIONS ---------- \\
@@ -88,46 +142,98 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
     {
         // Call each editor frame
         EditorGUI.BeginProperty(position, label, property);
-        
-        TweenPropertyEditorContext propContext = new TweenPropertyEditorContext(property);
-        propContext.position = position;
-        propContext.label = label;
+
+        // Show name of TweenProperty & ability to collapse it
+        Rect foldoutRect = position;
+        foldoutRect.height = EditorGUIUtility.singleLineHeight;
+        property.isExpanded = EditorGUI.Foldout(foldoutRect, property.isExpanded, label, true);
 
         // If property is collapse, the user can't interact with it so no needs to compute
         if (property.isExpanded)
         {
+            TweenPropertyEditorContext propContext = new TweenPropertyEditorContext(property);
+            propContext.Position = position;
+            propContext.label = label;
+
+            EditorGUI.indentLevel++;
             HandlePropertyIsExpand(propContext);
+            EditorGUI.indentLevel--;
         }
 
-        EditorGUI.PropertyField(position, property, label, true);
         EditorGUI.EndProperty();
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        float heigth = EditorGUI.GetPropertyHeight(property, label, true);
+        TweenPropertyEditorContext propContext = new TweenPropertyEditorContext();
+        propContext.property = property;
+        propContext.InitSerializedProperties();
 
-        if (!property.isExpanded) return heigth;
+        float height = Line;
+        
+        if (!property.isExpanded) return height;
 
-        SerializedProperty propCurrentObj = property.FindPropertyRelative("obj");
+        //Obj
+        height += Line;
 
-        long propId = property.managedReferenceId;
-
-        if (propCurrentObj.objectReferenceValue == null || !_propertiesNamesMap.ContainsKey(propId) || _propertiesNamesMap[propId].Length <= 0)
+        // If has an obj, field for methods to tween
+        if (propContext.propCurrentObject.boxedValue != null)
         {
-            heigth -= EditorGUIUtility.singleLineHeight;
+            height += Line;
         }
 
-        return heigth;
+        //Type
+        height += Line;
+
+        // If type is CustomCurve, show curve
+        if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
+        {
+            height += Line;
+        }
+
+        //Ease
+        height += Line;
+
+        // If ease is CustomCurve, show curve
+        if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
+        {
+            height += Line;
+        }
+
+        // From current value
+        height += Line;
+
+        // If not from current, show startValue
+        if (!propContext.propFromCurrentValue.boolValue)
+        {
+            height += Line;
+        }
+
+        // EndValue
+        height += Line;
+
+        // Duration
+        height += Line;
+
+        // Delay
+        height += Line;
+
+        // Unity events
+        height += EditorGUI.GetPropertyHeight(propContext.propUnityEvents, true);
+
+        return height;
     }
 
     // ----- My functions ----- \\
 
     private void HandlePropertyIsExpand(TweenPropertyEditorContext propContext)
     {
+        propContext.DrawProperty(propContext.propCurrentObject);
+
         // If an object to tween where given
         if (propContext.currentObject != null)
         {
+            propContext.NewLine();
             HandlePropertyHasAnObject(propContext);
         }
         else
@@ -144,6 +250,33 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             }
             propContext.property.serializedObject.ApplyModifiedProperties();
         }
+
+        propContext.DrawProperty(propContext.propTweenType);
+
+        if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
+        {
+            propContext.DrawProperty(propContext.propTypeAnimCurve);
+        }
+
+        propContext.DrawProperty(propContext.propTweenEase);
+
+        if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
+        {
+            propContext.DrawProperty(propContext.propEaseAnimCurve);
+        }
+
+        propContext.DrawProperty(propContext.propFromCurrentValue);
+        if (!propContext.propFromCurrentValue.boolValue)
+        {
+            propContext.DrawProperty(propContext.propStartValue);
+        }
+        propContext.DrawProperty(propContext.propEndValue);
+
+        propContext.DrawProperty(propContext.propDuration);
+
+        propContext.DrawProperty(propContext.propDelay);
+
+        propContext.DrawProperty(propContext.propUnityEvents);
     }
 
     private void HandlePropertyHasAnObject(TweenPropertyEditorContext propContext)
@@ -204,11 +337,12 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         // Set the position of the button to open the list of properties
         float propertyHeight = EditorGUI.GetPropertyHeight(propContext.property, propContext.label, true);
 
-        Rect popupRectPropertyChoosed = new Rect(propContext.position.x, propContext.position.y + propertyHeight + EditorGUIUtility.standardVerticalSpacing,
-                              propContext.position.width, EditorGUIUtility.singleLineHeight);
-        
+        Rect popupRectPropertyChoosed = new Rect(propContext.Position.x, propContext.Position.y + propertyHeight + EditorGUIUtility.standardVerticalSpacing,
+                              propContext.Position.width, EditorGUIUtility.singleLineHeight);
+
         // Draw button and get index of the chosen property by user
-        int choosedIndex = EditorGUI.Popup(popupRectPropertyChoosed, propContext.currentPropertyChoosedIndex, _propertiesNamesMap[propContext.referenceId]);
+        //int choosedIndex = EditorGUI.Popup(popupRectPropertyChoosed, propContext.currentPropertyChoosedIndex, _propertiesNamesMap[propContext.referenceId]);
+        int choosedIndex = EditorGUI.Popup(propContext.PropertyPos, propContext.currentPropertyChoosedIndex, _propertiesNamesMap[propContext.referenceId]);
         // If new property choosed
         if (choosedIndex != propContext.currentPropertyChoosedIndex)
         {

@@ -16,6 +16,15 @@ public class TweenCoreComponentEditor : Editor
 
     // ----- Objects ----- \\
 
+    private SerializedProperty _playOnStart;
+    private SerializedProperty _isParallel;
+    private SerializedProperty _isLoop;
+    private SerializedProperty _isInfinite;
+    private SerializedProperty _numIteration;
+    private SerializedProperty _destroyWhenFinish;
+    private SerializedProperty _surviveOnUnload;
+    private SerializedProperty _unityEvents;
+
     private ReorderableList _propertiesEditorList;
 
     // ----- Others ----- \\
@@ -34,6 +43,55 @@ public class TweenCoreComponentEditor : Editor
     // ----- Buil-in ----- \\
 
     private void OnEnable()
+    {
+        SetPropertiesList();
+        GetProperties();
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        EditorGUILayout.PropertyField(_playOnStart);
+        EditorGUILayout.PropertyField(_isParallel);
+
+        EditorGUILayout.PropertyField(_isLoop);
+
+        if (_isLoop.boolValue)
+        {
+            EditorGUILayout.PropertyField(_isInfinite);
+
+            if (!_isInfinite.boolValue)
+            {
+                EditorGUILayout.PropertyField(_numIteration);
+            }
+        }
+
+        EditorGUILayout.PropertyField(_destroyWhenFinish);
+        EditorGUILayout.PropertyField(_surviveOnUnload);
+
+        _propertiesEditorList.DoLayoutList();
+
+        EditorGUILayout.PropertyField(_unityEvents);
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    // ----- My Functions ----- \\
+
+    private void GetProperties()
+    {
+        _playOnStart = serializedObject.FindProperty("_playOnStart");
+        _isParallel = serializedObject.FindProperty("_isParallel");
+        _isLoop = serializedObject.FindProperty("_isLoop");
+        _isInfinite = serializedObject.FindProperty("_isInfinite");
+        _numIteration = serializedObject.FindProperty("_numIteration");
+        _destroyWhenFinish = serializedObject.FindProperty("_DestroyWhenFinished");
+        _surviveOnUnload = serializedObject.FindProperty("_surviveOnUnload");
+        _unityEvents = serializedObject.FindProperty("_unityEvents");
+    }
+
+    private void SetPropertiesList()
     {
         SerializedProperty property = serializedObject.FindProperty("_properties");
 
@@ -68,24 +126,6 @@ public class TweenCoreComponentEditor : Editor
             ButtonNewPropertyPressed();
         };
     }
-
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        SerializedProperty property = serializedObject.GetIterator();
-
-        while (property.NextVisible(true))
-        {
-            if (property.depth != 0) continue;
-            if (property.name == "_properties") _propertiesEditorList.DoLayoutList();
-            else EditorGUILayout.PropertyField(property, true);
-        }
-
-        serializedObject.ApplyModifiedProperties();
-    }
-
-    // ----- My Functions ----- \\
 
     private void ButtonNewPropertyPressed()
     {

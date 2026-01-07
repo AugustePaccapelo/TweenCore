@@ -15,9 +15,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     // ----- Others ----- \\
 
-    [SerializeField] private bool _fromCurrentValue = false;
-    public bool FromCurrentValue => _fromCurrentValue;
-
     [SerializeField] private TweenValueType _startValue;
     public TweenValueType StartValue => _startValue;
 
@@ -35,15 +32,15 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     private List<TweenCorePropertyBase> _nextProperties = new List<TweenCorePropertyBase>();
 
     [Serializable]
-    private class TweenUnityEvents
+    private class TweenPropertyUnityEvents
     {
-        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnStart;
-        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnUpdate;
-        public UnityEvent<TweenCoreProperty<TweenValueType>, TweenValueType> unityOnUpdateValue;
-        public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnFinish;
+        [SerializeField] public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnStart;
+        [SerializeField] public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnUpdate;
+        [SerializeField] public UnityEvent<TweenCoreProperty<TweenValueType>, TweenValueType> unityOnUpdateValue;
+        [SerializeField] public UnityEvent<TweenCoreProperty<TweenValueType>> unityOnFinish;
     }
 
-    [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
+    [SerializeField] private TweenPropertyUnityEvents _unityEvents = new TweenPropertyUnityEvents();
 
     public event Action<TweenCoreProperty<TweenValueType>, TweenValueType> OnUpdateValue;
 
@@ -64,7 +61,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         _startValue = startVal;
 
-        _fromCurrentValue = false;
+        fromCurrentValue = false;
     }
 
     /// <summary>
@@ -84,7 +81,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         _startValue = startVal;
         _function = function;
 
-        _fromCurrentValue = false;
+        fromCurrentValue = false;
     }
 
     /// <summary>
@@ -104,7 +101,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         base.obj = obj;
         SetReflexionFiels(propertyName);
 
-        _fromCurrentValue = false;
+        fromCurrentValue = false;
     }
 
     /// <summary>
@@ -126,7 +123,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         SetReflexionFiels(propertyName);
         _startValue = startVal;
 
-        _fromCurrentValue = false;
+        fromCurrentValue = false;
     }
 
     /// <summary>
@@ -206,7 +203,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
                 return;
             }
 
-            if (_fromCurrentValue)
+            if (fromCurrentValue)
             {
                 _startValue = GetObjValue();
             }
@@ -458,7 +455,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     public TweenCoreProperty<TweenValueType> From(TweenValueType value)
     {
         _startValue = value;
-        _fromCurrentValue = false;
+        fromCurrentValue = false;
         return this;
     }
 
@@ -469,7 +466,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <returns>This TweenProperty.</returns>
     public TweenCoreProperty<TweenValueType> FromCurrent()
     {
-        _fromCurrentValue = true;
+        fromCurrentValue = true;
         return this;
     }
 

@@ -39,6 +39,9 @@ public abstract class TweenCorePropertyBase
     [SerializeField] protected float delay = 0f;
     public float Delay => delay;
 
+    [SerializeField] protected bool fromCurrentValue = false;
+    public bool FromCurrentValue => fromCurrentValue;
+
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
 
