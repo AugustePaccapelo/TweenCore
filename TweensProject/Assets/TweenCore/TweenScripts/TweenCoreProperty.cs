@@ -589,7 +589,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public override TweenCorePropertyBase SetToFinalVals()
     {
-        SetValue(_finalValue);
+        SetValue((TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, _finalValue, RealWeight(1)));
 
         return this;
     }

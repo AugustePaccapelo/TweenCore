@@ -278,7 +278,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         }
 
         propContext.NewLine();
-        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Ease", currentIndex, _possibleTypes.Values.ToArray());
+        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Type", currentIndex, _possibleTypes.Values.ToArray());
         propContext.propTweenType.enumValueIndex = (int)_possibleTypes.Keys.ToArray()[newIndex];
     }
 
