@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEditor.PlayerSettings;
@@ -134,6 +135,31 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     private Dictionary<long, string[]> _propertiesNamesMap = new Dictionary<long, string[]>();
 
+    private static readonly Dictionary<TweenCoreType, string> _possibleTypes = new Dictionary<TweenCoreType, string>
+    {
+        { TweenCoreType.Linear, "Linear" },
+        { TweenCoreType.Back, "Back"},
+        { TweenCoreType.Bounce, "Bounce"},
+        { TweenCoreType.Circ, "Circ"},
+        { TweenCoreType.Cubic, "Cubic"},
+        { TweenCoreType.Elastic, "Elastic"},
+        { TweenCoreType.Expo, "Expo"},
+        { TweenCoreType.Quad, "Quad"},
+        { TweenCoreType.Quart, "Quart"},
+        { TweenCoreType.Quint, "Quint"},
+        { TweenCoreType.Sine, "Sine"},
+        { TweenCoreType.CustomCurve, "CustomCurve"},
+    };
+
+    private static readonly Dictionary<TweenCoreEase, string> _possibleEases = new Dictionary<TweenCoreEase, string>
+    {
+        { TweenCoreEase.In, "In"},
+        { TweenCoreEase.Out, "Out"},
+        { TweenCoreEase.InOut, "InOut"},
+        { TweenCoreEase.OutIn, "OutIn"},
+        { TweenCoreEase.CustomCurve, "CustomCurve" }
+    };
+
     // ---------- FUNCTIONS ---------- \\
 
     // ----- Buil-in ----- \\
@@ -226,6 +252,36 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     // ----- My functions ----- \\
 
+    private void DrawEasePopup(TweenPropertyEditorContext propContext)
+    {
+        TweenCoreEase currentEase = (TweenCoreEase)propContext.propTweenEase.enumValueIndex;
+
+        int currentIndex = Array.IndexOf(_possibleEases.Keys.ToArray(), currentEase);
+        if (currentIndex < 0)
+        {
+            currentIndex = 0;
+        }
+
+        propContext.NewLine();
+        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Ease", currentIndex, _possibleEases.Values.ToArray());
+        propContext.propTweenEase.enumValueIndex = (int)_possibleEases.Keys.ToArray()[newIndex];
+    }
+
+    private void DrawTypePopup(TweenPropertyEditorContext propContext)
+    {
+        TweenCoreType currentType = (TweenCoreType)propContext.propTweenType.enumValueIndex;
+
+        int currentIndex = Array.IndexOf(_possibleTypes.Keys.ToArray(), currentType);
+        if (currentIndex < 0)
+        {
+            currentIndex = 0;
+        }
+
+        propContext.NewLine();
+        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Ease", currentIndex, _possibleTypes.Values.ToArray());
+        propContext.propTweenType.enumValueIndex = (int)_possibleTypes.Keys.ToArray()[newIndex];
+    }
+
     private void HandlePropertyIsExpand(TweenPropertyEditorContext propContext)
     {
         propContext.DrawProperty(propContext.propCurrentObject);
@@ -251,14 +307,14 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             propContext.property.serializedObject.ApplyModifiedProperties();
         }
 
-        propContext.DrawProperty(propContext.propTweenType);
+        DrawTypePopup(propContext);
 
         if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
         {
             propContext.DrawProperty(propContext.propTypeAnimCurve);
         }
 
-        propContext.DrawProperty(propContext.propTweenEase);
+        DrawEasePopup(propContext);
 
         if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
         {
@@ -337,11 +393,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         // Set the position of the button to open the list of properties
         float propertyHeight = EditorGUI.GetPropertyHeight(propContext.property, propContext.label, true);
 
-        Rect popupRectPropertyChoosed = new Rect(propContext.Position.x, propContext.Position.y + propertyHeight + EditorGUIUtility.standardVerticalSpacing,
-                              propContext.Position.width, EditorGUIUtility.singleLineHeight);
-
         // Draw button and get index of the chosen property by user
-        //int choosedIndex = EditorGUI.Popup(popupRectPropertyChoosed, propContext.currentPropertyChoosedIndex, _propertiesNamesMap[propContext.referenceId]);
         int choosedIndex = EditorGUI.Popup(propContext.PropertyPos, propContext.currentPropertyChoosedIndex, _propertiesNamesMap[propContext.referenceId]);
         // If new property choosed
         if (choosedIndex != propContext.currentPropertyChoosedIndex)

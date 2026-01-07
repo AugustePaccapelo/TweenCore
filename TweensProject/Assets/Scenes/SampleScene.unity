@@ -2408,14 +2408,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playOnStart: 1
-  _isParallel: 0
-  _isLoop: 0
+  _isParallel: 1
+  _isLoop: 1
   _isInfinite: 1
   _numIteration: 5
   _DestroyWhenFinished: 1
   _surviveOnUnload: 0
   _properties:
-  - rid: 2870472041420554307
   - rid: 2870472041420554309
   _unityEvents:
     OnStart:
@@ -2433,40 +2432,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 2870472041420554307
+    - rid: 2870472041420554309
       type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
       data:
         obj: {fileID: 2053049825}
-        type: 12
-        ease: 5
+        type: 9
+        ease: 2
         duration: 1
-        delay: 0
+        delay: 0.5
         fromCurrentValue: 0
         easeAnimationCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 34
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 34
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        typeAnimationCurve:
           serializedVersion: 2
           m_Curve:
           - serializedVersion: 3
@@ -2486,6 +2461,75 @@ MonoBehaviour:
             tangentMode: 0
             weightedMode: 0
             inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        typeAnimationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.18143581
+            value: -0.2121959
+            inSlope: 1.0560774
+            outSlope: 1.0560774
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.2220644
+            outWeight: 0.05152313
+          - serializedVersion: 3
+            time: 0.23443161
+            value: 0.44009987
+            inSlope: 0.99054724
+            outSlope: 0.99054724
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.25764656
+          - serializedVersion: 3
+            time: 0.5
+            value: 0.5
+            inSlope: 0.015857514
+            outSlope: 0.015857514
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 1
+            outWeight: 1
+          - serializedVersion: 3
+            time: 0.7148979
+            value: 0.4918796
+            inSlope: 0.28122512
+            outSlope: 0.28122512
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.5236696
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 0.7368672
+            value: 1.2371781
+            inSlope: 1.3302776
+            outSlope: 1.3302776
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: -0.47768256
+            outSlope: -0.47768256
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.55491465
             outWeight: 0
           m_PreInfinity: 2
           m_PostInfinity: 2
@@ -2495,81 +2539,6 @@ MonoBehaviour:
         _lastKnownObject: {fileID: 2053049825}
         _startValue: {x: 0, y: 0, z: 0}
         _finalValue: {x: 0, y: 0, z: 360}
-        _unityEvents:
-          unityOnStart:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdate:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnUpdateValue:
-            m_PersistentCalls:
-              m_Calls: []
-          unityOnFinish:
-            m_PersistentCalls:
-              m_Calls: []
-    - rid: 2870472041420554309
-      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
-      data:
-        obj: {fileID: 2053049825}
-        type: 0
-        ease: 0
-        duration: 0.5
-        delay: 0
-        fromCurrentValue: 0
-        easeAnimationCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        typeAnimationCurve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        propertyName: eulerAngles
-        propertyIndex: 2
-        _lastKnownObject: {fileID: 2053049825}
-        _startValue: {x: 0, y: 0, z: 0}
-        _finalValue: {x: 0, y: 0, z: 0}
         _unityEvents:
           unityOnStart:
             m_PersistentCalls:
