@@ -290,7 +290,7 @@ public abstract class TweenCorePropertyBase
     private float OutIn(float t, Func<float, float> TypeFunc)
     {
         return t > 0.5f ?
-            0.5f * TypeFunc(t * 2) :
-            1 - 0.5f * TypeFunc(2 - 2 * t);
+            0.5f * (1 - TypeFunc(1 - t * 2)) :
+            0.5f + 0.5f * TypeFunc((t - 0.5f) * 2);
     }
 }
