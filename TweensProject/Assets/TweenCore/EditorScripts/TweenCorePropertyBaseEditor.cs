@@ -32,6 +32,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         public SerializedProperty propCurrentPropertyChoosedIndex;
         public SerializedProperty propPropertyChoosedName;
 
+        public SerializedProperty propIsEmpty;
         public SerializedProperty propTweenType;
         public SerializedProperty propTweenEase;
         public SerializedProperty propDuration;
@@ -107,6 +108,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             propCurrentPropertyChoosedIndex = property.FindPropertyRelative("propertyIndex");
             propPropertyChoosedName = property.FindPropertyRelative("propertyName");
 
+            propIsEmpty = property.FindPropertyRelative("isEmpty");
             propTweenType = property.FindPropertyRelative("type");
             propTweenEase = property.FindPropertyRelative("ease");
             propDuration = property.FindPropertyRelative("duration");
@@ -212,19 +214,13 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         
         if (!property.isExpanded) return height;
 
-        //TargetGO
+        //IsEmty
         height += Line;
 
-        //If has an target, show components
-        if (propContext.propTweenTargetObj.boxedValue != null)
+        // If not empty, show objects related fields
+        if (!propContext.propIsEmpty.boolValue)
         {
-            height += Line;
-        }
-
-        // If has an obj, field for methods to tween
-        if (propContext.propCurrentObject.boxedValue != null)
-        {
-            height += Line;
+            height += ComputeHeightWhenPropNotEmpty(propContext);
         }
 
         //Type
@@ -245,11 +241,15 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             height += Line;
         }
 
-        // From current value
-        height += Line;
+        // If isEmpt, cannot start from current value
+        if (!propContext.propIsEmpty.boolValue)
+        {
+            // From current value
+            height += Line;
+        }
 
-        // If not from current, show startValue
-        if (!propContext.propFromCurrentValue.boolValue)
+        // If not from current or empty, show startValue
+        if (!propContext.propFromCurrentValue.boolValue || propContext.propIsEmpty.boolValue)
         {
             height += Line;
         }
@@ -270,6 +270,28 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
     }
 
     // ----- My functions ----- \\
+
+    private float ComputeHeightWhenPropNotEmpty(TweenPropertyEditorContext propContext)
+    {
+        float height = 0f;
+
+        //TargetGO
+        height += Line;
+
+        //If has an target, show components
+        if (propContext.propTweenTargetObj.boxedValue != null)
+        {
+            height += Line;
+        }
+
+        // If has an obj, field for methods to tween
+        if (propContext.propCurrentObject.boxedValue != null)
+        {
+            height += Line;
+        }
+
+        return height;
+    }
 
     private void DrawEasePopup(TweenPropertyEditorContext propContext)
     {
@@ -302,6 +324,48 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
     }
 
     private void HandlePropertyIsExpand(TweenPropertyEditorContext propContext)
+    {
+        propContext.DrawProperty(propContext.propIsEmpty);
+
+        // If not empty, draw objects related fields
+        if (!propContext.propIsEmpty.boolValue)
+        {
+            HandlePropertyIsNotEmpty(propContext);
+        }
+
+        DrawTypePopup(propContext);
+
+        if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
+        {
+            propContext.DrawProperty(propContext.propTypeAnimCurve);
+        }
+
+        DrawEasePopup(propContext);
+
+        if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
+        {
+            propContext.DrawProperty(propContext.propEaseAnimCurve);
+        }
+
+        if (!propContext.propIsEmpty.boolValue)
+        {
+            propContext.DrawProperty(propContext.propFromCurrentValue);
+        }
+        
+        if (!propContext.propFromCurrentValue.boolValue || propContext.propIsEmpty.boolValue)
+        {
+            propContext.DrawProperty(propContext.propStartValue);
+        }
+        propContext.DrawProperty(propContext.propEndValue);
+
+        propContext.DrawProperty(propContext.propDuration);
+
+        propContext.DrawProperty(propContext.propDelay);
+
+        propContext.DrawProperty(propContext.propUnityEvents);
+    }
+
+    private void HandlePropertyIsNotEmpty(TweenPropertyEditorContext propContext)
     {
         propContext.DrawProperty(propContext.propTweenTargetObj);
 
@@ -364,33 +428,6 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             }
             propContext.property.serializedObject.ApplyModifiedProperties();
         }
-
-        DrawTypePopup(propContext);
-
-        if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
-        {
-            propContext.DrawProperty(propContext.propTypeAnimCurve);
-        }
-
-        DrawEasePopup(propContext);
-
-        if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
-        {
-            propContext.DrawProperty(propContext.propEaseAnimCurve);
-        }
-
-        propContext.DrawProperty(propContext.propFromCurrentValue);
-        if (!propContext.propFromCurrentValue.boolValue)
-        {
-            propContext.DrawProperty(propContext.propStartValue);
-        }
-        propContext.DrawProperty(propContext.propEndValue);
-
-        propContext.DrawProperty(propContext.propDuration);
-
-        propContext.DrawProperty(propContext.propDelay);
-
-        propContext.DrawProperty(propContext.propUnityEvents);
     }
 
     private void GetComponents(TweenPropertyEditorContext propContext)

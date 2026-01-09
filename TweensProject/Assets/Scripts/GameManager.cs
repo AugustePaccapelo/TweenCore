@@ -49,6 +49,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void Test(TweenCoreProperty<Vector3> tweenProp, Vector3 val)
+    {
+        Debug.Log(val);
+    }
+
     // ----- Destructor ----- \\
 
     protected virtual void OnDestroy()

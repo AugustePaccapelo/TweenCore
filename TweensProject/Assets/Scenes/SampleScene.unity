@@ -200,7 +200,7 @@ Transform:
   m_GameObject: {fileID: 20216354}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.010130469, y: 0.026379075, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1096,6 +1096,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 0}
         obj: {fileID: 747174022}
+        _lastKnownObject: {fileID: 747174022}
+        _lastKnownTweenTargetGO: {fileID: 0}
         type: 10
         ease: 1
         duration: 2
@@ -1151,8 +1153,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: position
         propertyIndex: 0
-        _lastKnownObject: {fileID: 747174022}
-        _lastKnownTweenTargetGO: {fileID: 0}
+        isEmpty: 0
         _startValue: {x: -2.5, y: -2.5, z: -2.5}
         _finalValue: {x: 2.5, y: 2.5, z: 2.5}
         _unityEvents:
@@ -1173,6 +1174,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 0}
         obj: {fileID: 747174022}
+        _lastKnownObject: {fileID: 747174022}
+        _lastKnownTweenTargetGO: {fileID: 0}
         type: 5
         ease: 0
         duration: 1
@@ -1228,8 +1231,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: localScale
         propertyIndex: 7
-        _lastKnownObject: {fileID: 747174022}
-        _lastKnownTweenTargetGO: {fileID: 0}
+        isEmpty: 0
         _startValue: {x: 1, y: 1, z: 1}
         _finalValue: {x: 3, y: 3, z: 3}
         _unityEvents:
@@ -1250,6 +1252,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 0}
         obj: {fileID: 747174022}
+        _lastKnownObject: {fileID: 747174022}
+        _lastKnownTweenTargetGO: {fileID: 0}
         type: 0
         ease: 0
         duration: 1
@@ -1305,8 +1309,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: localScale
         propertyIndex: 7
-        _lastKnownObject: {fileID: 747174022}
-        _lastKnownTweenTargetGO: {fileID: 0}
+        isEmpty: 0
         _startValue: {x: 3, y: 3, z: 3}
         _finalValue: {x: 1, y: 1, z: 1}
         _unityEvents:
@@ -1327,6 +1330,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 0}
         obj: {fileID: 747174022}
+        _lastKnownObject: {fileID: 747174022}
+        _lastKnownTweenTargetGO: {fileID: 0}
         type: 0
         ease: 0
         duration: 1
@@ -1382,8 +1387,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: position
         propertyIndex: 0
-        _lastKnownObject: {fileID: 747174022}
-        _lastKnownTweenTargetGO: {fileID: 0}
+        isEmpty: 0
         _startValue: {x: 2.5, y: 2.5, z: 2.5}
         _finalValue: {x: 0, y: 0, z: 0}
         _unityEvents:
@@ -1522,6 +1526,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 0}
         obj: {fileID: 0}
+        _lastKnownObject: {fileID: 0}
+        _lastKnownTweenTargetGO: {fileID: 0}
         type: 0
         ease: 0
         duration: 1
@@ -1577,8 +1583,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: 
         propertyIndex: 0
-        _lastKnownObject: {fileID: 0}
-        _lastKnownTweenTargetGO: {fileID: 0}
+        isEmpty: 0
         _startValue: {x: 0, y: 0, z: 0}
         _finalValue: {x: 0, y: 0, z: 0}
         _unityEvents:
@@ -2307,6 +2312,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 2053049821}
         obj: {fileID: 2053049825}
+        _lastKnownObject: {fileID: 2053049825}
+        _lastKnownTweenTargetGO: {fileID: 2053049821}
         type: 9
         ease: 2
         duration: 1
@@ -2407,8 +2414,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: eulerAngles
         propertyIndex: 2
-        _lastKnownObject: {fileID: 2053049825}
-        _lastKnownTweenTargetGO: {fileID: 2053049821}
+        isEmpty: 0
         _startValue: {x: 0, y: 0, z: 0}
         _finalValue: {x: 0, y: 0, z: 360}
         _unityEvents:
@@ -2429,6 +2435,8 @@ MonoBehaviour:
       data:
         _tweenTargetObj: {fileID: 20216354}
         obj: {fileID: 20216356}
+        _lastKnownObject: {fileID: 20216356}
+        _lastKnownTweenTargetGO: {fileID: 20216354}
         type: 0
         ease: 0
         duration: 1
@@ -2484,8 +2492,7 @@ MonoBehaviour:
           m_RotationOrder: 4
         propertyName: position
         propertyIndex: 0
-        _lastKnownObject: {fileID: 20216356}
-        _lastKnownTweenTargetGO: {fileID: 20216354}
+        isEmpty: 0
         _startValue: {x: -5, y: 0, z: 0}
         _finalValue: {x: 5, y: 0, z: 0}
         _unityEvents:

@@ -155,7 +155,15 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
             SetEase(ease);
         }
 
-        SetReflexionFiels(propertyName);
+        if (isEmpty)
+        {
+            _currentMethod = MethodUse.ReturnValue;
+        }
+        else
+        {
+            SetReflexionFiels(propertyName);
+        }
+
         return this;
     }
 

@@ -15,6 +15,9 @@ public abstract class TweenCorePropertyBase
     [SerializeField, HideInInspector] protected UnityEngine.Object obj;
     public UnityEngine.Object TargetObject => obj;
 
+    [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
+    [SerializeField, HideInInspector] private GameObject _lastKnownTweenTargetGO;
+
     // ----- Others ----- \\
 
     private const float BACK_C1 = 1.70158f;
@@ -53,8 +56,8 @@ public abstract class TweenCorePropertyBase
     public string PropertyName => propertyName;
 
     [SerializeField, HideInInspector] protected int propertyIndex;
-    [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
-    [SerializeField, HideInInspector] private GameObject _lastKnownTweenTargetGO;
+
+    [SerializeField] protected bool isEmpty = false;
 
     protected bool isPlaying = false;
     public bool IsPlaying => isPlaying;
