@@ -65,6 +65,9 @@ public abstract class TweenCorePropertyBase
     protected bool hasStarted = false;
     public bool HasStarted => hasStarted;
 
+    protected bool isFinish = false;
+    public bool IsFinish => isFinish;
+
     protected float elapseTime = 0f;
     public float ElapseTime => elapseTime;
 

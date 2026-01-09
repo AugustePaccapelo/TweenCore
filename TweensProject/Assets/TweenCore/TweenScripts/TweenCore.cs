@@ -22,6 +22,9 @@ public class TweenCore
     private bool _hasStarted = false;
     public bool HasStarted => _hasStarted;
 
+    private bool _isFinished = false;
+    public bool IsFinished => _isFinished;
+
     private bool _isParallel = true;
     public bool IsParallel => _isParallel;
 
@@ -142,6 +145,7 @@ public class TweenCore
         _hasStarted = true;
         _isPaused = false;
         _isPlaying = true;
+        _isFinished = false;
 
         _elapseTime = 0;
 
@@ -216,8 +220,9 @@ public class TweenCore
         {
             if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop(setToFinalValue);
         }
+        _isFinished = true;
         OnFinish?.Invoke(this);
-        if (_destroyOnFinish) TweenCoreManager.Instance.RemoveTween(this);
+        if (_destroyOnFinish) DestroyTween();
     }
 
     /// <summary>
@@ -427,5 +432,13 @@ public class TweenCore
     {
         _destroyOnFinish = destroy;
         return this;
+    }
+
+    /// <summary>
+    /// Destroy this TweenCore without modifying the value.
+    /// </summary>
+    public void DestroyTween()
+    {
+        TweenCoreManager.Instance.RemoveTween(this);
     }
 }

@@ -193,6 +193,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         hasStarted = true;
         isPaused = false;
         isPlaying = true;
+        isFinish = false;
 
         if (_currentMethod == MethodUse.Reflexion)
         {
@@ -548,6 +549,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         isPlaying = false;
         isPaused = true;
+        isFinish = true;
 
         StartNextProperties();
 
