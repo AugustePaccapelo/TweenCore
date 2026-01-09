@@ -11,7 +11,8 @@ public abstract class TweenCorePropertyBase
 
     // ----- Objects ----- \\
 
-    [SerializeField] protected UnityEngine.Object obj;
+    [SerializeField] private GameObject _tweenTargetObj;
+    [SerializeField, HideInInspector] protected UnityEngine.Object obj;
     public UnityEngine.Object TargetObject => obj;
 
     // ----- Others ----- \\
@@ -53,6 +54,7 @@ public abstract class TweenCorePropertyBase
 
     [SerializeField, HideInInspector] protected int propertyIndex;
     [SerializeField, HideInInspector] private UnityEngine.Object _lastKnownObject;
+    [SerializeField, HideInInspector] private GameObject _lastKnownTweenTargetGO;
 
     protected bool isPlaying = false;
     public bool IsPlaying => isPlaying;

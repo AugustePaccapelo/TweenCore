@@ -5,12 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEditor.PlayerSettings;
 
 // Author : Auguste Paccapelo
 
@@ -24,6 +20,10 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
         // Tween related \\
 
+        public SerializedProperty propTweenTargetObj;
+        public GameObject currentTweenTargetObj;
+        public SerializedProperty propLastKnownTweenTargetGO;
+        public GameObject lastTweenTargetObjKnown;
         public SerializedProperty property;
         public SerializedProperty propCurrentObject;
         public UnityEngine.Object currentObject;
@@ -98,6 +98,10 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             if (property == null) return;
 
             this.property = property;
+
+            propTweenTargetObj = property.FindPropertyRelative("_tweenTargetObj");
+            propLastKnownTweenTargetGO = property.FindPropertyRelative("_lastKnownTweenTargetGO");
+
             propCurrentObject = property.FindPropertyRelative("obj");
             propLastKnownObject = property.FindPropertyRelative("_lastKnownObject");
             propCurrentPropertyChoosedIndex = property.FindPropertyRelative("propertyIndex");
@@ -117,6 +121,8 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
         public void InitVariables()
         {
+            if (propTweenTargetObj != null) currentTweenTargetObj = (GameObject)propTweenTargetObj.objectReferenceValue;
+            if (propLastKnownTweenTargetGO != null) lastTweenTargetObjKnown = (GameObject)propLastKnownTweenTargetGO.objectReferenceValue;
             if (propCurrentObject != null) currentObject = propCurrentObject.objectReferenceValue;
             if (propLastKnownObject != null) lastKnownObject = propLastKnownObject.objectReferenceValue;
             if (propCurrentPropertyChoosedIndex != null) currentPropertyChoosedIndex = propCurrentPropertyChoosedIndex.intValue;
@@ -127,6 +133,11 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         {
             return currentObject != lastKnownObject;
         }
+
+        public bool DidTargetGOChanged()
+        {
+            return currentTweenTargetObj != lastTweenTargetObjKnown;
+        }
     }
 
     // ---------- VARIABLES ---------- \\
@@ -134,6 +145,8 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
     private float Line => EditorGUIUtility.singleLineHeight;
 
     private Dictionary<long, string[]> _propertiesNamesMap = new Dictionary<long, string[]>();
+    private Dictionary<long, List<Component>> _propertiesComponentsMap = new ();
+    private Dictionary<long, List<string>> _propertiesComponentsNamesMap = new();
 
     private static readonly Dictionary<TweenCoreType, string> _possibleTypes = new Dictionary<TweenCoreType, string>
     {
@@ -199,8 +212,14 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         
         if (!property.isExpanded) return height;
 
-        //Obj
+        //TargetGO
         height += Line;
+
+        //If has an target, show components
+        if (propContext.propTweenTargetObj.boxedValue != null)
+        {
+            height += Line;
+        }
 
         // If has an obj, field for methods to tween
         if (propContext.propCurrentObject.boxedValue != null)
@@ -284,7 +303,46 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     private void HandlePropertyIsExpand(TweenPropertyEditorContext propContext)
     {
-        propContext.DrawProperty(propContext.propCurrentObject);
+        propContext.DrawProperty(propContext.propTweenTargetObj);
+
+        if (propContext.currentTweenTargetObj != null)
+        {
+            if (propContext.DidTargetGOChanged() || !_propertiesComponentsMap.ContainsKey(propContext.referenceId))
+            {
+                GetComponents(propContext);
+            }
+
+            int currentIndex;
+
+            if (_propertiesComponentsMap[propContext.referenceId].Contains(propContext.currentObject))
+            {
+                currentIndex = _propertiesComponentsMap[propContext.referenceId].IndexOf((Component)propContext.currentObject);
+            }
+            else
+            {
+                currentIndex = 0;
+                propContext.currentObject = _propertiesComponentsMap[propContext.referenceId][0];
+            }
+
+            propContext.NewLine();
+            currentIndex = EditorGUI.Popup(propContext.PropertyPos, currentIndex, _propertiesComponentsNamesMap[propContext.referenceId].ToArray());
+
+            propContext.currentObject = _propertiesComponentsMap[propContext.referenceId][currentIndex];
+            propContext.propCurrentObject.objectReferenceValue = propContext.currentObject;
+
+            propContext.currentTweenTargetObj = (GameObject)propContext.propTweenTargetObj.objectReferenceValue;
+            propContext.lastTweenTargetObjKnown = propContext.currentTweenTargetObj;
+            propContext.propLastKnownTweenTargetGO.objectReferenceValue = propContext.lastTweenTargetObjKnown;
+
+            propContext.property.serializedObject.ApplyModifiedProperties();
+        }
+        else
+        {
+            propContext.lastTweenTargetObjKnown = null;
+            propContext.propLastKnownTweenTargetGO.objectReferenceValue = propContext.lastTweenTargetObjKnown;
+
+            propContext.property.serializedObject.ApplyModifiedProperties();
+        }
 
         // If an object to tween where given
         if (propContext.currentObject != null)
@@ -333,6 +391,21 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         propContext.DrawProperty(propContext.propDelay);
 
         propContext.DrawProperty(propContext.propUnityEvents);
+    }
+
+    private void GetComponents(TweenPropertyEditorContext propContext)
+    {
+        List<Component> foundComponents = new();
+        propContext.currentTweenTargetObj.GetComponents(foundComponents);
+        _propertiesComponentsMap[propContext.referenceId] = foundComponents;
+
+        List<string> foundComponentsNames = new();
+        foreach (Component comp in foundComponents)
+        {
+            foundComponentsNames.Add(comp.GetType().Name);
+        }
+
+        _propertiesComponentsNamesMap[propContext.referenceId] = foundComponentsNames;
     }
 
     private void HandlePropertyHasAnObject(TweenPropertyEditorContext propContext)
@@ -390,9 +463,6 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     private void DrawPopupChooseProperty(TweenPropertyEditorContext propContext)
     {
-        // Set the position of the button to open the list of properties
-        float propertyHeight = EditorGUI.GetPropertyHeight(propContext.property, propContext.label, true);
-
         // Draw button and get index of the chosen property by user
         int choosedIndex = EditorGUI.Popup(propContext.PropertyPos, propContext.currentPropertyChoosedIndex, _propertiesNamesMap[propContext.referenceId]);
         // If new property choosed
