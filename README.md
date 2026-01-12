@@ -74,14 +74,27 @@ Contain and manage one or multiple TweenProperty.
 - "Stop(bool setToFinalValue = true)"
 - "Update(float deltaTime)"
 - "NewProperty(...)" 4 overloads
+
 - "SetParallel(bool isParallel)"
 - "SetChain(bool isChain)"
 - "Parallel()"
 - "Chain()"
+- "SetLoop(bool isLoop, int numIteration = -1)"
+- "SurviveOnSceneLoad()"
+- "KillOnSceneUnLoad()"
+- "SetSurviveOnUnload(bool survive)"
+- "DestroyWhenFinish()"
+- "DontDestroyWhenFinish()"
+- "SetDestroyWhenFinish(bool destroy)"
+- "DestroyTween()"
+
+- "AddProperty(TweenCorePropertyBase property)"
 
 **Events :**
-- "OnStart"
-- "OnFinish"
+- "OnStart<TweenCore>"
+- "OnFinish<TweenCore>"
+- "OnFinish<TweenCore>"
+- "OnLoopFinish<TweenCore>"
 
 ### TweenCorePropertyBase
 Abstract class, parent of TweenCoreProperty<TweenValueType> to manage multiple properties of different TweenValueTypes.
@@ -89,27 +102,31 @@ Abstract class, parent of TweenCoreProperty<TweenValueType> to manage multiple p
 **Methods :**
 - "Update(float deltaTime)"
 - "Start()"
-- "Stop()"
+- "Stop(bool setToFinalValue = true)"
+
+- "SetToFinalVals()"
+
 - "AddNextProperty(TweenCorePropertyBase property)"
 
 **Events :**
-- "OnStart"
-- "OnUpdate"
-- "OnFinish"
+- "OnStart<TweenCorePropertyBase>"
+- "OnUpdate<TweenCorePropertyBase>"
+- "OnFinish<TweenCorePropertyBase>"
 
 ### TweenCoreProperty<TweenValueType>
 Calculates the current value of type TweenValueType, and if wanted set the given property or field.
 
 **Methods :**
 - "SetDelay(float tweenDelay)"
-- "SetType(TweenType newType)"
-- "SetCustomType(Func<float, float> customType)"
-- "SetEase(TweenType newEase)"
-- "SetCustomEase(Func<float, Func<float, float>, float> customEase)"
+- "SetType()" 5 overloads
+- "SetEase()" 5 overloads
 - "GetCurrentValue()"
 - "From(TweenValueType value)"
+- "FromCurrent()"
 - "Pause()"
 - "Resume()"
+- "Stop(bool setToFinalValue = true)"
+- "SetToFinalVals()"
 
 **Events :**
 - "OnUpdate<TweenValueType>"
