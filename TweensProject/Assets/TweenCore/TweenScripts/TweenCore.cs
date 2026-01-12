@@ -311,7 +311,6 @@ public class TweenCore
     {
         _tweenProperties.Add(property);
         property.OnFinish += NewPropertyFinished;
-        //property.OnLoopFinish += NewPropertyFinishedIteration;
         return this;
     }
     

@@ -351,7 +351,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         {
             propContext.DrawProperty(propContext.propFromCurrentValue);
         }
-        
+
         if (!propContext.propFromCurrentValue.boolValue || propContext.propIsEmpty.boolValue)
         {
             propContext.DrawProperty(propContext.propStartValue);
