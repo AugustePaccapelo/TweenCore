@@ -46,6 +46,9 @@ public abstract class TweenCorePropertyBase
     [SerializeField] protected bool fromCurrentValue = false;
     public bool FromCurrentValue => fromCurrentValue;
 
+    [SerializeField] protected bool isIncreasingValue = false;
+    public bool IsIncreasingValue => isIncreasingValue;
+
     protected Func<float, Func<float, float>, float> EaseFunc;
     protected Func<float, float> TypeFunc;
 
@@ -95,6 +98,23 @@ public abstract class TweenCorePropertyBase
         {typeof(Quaternion), (a, b, t) => Quaternion.Lerp((Quaternion)a, (Quaternion)b, t)},
         {typeof(Color), (a, b, t) => (Color)a + ((Color)b - (Color)a) * t },
         {typeof(Color32), (a, b, t) => Color32.Lerp((Color32)a, (Color32)b, t)},
+    };
+
+    protected static readonly Dictionary<Type, Func<object, object, object>> addFuncs = new()
+    {
+        // C# types
+        {typeof(float), (a, b) => (float)a + (float)b },
+        {typeof(double), (a, b) => (double)a + (double)b },
+        {typeof(int), (a, b) => (int)a + (int)b },
+        {typeof(uint), (a, b) => (uint)a + (uint)b },
+        {typeof(long), (a, b) => (long)a + (long)b },
+        {typeof(ulong), (a, b) => (ulong)a + (ulong)b },
+        {typeof(decimal), (a, b) => (decimal)a + (decimal)b },
+        // Unity types
+        {typeof(Vector2), (a, b) => (Vector2)a + (Vector2)b },
+        {typeof(Vector3), (a, b) => (Vector3)a + (Vector3)b },
+        {typeof(Vector4), (a, b) => (Vector4)a + (Vector4)b },
+        {typeof(Color), (a, b) => (Color)a + (Color)b }
     };
 
     // ---------- FUNCTIONS ---------- \\

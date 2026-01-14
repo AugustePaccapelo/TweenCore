@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 // Author : Auguste Paccapelo
 
@@ -19,6 +20,9 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     [SerializeField] private TweenValueType _finalValue;
     public TweenValueType FinalValue => _finalValue;
 
+    [SerializeField] private TweenValueType _increaseValue;
+    public TweenValueType IncreasingValue => _increaseValue;
+
     private TweenValueType _currentValue;
     public TweenValueType CurrentValue => _currentValue;
 
@@ -26,7 +30,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     private PropertyInfo _property;
     private FieldInfo _field;
     private Action<TweenValueType> _function;
-
+    
     private List<TweenCorePropertyBase> _nextProperties = new List<TweenCorePropertyBase>();
 
     [Serializable]
@@ -50,7 +54,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="startVal">The start value.</param>
     /// <param name="finalVal">The end value.</param>
     /// <param name="time">The duration.</param>
-    /// <param name="tween">The attached tween.</param>
     public TweenCoreProperty(TweenValueType startVal, TweenValueType finalVal, float time)
     {
         _currentMethod = MethodUse.ReturnValue;
@@ -69,7 +72,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="startVal">The start value.</param>
     /// <param name="finalVal">The end value.</param>
     /// <param name="duration">The duration.</param>
-    /// <param name="tween">The attached tween.</param>
     public TweenCoreProperty(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float duration)
     {
         _currentMethod = MethodUse.Strategy;
@@ -89,7 +91,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="method">The targeted property or field.</param>
     /// <param name="finalVal">The end value.</param>
     /// <param name="duration">The duration.</param>
-    /// <param name="tween">The attached tween.</param>
     public TweenCoreProperty(UnityEngine.Object obj, string method, TweenValueType finalVal, float duration)
     {
         _currentMethod = MethodUse.Reflexion;
@@ -99,7 +100,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         base.obj = obj;
         SetReflexionFiels(propertyName);
 
-        fromCurrentValue = false;
+        fromCurrentValue = true;
     }
 
     /// <summary>
@@ -110,7 +111,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     /// <param name="startVal">The start value.</param>
     /// <param name="finalVal">The end value.</param>
     /// <param name="duration">The duration.</param>
-    /// <param name="tween">The attached tween.</param>
     public TweenCoreProperty(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float duration)
     {
         _currentMethod = MethodUse.Reflexion;
@@ -247,7 +247,12 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         if (lerpsFunc.ContainsKey(typeof(TweenValueType)))
         {
-            TweenValueType value = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, _finalValue, w);
+
+            TweenValueType endVal = fromCurrentValue && isIncreasingValue ?
+                (TweenValueType)addFuncs[typeof(TweenValueType)](_startValue, _finalValue) :
+                _finalValue;
+
+            TweenValueType value = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, endVal, w);
             SetValue(value);
         }
         else
@@ -477,6 +482,17 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         return this;
     }
 
+    public TweenCoreProperty<TweenValueType> SetIsAdditive(bool isAdd)
+    {
+        isIncreasingValue = isAdd;
+        if (isAdd)
+        {
+            fromCurrentValue = isAdd;
+        }
+        
+        return this;
+    }
+
     public override TweenCorePropertyBase AddNextProperty(TweenCorePropertyBase property)
     {
         _nextProperties.Add(property);
@@ -597,7 +613,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public override TweenCorePropertyBase SetToFinalVals()
     {
-        SetValue((TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, _finalValue, RealWeight(1)));
+        TweenValueType endVal = fromCurrentValue && isIncreasingValue ?
+                (TweenValueType)addFuncs[typeof(TweenValueType)](_startValue, _finalValue) :
+                _finalValue;
+
+        SetValue((TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, endVal, RealWeight(1)));
 
         return this;
     }

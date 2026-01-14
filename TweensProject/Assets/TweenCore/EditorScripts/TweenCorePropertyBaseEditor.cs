@@ -40,6 +40,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         public SerializedProperty propTypeAnimCurve;
         public SerializedProperty propEaseAnimCurve;
         public SerializedProperty propFromCurrentValue;
+        public SerializedProperty propIsAdd;
         public SerializedProperty propStartValue;
         public SerializedProperty propEndValue;
         public SerializedProperty propUnityEvents;
@@ -70,10 +71,17 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
         // ----- FUNCTIONS ----- \\
 
-        public void DrawProperty(SerializedProperty property)
+        public void DrawProperty(SerializedProperty property, string name = "")
         {
             NewLine();
-            EditorGUI.PropertyField(_propertyPos, property, true);
+            if (string.IsNullOrEmpty(name))
+            {
+                EditorGUI.PropertyField(_propertyPos, property, true);
+            }
+            else
+            {
+                EditorGUI.PropertyField(_propertyPos, property, new GUIContent(name), true);
+            }
         }
 
         public void NewLine()
@@ -116,6 +124,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             propTypeAnimCurve = property.FindPropertyRelative("typeAnimationCurve");
             propEaseAnimCurve = property.FindPropertyRelative("easeAnimationCurve");
             propFromCurrentValue = property.FindPropertyRelative("fromCurrentValue");
+            propIsAdd = property.FindPropertyRelative("isIncreasingValue");
             propStartValue = property.FindPropertyRelative("_startValue");
             propEndValue = property.FindPropertyRelative("_finalValue");
             propUnityEvents = property.FindPropertyRelative("_unityEvents");
@@ -241,11 +250,17 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             height += Line;
         }
 
-        // If isEmpt, cannot start from current value
+        // If isEmpty, cannot start from current value
         if (!propContext.propIsEmpty.boolValue)
         {
             // From current value
             height += Line;
+
+            // If from current, is add
+            if (propContext.propFromCurrentValue.boolValue)
+            {
+                height += Line;
+            }
         }
 
         // If not from current or empty, show startValue
@@ -350,13 +365,25 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         if (!propContext.propIsEmpty.boolValue)
         {
             propContext.DrawProperty(propContext.propFromCurrentValue);
+
+            if (propContext.propFromCurrentValue.boolValue)
+            {
+                propContext.DrawProperty(propContext.propIsAdd);
+            }
         }
 
         if (!propContext.propFromCurrentValue.boolValue || propContext.propIsEmpty.boolValue)
         {
             propContext.DrawProperty(propContext.propStartValue);
         }
-        propContext.DrawProperty(propContext.propEndValue);
+
+        string endName = "";
+        if (propContext.propIsAdd.boolValue)
+        {
+            endName = "Value to add";
+        }
+
+        propContext.DrawProperty(propContext.propEndValue, endName);
 
         propContext.DrawProperty(propContext.propDuration);
 
