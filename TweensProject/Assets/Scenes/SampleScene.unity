@@ -1771,7 +1771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playOnStart: 1
-  _isParallel: 1
+  _isParallel: 0
   _isLoop: 1
   _isInfinite: 1
   _numIteration: 5
@@ -1779,6 +1779,7 @@ MonoBehaviour:
   _surviveOnUnload: 0
   _properties:
   - rid: 2870472248389533696
+  - rid: 2870472294634094659
   _unityEvents:
     OnStart:
       m_PersistentCalls:
@@ -1802,8 +1803,8 @@ MonoBehaviour:
         obj: {fileID: 1442918758}
         _lastKnownObject: {fileID: 1442918758}
         _lastKnownTweenTargetGO: {fileID: 1442918755}
-        type: 10
-        ease: 0
+        type: 6
+        ease: 3
         duration: 1
         delay: 0
         fromCurrentValue: 1
@@ -1861,6 +1862,86 @@ MonoBehaviour:
         isEmpty: 0
         _startValue: {x: -2.5, y: 0, z: 0}
         _finalValue: {x: 5, y: 0, z: 0}
+        _increaseValue: {x: 0, y: 0, z: 0}
+        _unityEvents:
+          unityOnStart:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdate:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdateValue:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnFinish:
+            m_PersistentCalls:
+              m_Calls: []
+    - rid: 2870472294634094659
+      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
+      data:
+        _tweenTargetObj: {fileID: 1442918755}
+        obj: {fileID: 1442918758}
+        _lastKnownObject: {fileID: 1442918758}
+        _lastKnownTweenTargetGO: {fileID: 1442918755}
+        type: 0
+        ease: 0
+        duration: 0
+        delay: 0
+        fromCurrentValue: 1
+        isIncreasingValue: 1
+        easeAnimationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        typeAnimationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        propertyName: position
+        propertyIndex: 0
+        isEmpty: 0
+        _startValue: {x: 0, y: 0, z: 0}
+        _finalValue: {x: -5, y: 0, z: 0}
         _increaseValue: {x: 0, y: 0, z: 0}
         _unityEvents:
           unityOnStart:
