@@ -55,8 +55,8 @@ transform.localScale = property.CurrentValue;
 Need to be in the game, manage all tweens.
 
 **Methods :**
-- "PauseAll()"
-- "ResumeAll()"
+- "PauseAll()" // Do not set all tweens in pause mode, only the manager
+- "ResumeAll()" // Same as PauseAll()
 - "AddTween(TweenCore tween)"
 - "RemoveTween(TweenCore tween)"
 - "StopAll()"
@@ -79,7 +79,7 @@ Contain and manage one or multiple TweenProperty.
 - "SetChain(bool isChain)"
 - "Parallel()"
 - "Chain()"
-- "SetLoop(bool isLoop, int numIteration = -1)"
+- "SetLoop(bool isLoop, int numIteration = -1)" // Any negative value will be compute as infinite, 0 no iterration.
 - "SurviveOnSceneLoad()"
 - "KillOnSceneUnLoad()"
 - "SetSurviveOnUnload(bool survive)"
@@ -127,6 +127,8 @@ Calculates the current value of type TweenValueType, and if wanted set the given
 - "Resume()"
 - "Stop(bool setToFinalValue = true)"
 - "SetToFinalVals()"
+- "SetIsAdditive(bool isAdd)" // This need to also be fromCurrent, if isAdd is true, property will set fromCurrent to true, if false, it will not modify fromCurrent
+// Quaternion and Color32 is not supported in this unique case
 
 **Events :**
 - "OnUpdate<TweenValueType>"

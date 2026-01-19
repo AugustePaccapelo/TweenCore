@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 20216356}
   - component: {fileID: 20216355}
+  - component: {fileID: 20216357}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -206,6 +207,123 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &20216357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20216354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa4fedc28c2c3a949ae6f1e79d896062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playOnStart: 1
+  _isParallel: 1
+  _isLoop: 0
+  _isInfinite: 0
+  _numIteration: 1
+  _DestroyWhenFinished: 1
+  _surviveOnUnload: 0
+  _properties:
+  - rid: 2870472334799273984
+  _unityEvents:
+    OnStart:
+      m_PersistentCalls:
+        m_Calls: []
+    OnUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    OnFinish:
+      m_PersistentCalls:
+        m_Calls: []
+    OnLoopFinish:
+      m_PersistentCalls:
+        m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2870472334799273984
+      type: {class: 'TweenCoreProperty`1[[UnityEngine.Vector3, UnityEngine.CoreModule]]', ns: , asm: Assembly-CSharp}
+      data:
+        _tweenTargetObj: {fileID: 20216354}
+        obj: {fileID: 20216356}
+        _lastKnownObject: {fileID: 20216356}
+        _lastKnownTweenTargetGO: {fileID: 20216354}
+        type: 12
+        ease: 2
+        duration: 1
+        delay: 0
+        fromCurrentValue: 0
+        isIncreasingValue: 0
+        easeAnimationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        typeAnimationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        propertyName: position
+        propertyIndex: 0
+        isEmpty: 0
+        _startValue: {x: 0, y: 0, z: 0}
+        _finalValue: {x: 0, y: 0, z: 0}
+        _increaseValue: {x: 0, y: 0, z: 0}
+        _unityEvents:
+          unityOnStart:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdate:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnUpdateValue:
+            m_PersistentCalls:
+              m_Calls: []
+          unityOnFinish:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &112878430
 GameObject:
   m_ObjectHideFlags: 0
