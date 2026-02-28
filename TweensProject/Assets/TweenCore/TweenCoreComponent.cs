@@ -18,6 +18,13 @@ public class TweenCoreComponent : MonoBehaviour
 
     // ----- Others ----- \\
 
+    [SerializeField] private string _name = "";
+    public string TweenName
+    {
+        get => _name;
+        set => _name = value;
+    }
+
     [SerializeField] private bool _playOnStart = true;
     [SerializeField] private bool _isParallel = true;
     [SerializeField] private bool _isLoop = false;
@@ -43,10 +50,6 @@ public class TweenCoreComponent : MonoBehaviour
 
     // ----- Buil-in ----- \\
 
-    private void OnEnable() { }
-
-    private void OnDisable() { }
-
     private void Awake()
     {
         _tween = TweenCore.CreateTween();
@@ -71,7 +74,8 @@ public class TweenCoreComponent : MonoBehaviour
             _tween.AddProperty(property);
             property.SetBaseValues();
         }
-        TweenCoreManager.Instance.AddTween(_tween);
+
+        TweenCoreManager.Instance?.AddTween(_tween);
 
         _tween.OnStart += OnTweenStart;
         _tween.OnUpdate += OnTweenUpdate;
@@ -125,5 +129,9 @@ public class TweenCoreComponent : MonoBehaviour
 
     // ----- Destructor ----- \\
 
-    private void OnDestroy() { }
+    private void OnDestroy()
+    {
+        _tween?.Stop(false);
+        _tween.DestroyTween();
+    }
 }

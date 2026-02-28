@@ -16,6 +16,7 @@ public class TweenCoreComponentEditor : Editor
 
     // ----- Objects ----- \\
 
+    private SerializedProperty _name;
     private SerializedProperty _playOnStart;
     private SerializedProperty _isParallel;
     private SerializedProperty _isLoop;
@@ -52,6 +53,7 @@ public class TweenCoreComponentEditor : Editor
     {
         serializedObject.Update();
 
+        EditorGUILayout.PropertyField(_name);
         EditorGUILayout.PropertyField(_playOnStart);
         EditorGUILayout.PropertyField(_isParallel);
 
@@ -81,6 +83,7 @@ public class TweenCoreComponentEditor : Editor
 
     private void GetProperties()
     {
+        _name = serializedObject.FindProperty("_name");
         _playOnStart = serializedObject.FindProperty("_playOnStart");
         _isParallel = serializedObject.FindProperty("_isParallel");
         _isLoop = serializedObject.FindProperty("_isLoop");
