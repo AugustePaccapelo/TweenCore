@@ -17,6 +17,8 @@ public class TweenCoreManager : MonoBehaviour
         {
             if (_instance == null)
             {
+                if (!_canBeInstantiate) return null;
+
                 GameObject obj = new GameObject(nameof(TweenCoreManager));
                 _instance = obj.AddComponent<TweenCoreManager>();
             }
@@ -32,6 +34,7 @@ public class TweenCoreManager : MonoBehaviour
 
     private bool _isPlaying = true;
     public bool IsPlaying => _isPlaying;
+    static private bool _canBeInstantiate = true;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -68,6 +71,11 @@ public class TweenCoreManager : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    private void OnApplicationQuit()
+    {
+        _canBeInstantiate = false;
     }
 
     // ----- My Functions ----- \\
