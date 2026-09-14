@@ -181,10 +181,18 @@ Runtime interpolation supports:
 The current Inspector add menu supports:
 
 - `float`
+- `double`
+- `int`
+- `uint`
+- `long`
+- `ulong`
+- `decimal`
 - `Vector2`
 - `Vector3`
 - `Vector4`
+- `Quaternion`
 - `Color`
+- `Color32`
 
 ## TweenCore
 

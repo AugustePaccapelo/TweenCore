@@ -33,10 +33,18 @@ public class TweenCoreComponentEditor : Editor
     private static readonly Dictionary<string, Type> _typesMap = new Dictionary<string, Type>()
     {
         {"float", typeof(float)},
+        {"double", typeof(double)},
+        {"int", typeof(int)},
+        {"uint", typeof(uint)},
+        {"long", typeof(long)},
+        {"ulong", typeof(ulong)},
+        {"decimal", typeof(decimal)},
         {"Vector2", typeof(Vector2)},
         {"Vector3", typeof(Vector3)},
         {"Vector4", typeof(Vector4)},
+        {"Quaternion", typeof(Quaternion)},
         {"Color", typeof(Color)},
+        {"Color32", typeof(Color32)},
     };
 
     // ---------- FUNCTIONS ---------- \\

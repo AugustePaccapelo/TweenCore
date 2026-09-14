@@ -157,7 +157,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     private Dictionary<long, string[]> _propertiesNamesMap = new Dictionary<long, string[]>();
     private Dictionary<long, List<Component>> _propertiesComponentsMap = new ();
-    private Dictionary<long, List<string>> _propertiesComponentsNamesMap = new();
+    private Dictionary<long, string[]> _propertiesComponentsNamesMap = new();
 
     private static readonly Dictionary<TweenCoreType, string> _possibleTypes = new Dictionary<TweenCoreType, string>
     {
@@ -422,7 +422,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             }
 
             propContext.NewLine();
-            currentIndex = EditorGUI.Popup(propContext.PropertyPos, currentIndex, _propertiesComponentsNamesMap[propContext.referenceId].ToArray());
+            currentIndex = EditorGUI.Popup(propContext.PropertyPos, currentIndex, _propertiesComponentsNamesMap[propContext.referenceId]);
 
             propContext.currentObject = _propertiesComponentsMap[propContext.referenceId][currentIndex];
             propContext.propCurrentObject.objectReferenceValue = propContext.currentObject;
@@ -475,7 +475,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             foundComponentsNames.Add(comp.GetType().Name);
         }
 
-        _propertiesComponentsNamesMap[propContext.referenceId] = foundComponentsNames;
+        _propertiesComponentsNamesMap[propContext.referenceId] = foundComponentsNames.ToArray();
     }
 
     private void HandlePropertyHasAnObject(TweenPropertyEditorContext propContext)
@@ -511,6 +511,13 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             propContext.currentPropertyChoosedIndex = 0;
             propContext.property.serializedObject.ApplyModifiedProperties();
         }
+        else
+        {
+            propContext.propPropertyChoosedName.stringValue = "";
+            propContext.propCurrentPropertyChoosedIndex.intValue = 0;
+            propContext.currentPropertyChoosedIndex = 0;
+            propContext.property.serializedObject.ApplyModifiedProperties();
+        }
     }
 
     private void HandleMissingPropertiesMap(TweenPropertyEditorContext propContext)
@@ -520,15 +527,22 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
     private void NewPropertiesNames(TweenPropertyEditorContext propContext)
     {
-        // Search all properties of Instance and that are Public
+        // Search all settable public members of Instance.
         BindingFlags flag = BindingFlags.Instance | BindingFlags.Public;
 
-        // Get all properties availbles that correspond in the object given to tween
-        PropertyInfo[] allProperties = propContext.currentObject.GetType().GetProperties(flag);
         // Get the exact value of the TweenProperty (float, Vector, ...)
         Type genericType = propContext.property.managedReferenceValue.GetType().GetGenericArguments()[0];
-        // Get all properties name avaible
-        _propertiesNamesMap[propContext.referenceId] = allProperties.Where(p => p.PropertyType == genericType).Select(p => p.Name).ToArray();
+
+        Type objectType = propContext.currentObject.GetType();
+        IEnumerable<string> propertyNames = objectType.GetProperties(flag)
+            .Where(p => p.PropertyType == genericType && p.CanWrite && p.GetIndexParameters().Length == 0)
+            .Select(p => p.Name);
+
+        IEnumerable<string> fieldNames = objectType.GetFields(flag)
+            .Where(f => f.FieldType == genericType && !f.IsInitOnly)
+            .Select(f => f.Name);
+
+        _propertiesNamesMap[propContext.referenceId] = propertyNames.Concat(fieldNames).Distinct().ToArray();
     }
 
     private void DrawPopupChooseProperty(TweenPropertyEditorContext propContext)
