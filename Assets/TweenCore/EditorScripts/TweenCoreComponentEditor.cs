@@ -161,7 +161,14 @@ namespace TweenCore.Editor
                 Type genericType = typeof(TweenCoreProperty<>).MakeGenericType(supportedType);
                 TweenCorePropertyBase propertyBase = (TweenCorePropertyBase)Activator.CreateInstance(genericType);
 
-                comp.AddProperty(propertyBase);
+                Undo.RecordObject(comp, "Add Tween Property");
+
+                SerializedProperty properties = FindProperty(TweenCoreComponent.PROPERTIES_PROPERTY);
+                int index = properties.arraySize;
+                properties.InsertArrayElementAtIndex(index);
+                properties.GetArrayElementAtIndex(index).managedReferenceValue = propertyBase;
+                serializedObject.ApplyModifiedProperties();
+
                 EditorUtility.SetDirty(comp);
             });
         }
