@@ -240,8 +240,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         if (_property != null)
         {
-            _getter = () => (TweenValueType)_property.GetValue(obj);
-            _setter = value => _property.SetValue(obj, value);
+            SetPropertyAccessors();
         }
         else
         {
@@ -250,6 +249,33 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         }
 
         _isValid = true;
+    }
+
+    private void SetPropertyAccessors()
+    {
+        MethodInfo getMethod = _property.GetGetMethod(true);
+        MethodInfo setMethod = _property.GetSetMethod(true);
+
+        if (getMethod != null)
+        {
+            try
+            {
+                _getter = (Func<TweenValueType>)Delegate.CreateDelegate(typeof(Func<TweenValueType>), obj, getMethod);
+            }
+            catch (Exception)
+            {
+                _getter = () => (TweenValueType)_property.GetValue(obj);
+            }
+        }
+
+        try
+        {
+            _setter = (Action<TweenValueType>)Delegate.CreateDelegate(typeof(Action<TweenValueType>), obj, setMethod);
+        }
+        catch (Exception)
+        {
+            _setter = value => _property.SetValue(obj, value);
+        }
     }
 
     public override void Start()
