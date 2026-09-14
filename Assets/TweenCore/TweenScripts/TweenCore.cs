@@ -202,14 +202,17 @@ public class TweenCore
 
         if (!_isParallel && _currentChainIndex < _tweenProperties.Count && _tweenProperties[_currentChainIndex] == property)
         {
-            int nextPropertyIndex = _destroyOnFinish && !_isLoop ? _currentChainIndex : _currentChainIndex + 1;
+            int nextPropertyIndex = _currentChainIndex + 1;
 
             if (nextPropertyIndex < _tweenProperties.Count)
             {
                 nextProperty = _tweenProperties[nextPropertyIndex];
             }
 
-            _currentChainIndex++;
+            if (_isLoop || !_destroyOnFinish)
+            {
+                _currentChainIndex++;
+            }
         }
 
         _numPropertiesFinished++;

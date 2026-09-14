@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
 
 // Author : Auguste Paccapelo
 
