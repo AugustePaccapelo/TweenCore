@@ -6,14 +6,14 @@ using UnityEngine.SceneManagement;
 
 namespace TweenCore.Runtime
 {
-    public class TweenCoreManager : MonoBehaviour
+    public class TweenManager : MonoBehaviour
     {
         // ---------- VARIABLES ---------- \\
 
     // ----- Singleton ----- \\
 
-    private static TweenCoreManager _instance;
-    public static TweenCoreManager Instance
+    private static TweenManager _instance;
+    public static TweenManager Instance
     {
         get
         {
@@ -21,8 +21,8 @@ namespace TweenCore.Runtime
             {
                 if (!_canBeInstantiate) return null;
 
-                GameObject obj = new GameObject(nameof(TweenCoreManager));
-                _instance = obj.AddComponent<TweenCoreManager>();
+                GameObject obj = new GameObject(nameof(TweenManager));
+                _instance = obj.AddComponent<TweenManager>();
             }
             return _instance;
         }
@@ -54,7 +54,7 @@ namespace TweenCore.Runtime
         // Singleton
         if (_instance != null && _instance != this)
         {
-            Debug.Log(nameof(TweenCoreManager) + " Instance already exist, destorying last added.");
+            Debug.Log(nameof(TweenManager) + " Instance already exist, destorying last added.");
             Destroy(gameObject);
             return;
         }

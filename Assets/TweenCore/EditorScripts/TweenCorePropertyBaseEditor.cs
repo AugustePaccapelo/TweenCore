@@ -13,7 +13,7 @@ using TweenCore.Runtime;
 
 namespace TweenCore.Editor
 {
-    [CustomPropertyDrawer(typeof(TweenCorePropertyBase), true)]
+    [CustomPropertyDrawer(typeof(TweenPropertyBase), true)]
     public class TweenCorePropertyBaseEditor : PropertyDrawer
     {
         // ----- CLASS ----- \\
@@ -111,26 +111,26 @@ namespace TweenCore.Editor
 
             this.property = property;
 
-            propTweenTargetObj = FindRelative(TweenCorePropertyBase.TWEEN_TARGET_OBJ_PROPERTY);
-            propLastKnownTweenTargetGO = FindRelative(TweenCorePropertyBase.LAST_KNOWN_TWEEN_TARGET_GO_PROPERTY);
+            propTweenTargetObj = FindRelative(TweenPropertyBase.TWEEN_TARGET_OBJ_PROPERTY);
+            propLastKnownTweenTargetGO = FindRelative(TweenPropertyBase.LAST_KNOWN_TWEEN_TARGET_GO_PROPERTY);
 
-            propCurrentObject = FindRelative(TweenCorePropertyBase.TARGET_OBJECT_PROPERTY);
-            propLastKnownObject = FindRelative(TweenCorePropertyBase.LAST_KNOWN_OBJECT_PROPERTY);
-            propCurrentPropertyChoosedIndex = FindRelative(TweenCorePropertyBase.PROPERTY_INDEX_PROPERTY);
-            propPropertyChoosedName = FindRelative(TweenCorePropertyBase.PROPERTY_NAME_PROPERTY);
+            propCurrentObject = FindRelative(TweenPropertyBase.TARGET_OBJECT_PROPERTY);
+            propLastKnownObject = FindRelative(TweenPropertyBase.LAST_KNOWN_OBJECT_PROPERTY);
+            propCurrentPropertyChoosedIndex = FindRelative(TweenPropertyBase.PROPERTY_INDEX_PROPERTY);
+            propPropertyChoosedName = FindRelative(TweenPropertyBase.PROPERTY_NAME_PROPERTY);
 
-            propIsEmpty = FindRelative(TweenCorePropertyBase.IS_EMPTY_PROPERTY);
-            propTweenType = FindRelative(TweenCorePropertyBase.TYPE_PROPERTY);
-            propTweenEase = FindRelative(TweenCorePropertyBase.EASE_PROPERTY);
-            propDuration = FindRelative(TweenCorePropertyBase.DURATION_PROPERTY);
-            propDelay = FindRelative(TweenCorePropertyBase.DELAY_PROPERTY);
-            propTypeAnimCurve = FindRelative(TweenCorePropertyBase.TYPE_ANIMATION_CURVE_PROPERTY);
-            propEaseAnimCurve = FindRelative(TweenCorePropertyBase.EASE_ANIMATION_CURVE_PROPERTY);
-            propFromCurrentValue = FindRelative(TweenCorePropertyBase.FROM_CURRENT_VALUE_PROPERTY);
-            propIsAdd = FindRelative(TweenCorePropertyBase.IS_INCREASING_VALUE_PROPERTY);
-            propStartValue = FindRelative(TweenCoreProperty<object>.START_VALUE_PROPERTY);
-            propEndValue = FindRelative(TweenCoreProperty<object>.FINAL_VALUE_PROPERTY);
-            propUnityEvents = FindRelative(TweenCoreProperty<object>.UNITY_EVENTS_PROPERTY);
+            propIsEmpty = FindRelative(TweenPropertyBase.IS_EMPTY_PROPERTY);
+            propTweenType = FindRelative(TweenPropertyBase.TYPE_PROPERTY);
+            propTweenEase = FindRelative(TweenPropertyBase.EASE_PROPERTY);
+            propDuration = FindRelative(TweenPropertyBase.DURATION_PROPERTY);
+            propDelay = FindRelative(TweenPropertyBase.DELAY_PROPERTY);
+            propTypeAnimCurve = FindRelative(TweenPropertyBase.TYPE_ANIMATION_CURVE_PROPERTY);
+            propEaseAnimCurve = FindRelative(TweenPropertyBase.EASE_ANIMATION_CURVE_PROPERTY);
+            propFromCurrentValue = FindRelative(TweenPropertyBase.FROM_CURRENT_VALUE_PROPERTY);
+            propIsAdd = FindRelative(TweenPropertyBase.IS_INCREASING_VALUE_PROPERTY);
+            propStartValue = FindRelative(TweenProperty<object>.START_VALUE_PROPERTY);
+            propEndValue = FindRelative(TweenProperty<object>.FINAL_VALUE_PROPERTY);
+            propUnityEvents = FindRelative(TweenProperty<object>.UNITY_EVENTS_PROPERTY);
         }
 
         private SerializedProperty FindRelative(string propertyName)
@@ -167,35 +167,35 @@ namespace TweenCore.Editor
     private Dictionary<long, List<Component>> _propertiesComponentsMap = new ();
     private Dictionary<long, string[]> _propertiesComponentsNamesMap = new();
 
-    private static readonly Dictionary<TweenCoreType, string> _possibleTypes = new Dictionary<TweenCoreType, string>
+    private static readonly Dictionary<TweenType, string> _possibleTypes = new Dictionary<TweenType, string>
     {
-        { TweenCoreType.Linear, "Linear" },
-        { TweenCoreType.Back, "Back"},
-        { TweenCoreType.Bounce, "Bounce"},
-        { TweenCoreType.Circ, "Circ"},
-        { TweenCoreType.Cubic, "Cubic"},
-        { TweenCoreType.Elastic, "Elastic"},
-        { TweenCoreType.Expo, "Expo"},
-        { TweenCoreType.Quad, "Quad"},
-        { TweenCoreType.Quart, "Quart"},
-        { TweenCoreType.Quint, "Quint"},
-        { TweenCoreType.Sine, "Sine"},
-        { TweenCoreType.CustomCurve, "CustomCurve"},
+        { TweenType.Linear, "Linear" },
+        { TweenType.Back, "Back"},
+        { TweenType.Bounce, "Bounce"},
+        { TweenType.Circ, "Circ"},
+        { TweenType.Cubic, "Cubic"},
+        { TweenType.Elastic, "Elastic"},
+        { TweenType.Expo, "Expo"},
+        { TweenType.Quad, "Quad"},
+        { TweenType.Quart, "Quart"},
+        { TweenType.Quint, "Quint"},
+        { TweenType.Sine, "Sine"},
+        { TweenType.CustomCurve, "CustomCurve"},
     };
 
-    private static readonly TweenCoreType[] _possibleTypeKeys = _possibleTypes.Keys.ToArray();
+    private static readonly TweenType[] _possibleTypeKeys = _possibleTypes.Keys.ToArray();
     private static readonly string[] _possibleTypeNames = _possibleTypes.Values.ToArray();
 
-    private static readonly Dictionary<TweenCoreEase, string> _possibleEases = new Dictionary<TweenCoreEase, string>
+    private static readonly Dictionary<TweenEase, string> _possibleEases = new Dictionary<TweenEase, string>
     {
-        { TweenCoreEase.In, "In"},
-        { TweenCoreEase.Out, "Out"},
-        { TweenCoreEase.InOut, "InOut"},
-        { TweenCoreEase.OutIn, "OutIn"},
-        { TweenCoreEase.CustomCurve, "CustomCurve" }
+        { TweenEase.In, "In"},
+        { TweenEase.Out, "Out"},
+        { TweenEase.InOut, "InOut"},
+        { TweenEase.OutIn, "OutIn"},
+        { TweenEase.CustomCurve, "CustomCurve" }
     };
 
-    private static readonly TweenCoreEase[] _possibleEaseKeys = _possibleEases.Keys.ToArray();
+    private static readonly TweenEase[] _possibleEaseKeys = _possibleEases.Keys.ToArray();
     private static readonly string[] _possibleEaseNames = _possibleEases.Values.ToArray();
 
     // ---------- FUNCTIONS ---------- \\
@@ -250,7 +250,7 @@ namespace TweenCore.Editor
         height += Line;
 
         // If type is CustomCurve, show curve
-        if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
+        if ((TweenType)propContext.propTweenType.boxedValue == TweenType.CustomCurve)
         {
             height += Line;
         }
@@ -259,7 +259,7 @@ namespace TweenCore.Editor
         height += Line;
 
         // If ease is CustomCurve, show curve
-        if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
+        if ((TweenEase)propContext.propTweenEase.boxedValue == TweenEase.CustomCurve)
         {
             height += Line;
         }
@@ -324,7 +324,7 @@ namespace TweenCore.Editor
 
     private void DrawEasePopup(TweenPropertyEditorContext propContext)
     {
-        TweenCoreEase currentEase = (TweenCoreEase)propContext.propTweenEase.enumValueIndex;
+        TweenEase currentEase = (TweenEase)propContext.propTweenEase.enumValueIndex;
 
         int currentIndex = Array.IndexOf(_possibleEaseKeys, currentEase);
         if (currentIndex < 0)
@@ -339,7 +339,7 @@ namespace TweenCore.Editor
 
     private void DrawTypePopup(TweenPropertyEditorContext propContext)
     {
-        TweenCoreType currentType = (TweenCoreType)propContext.propTweenType.enumValueIndex;
+        TweenType currentType = (TweenType)propContext.propTweenType.enumValueIndex;
 
         int currentIndex = Array.IndexOf(_possibleTypeKeys, currentType);
         if (currentIndex < 0)
@@ -364,14 +364,14 @@ namespace TweenCore.Editor
 
         DrawTypePopup(propContext);
 
-        if ((TweenCoreType)propContext.propTweenType.boxedValue == TweenCoreType.CustomCurve)
+        if ((TweenType)propContext.propTweenType.boxedValue == TweenType.CustomCurve)
         {
             propContext.DrawProperty(propContext.propTypeAnimCurve);
         }
 
         DrawEasePopup(propContext);
 
-        if ((TweenCoreEase)propContext.propTweenEase.boxedValue == TweenCoreEase.CustomCurve)
+        if ((TweenEase)propContext.propTweenEase.boxedValue == TweenEase.CustomCurve)
         {
             propContext.DrawProperty(propContext.propEaseAnimCurve);
         }

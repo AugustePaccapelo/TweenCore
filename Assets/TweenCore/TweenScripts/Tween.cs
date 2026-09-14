@@ -11,7 +11,7 @@ namespace TweenCore.Runtime
 
     // ----- Objects ----- \\
 
-    private List<TweenCorePropertyBase> _tweenProperties = new List<TweenCorePropertyBase>();
+    private List<TweenPropertyBase> _tweenProperties = new List<TweenPropertyBase>();
 
     // ----- Others ----- \\
 
@@ -190,17 +190,17 @@ namespace TweenCore.Runtime
         }
     }
 
-    private void DestroyTweenProperty(TweenCorePropertyBase property)
+    private void DestroyTweenProperty(TweenPropertyBase property)
     {
         if (!_tweenProperties.Contains(property)) throw new ArgumentException("The tween does not contain the given property to destroy");
         _tweenProperties.Remove(property);
     }
 
-    private void NewPropertyFinished(TweenCorePropertyBase property)
+    private void NewPropertyFinished(TweenPropertyBase property)
     {
         if (_isStopping) return;
 
-        TweenCorePropertyBase nextProperty = null;
+        TweenPropertyBase nextProperty = null;
 
         if (!_isParallel && _currentChainIndex < _tweenProperties.Count && _tweenProperties[_currentChainIndex] == property)
         {
@@ -247,7 +247,7 @@ namespace TweenCore.Runtime
         {
             _isStopping = true;
 
-            TweenCorePropertyBase[] propertiesToStop = _tweenProperties.ToArray();
+            TweenPropertyBase[] propertiesToStop = _tweenProperties.ToArray();
 
             for (int i = 0; i < propertiesToStop.Length; i++)
             {
@@ -272,11 +272,17 @@ namespace TweenCore.Runtime
     /// A Tween handle one or multiples TweenProperty.
     /// </summary>
     /// <returns>The tween created.</returns>
-    public static Tween CreateTween()
+    public static Tween Create()
     {
         Tween tween = new Tween();
-        TweenCoreManager.Instance?.AddTween(tween);
+        TweenManager.Instance?.AddTween(tween);
         return tween;
+    }
+
+    [Obsolete("Use Create instead.")]
+    public static Tween CreateTween()
+    {
+        return Create();
     }
 
     /// <summary>
@@ -288,9 +294,9 @@ namespace TweenCore.Runtime
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(TweenValueType startVal, TweenValueType finalVal, float time)
+    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(startVal, finalVal, time);
+        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(startVal, finalVal, time);
         AddProperty(property);
         return property;
     }
@@ -306,9 +312,9 @@ namespace TweenCore.Runtime
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float time)
+    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(Action<TweenValueType> function, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(function, startVal, finalVal, time);
+        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(function, startVal, finalVal, time);
         AddProperty(property);
         return property;
     }
@@ -324,9 +330,9 @@ namespace TweenCore.Runtime
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
+    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, finalVal, time);
+        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(obj, method, finalVal, time);
         AddProperty(property);
         return property;
     }
@@ -342,14 +348,14 @@ namespace TweenCore.Runtime
     /// <param name="finalVal">The end value of the property.</param>
     /// <param name="time">The duration of the property.</param>
     /// <returns>The TweenProperty to chain the methods calls (e.g. NewProperty(...).SetEase(...);).</returns>
-    public TweenCoreProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
+    public TweenProperty<TweenValueType> NewProperty<TweenValueType>(UnityEngine.Object obj, string method, TweenValueType startVal, TweenValueType finalVal, float time)
     {
-        TweenCoreProperty<TweenValueType> property = new TweenCoreProperty<TweenValueType>(obj, method, startVal, finalVal, time);
+        TweenProperty<TweenValueType> property = new TweenProperty<TweenValueType>(obj, method, startVal, finalVal, time);
         AddProperty(property);
         return property;
     }
 
-    public Tween AddProperty(TweenCorePropertyBase property)
+    public Tween AddProperty(TweenPropertyBase property)
     {
         _tweenProperties.Add(property);
         property.OnFinish += NewPropertyFinished;
@@ -481,8 +487,7 @@ namespace TweenCore.Runtime
     public void DestroyTween()
     {
         _isDestroyed = true;
-        TweenCoreManager.Instance?.RemoveTween(this);
+        TweenManager.Instance?.RemoveTween(this);
     }
     }
 }
-

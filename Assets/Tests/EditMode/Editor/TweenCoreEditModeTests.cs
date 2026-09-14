@@ -16,8 +16,8 @@ namespace TweenCore.Tests.EditMode
     public void Stop_StopsStartedPropertiesInOriginalOrder()
     {
         Tween tween = new Tween().DontDestroyWhenFinish();
-        TweenCoreProperty<float> first = tween.NewProperty(0f, 1f, 10f);
-        TweenCoreProperty<float> second = tween.NewProperty(0f, 1f, 10f);
+        TweenProperty<float> first = tween.NewProperty(0f, 1f, 10f);
+        TweenProperty<float> second = tween.NewProperty(0f, 1f, 10f);
         List<string> finishOrder = new List<string>();
 
         first.OnFinish += _ => finishOrder.Add("first");
@@ -34,7 +34,7 @@ namespace TweenCore.Tests.EditMode
     public void Update_InvokesValueUpdateOnlyOncePerFrame()
     {
         Tween tween = new Tween().DontDestroyWhenFinish();
-        TweenCoreProperty<float> property = tween.NewProperty(0f, 10f, 1f);
+        TweenProperty<float> property = tween.NewProperty(0f, 10f, 1f);
         int updateCount = 0;
         float lastValue = 0f;
 
@@ -55,7 +55,7 @@ namespace TweenCore.Tests.EditMode
     public void AdditiveColor32_ClampsFinalChannels()
     {
         Tween tween = new Tween().DontDestroyWhenFinish();
-        TweenCoreProperty<Color32> property = tween.NewProperty(
+        TweenProperty<Color32> property = tween.NewProperty(
             new Color32(250, 10, 20, 250),
             new Color32(10, 20, 250, 10),
             1f);
@@ -74,7 +74,7 @@ namespace TweenCore.Tests.EditMode
         Tween tween = new Tween().DontDestroyWhenFinish();
         Quaternion start = Quaternion.Euler(0f, 30f, 0f);
         Quaternion delta = Quaternion.Euler(0f, 45f, 0f);
-        TweenCoreProperty<Quaternion> property = tween.NewProperty(start, delta, 1f);
+        TweenProperty<Quaternion> property = tween.NewProperty(start, delta, 1f);
 
         property.SetIsAdditive(true);
 
@@ -103,8 +103,8 @@ namespace TweenCore.Tests.EditMode
     public void ChainWithDestroyOnFinish_StartsNextPropertyAfterRemovingCurrent()
     {
         Tween tween = new Tween().Chain();
-        TweenCoreProperty<float> first = tween.NewProperty(0f, 1f, 0.1f);
-        TweenCoreProperty<float> second = tween.NewProperty(0f, 1f, 0.1f);
+        TweenProperty<float> first = tween.NewProperty(0f, 1f, 0.1f);
+        TweenProperty<float> second = tween.NewProperty(0f, 1f, 0.1f);
 
         tween.Play();
         tween.Update(0.1f);

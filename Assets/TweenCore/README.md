@@ -35,16 +35,16 @@ For each property:
 ### Reflection From Code
 
 ```csharp
-Tween tween = Tween.CreateTween();
+Tween tween = Tween.Create();
 
 tween.NewProperty(
         transform,
-        TweenCoreTarget.Transform.GLOBAL_POSITION,
+        TweenTarget.Transform.GLOBAL_POSITION,
         Vector3.zero,
         new Vector3(5f, 2f, 0f),
         2f)
-    .SetEase(TweenCoreEase.Out)
-    .SetType(TweenCoreType.Bounce);
+    .SetEase(TweenEase.Out)
+    .SetType(TweenType.Bounce);
 
 tween.Play();
 ```
@@ -52,15 +52,15 @@ tween.Play();
 If you want the tween to start from the current value, use the overload without an explicit start value:
 
 ```csharp
-Tween tween = Tween.CreateTween();
+Tween tween = Tween.Create();
 
 tween.NewProperty(
         transform,
-        TweenCoreTarget.Transform.LOCAL_SCALE,
+        TweenTarget.Transform.LOCAL_SCALE,
         Vector3.one * 2f,
         0.5f)
-    .SetEase(TweenCoreEase.Out)
-    .SetType(TweenCoreType.Back);
+    .SetEase(TweenEase.Out)
+    .SetType(TweenType.Back);
 
 tween.Play();
 ```
@@ -70,15 +70,15 @@ tween.Play();
 This avoids reflected setting during updates and is the preferred code path when writing tweens by script.
 
 ```csharp
-Tween tween = Tween.CreateTween();
+Tween tween = Tween.Create();
 
 tween.NewProperty(
         value => transform.localScale = value,
         Vector3.zero,
         Vector3.one,
         0.5f)
-    .SetEase(TweenCoreEase.Out)
-    .SetType(TweenCoreType.Back);
+    .SetEase(TweenEase.Out)
+    .SetType(TweenType.Back);
 
 tween.Play();
 ```
@@ -88,14 +88,14 @@ tween.Play();
 Use this when you want TweenCore to calculate the value but apply it yourself.
 
 ```csharp
-Tween tween = Tween.CreateTween();
+Tween tween = Tween.Create();
 
-TweenCoreProperty<Vector3> property = tween.NewProperty(
+TweenProperty<Vector3> property = tween.NewProperty(
         Vector3.zero,
         Vector3.one,
         1f)
-    .SetEase(TweenCoreEase.InOut)
-    .SetType(TweenCoreType.Sine);
+    .SetEase(TweenEase.InOut)
+    .SetType(TweenType.Sine);
 
 property.OnUpdateValue += (_, value) =>
 {
@@ -140,7 +140,7 @@ tween.SetLoop(true, 3);
 Additive tweens treat the final value as a value to add to the current start value.
 
 ```csharp
-tween.NewProperty(transform, TweenCoreTarget.Transform.GLOBAL_POSITION, Vector3.right * 2f, 1f)
+tween.NewProperty(transform, TweenTarget.Transform.GLOBAL_POSITION, Vector3.right * 2f, 1f)
     .SetIsAdditive(true);
 ```
 
@@ -204,7 +204,7 @@ The current Inspector add menu supports:
 Create a tween with:
 
 ```csharp
-Tween tween = Tween.CreateTween();
+Tween tween = Tween.Create();
 ```
 
 Common methods:
@@ -227,14 +227,14 @@ Events:
 - `OnFinish`
 - `OnLoopFinish`
 
-## TweenCoreProperty
+## TweenProperty
 
 Common methods:
 
 - `SetDelay(float tweenDelay)`
-- `SetType(TweenCoreType type)`
+- `SetType(TweenType type)`
 - `SetType(AnimationCurve curve)`
-- `SetEase(TweenCoreEase ease)`
+- `SetEase(TweenEase ease)`
 - `SetEase(AnimationCurve curve)`
 - `From(TweenValueType value)`
 - `FromCurrent()`
@@ -260,7 +260,7 @@ Events:
 
 ## Notes
 
-- A `TweenCoreManager` is created automatically when needed.
+- A `TweenManager` is created automatically when needed.
 - `TweenCoreComponent` can optionally play on start.
 - `DestroyWhenFinish` removes the tween from the manager when it completes.
 - Editor scripts are wrapped in `#if UNITY_EDITOR`, so they are excluded from builds.

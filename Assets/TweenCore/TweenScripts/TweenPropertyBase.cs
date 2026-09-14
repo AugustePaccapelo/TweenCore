@@ -7,7 +7,7 @@ using UnityEngine;
 namespace TweenCore.Runtime
 {
     [Serializable]
-    public abstract class TweenCorePropertyBase
+    public abstract class TweenPropertyBase
     {
         // ---------- VARIABLES ---------- \\
 
@@ -51,11 +51,11 @@ namespace TweenCore.Runtime
         Reflexion, Strategy, ReturnValue
     }
 
-    [SerializeField] protected TweenCoreType type = TweenCoreType.Linear;
-    public TweenCoreType Type => type;
+    [SerializeField] protected TweenType type = TweenType.Linear;
+    public TweenType Type => type;
 
-    [SerializeField] protected TweenCoreEase ease = TweenCoreEase.In;
-    public TweenCoreEase Ease => ease;
+    [SerializeField] protected TweenEase ease = TweenEase.In;
+    public TweenEase Ease => ease;
 
     [SerializeField] protected float duration = 1f;
     public float Duration => duration;
@@ -97,9 +97,9 @@ namespace TweenCore.Runtime
     protected float elapseTime = 0f;
     public float ElapseTime => elapseTime;
 
-    public event Action<TweenCorePropertyBase> OnStart;
-    public event Action<TweenCorePropertyBase> OnUpdate;
-    public event Action<TweenCorePropertyBase> OnFinish;
+    public event Action<TweenPropertyBase> OnStart;
+    public event Action<TweenPropertyBase> OnUpdate;
+    public event Action<TweenPropertyBase> OnFinish;
 
     protected static readonly Dictionary<Type, Func<object, object, float, object>> lerpsFunc = new Dictionary<Type, Func<object, object, float, object>>()
     {
@@ -174,80 +174,80 @@ namespace TweenCore.Runtime
     /// You should call Stop() or Pause() if tween is playing.
     /// </summary>
     /// <returns>This TweenPropertyBase.</returns>
-    public abstract TweenCorePropertyBase SetToFinalVals();
+    public abstract TweenPropertyBase SetToFinalVals();
 
     /// <summary>
     /// Add a TweenProperty to start when this TweenProperty is finished.
     /// </summary>
     /// <param name="property">The TweenProperty to start.</param>
     /// <returns>This TweenPropertyBase.</returns>
-    public abstract TweenCorePropertyBase AddNextProperty(TweenCorePropertyBase property);
+    public abstract TweenPropertyBase AddNextProperty(TweenPropertyBase property);
 
     /// <summary>
     /// Set the base values when using the empty constructor.
     /// Using this in a different context may have unexpted results.
     /// </summary>
     /// <returns>This TweenPropertyBase.</returns>
-    public abstract TweenCorePropertyBase SetBaseValues();
+    public abstract TweenPropertyBase SetBaseValues();
 
     protected virtual void TriggerOnStart() => OnStart?.Invoke(this);
     protected virtual void TriggerOnUpdate() => OnUpdate?.Invoke(this);
     protected virtual void TriggerOnFinish() => OnFinish?.Invoke(this);
 
-    protected void SetTypeFunc(TweenCoreType newType)
+    protected void SetTypeFunc(TweenType newType)
     {
         switch (newType)
         {
-            case TweenCoreType.Linear:
+            case TweenType.Linear:
                 TypeFunc = Linear;
                 break;
-            case TweenCoreType.Quad:
+            case TweenType.Quad:
                 TypeFunc = Quad;
                 break;
-            case TweenCoreType.Cubic:
+            case TweenType.Cubic:
                 TypeFunc = Cubic;
                 break;
-            case TweenCoreType.Quart:
+            case TweenType.Quart:
                 TypeFunc = Quart;
                 break;
-            case TweenCoreType.Quint:
+            case TweenType.Quint:
                 TypeFunc = Quint;
                 break;
-            case TweenCoreType.Back:
+            case TweenType.Back:
                 TypeFunc = Back;
                 break;
-            case TweenCoreType.Elastic:
+            case TweenType.Elastic:
                 TypeFunc = Elastic;
                 break;
-            case TweenCoreType.Bounce:
+            case TweenType.Bounce:
                 TypeFunc = Bounce;
                 break;
-            case TweenCoreType.Circ:
+            case TweenType.Circ:
                 TypeFunc = Circ;
                 break;
-            case TweenCoreType.Sine:
+            case TweenType.Sine:
                 TypeFunc = Sine;
                 break;
-            case TweenCoreType.Expo:
+            case TweenType.Expo:
                 TypeFunc = Expo;
                 break;
         }
     }
 
-    protected void SetEaseFunc(TweenCoreEase newEase)
+    protected void SetEaseFunc(TweenEase newEase)
     {
         switch (newEase)
         {
-            case TweenCoreEase.In:
+            case TweenEase.In:
                 EaseFunc = In;
                 break;
-            case TweenCoreEase.Out:
+            case TweenEase.Out:
                 EaseFunc = Out;
                 break;
-            case TweenCoreEase.InOut:
+            case TweenEase.InOut:
                 EaseFunc = InOut;
                 break;
-            case TweenCoreEase.OutIn:
+            case TweenEase.OutIn:
                 EaseFunc = OutIn;
                 break;
         }

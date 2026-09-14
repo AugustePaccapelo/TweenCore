@@ -158,8 +158,8 @@ namespace TweenCore.Editor
 
             menu.AddItem(new GUIContent(typeName), false, () =>
             {
-                Type genericType = typeof(TweenCoreProperty<>).MakeGenericType(supportedType);
-                TweenCorePropertyBase propertyBase = (TweenCorePropertyBase)Activator.CreateInstance(genericType);
+                Type genericType = typeof(TweenProperty<>).MakeGenericType(supportedType);
+                TweenPropertyBase propertyBase = (TweenPropertyBase)Activator.CreateInstance(genericType);
 
                 Undo.RecordObject(comp, "Add Tween Property");
 

@@ -48,7 +48,7 @@ namespace TweenCore.Runtime
     [SerializeField] private bool _DestroyWhenFinished = true;
     [SerializeField] private bool _surviveOnUnload = false;
 
-    [SerializeReference] private List<TweenCorePropertyBase> _properties = new List<TweenCorePropertyBase>();
+    [SerializeReference] private List<TweenPropertyBase> _properties = new List<TweenPropertyBase>();
 
     [Serializable]
     private class TweenUnityEvents
@@ -67,7 +67,7 @@ namespace TweenCore.Runtime
 
     private void Awake()
     {
-        _tween = Tween.CreateTween();
+        _tween = Tween.Create();
     }
 
     private void Start()
@@ -84,13 +84,13 @@ namespace TweenCore.Runtime
             DontDestroyOnLoad(gameObject);
         }
 
-        foreach (TweenCorePropertyBase property in _properties)
+        foreach (TweenPropertyBase property in _properties)
         {
             _tween.AddProperty(property);
             property.SetBaseValues();
         }
 
-        TweenCoreManager.Instance?.AddTween(_tween);
+        TweenManager.Instance?.AddTween(_tween);
 
         _tween.OnStart += OnTweenStart;
         _tween.OnUpdate += OnTweenUpdate;
@@ -102,7 +102,7 @@ namespace TweenCore.Runtime
 
     // ----- My Functions ----- \\
 
-    public void AddProperty(TweenCorePropertyBase property)
+    public void AddProperty(TweenPropertyBase property)
     {
         _properties.Add(property);
     }

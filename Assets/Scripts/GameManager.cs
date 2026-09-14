@@ -53,7 +53,7 @@ namespace TweenCore.Samples
         SceneManager.LoadScene(1);
     }
 
-    public void Test(TweenCoreProperty<Vector3> tweenProp, Vector3 val)
+    public void Test(TweenProperty<Vector3> tweenProp, Vector3 val)
     {
         Debug.Log(val);
     }

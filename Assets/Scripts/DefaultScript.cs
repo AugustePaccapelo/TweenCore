@@ -35,9 +35,9 @@ namespace TweenCore.Samples
 
     private void Start()
     {
-        _myTween = Tween.CreateTween().SurviveOnSceneLoad();
+        _myTween = Tween.Create().SurviveOnSceneLoad();
         _myTween.NewProperty(TweenFunc, Vector3.zero, new Vector3(5, 5, 0), 2f)
-            .SetEase(TweenCoreEase.Out).SetType(TweenCoreType.Elastic);
+            .SetEase(TweenEase.Out).SetType(TweenType.Elastic);
         //StartCoroutine(TweenCoroutine());
     }
 

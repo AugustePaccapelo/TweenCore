@@ -38,13 +38,13 @@ namespace TweenCore.Samples
         _startPos = _startObj.transform.position;
         _endPos = _endObj.transform.position;
 
-        Tween tween = Tween.CreateTween();
-        TweenCoreProperty<Vector3> testProp = tween.NewProperty(_target.transform, "position", _endPos, _time).From(_startPos)
-            .SetType(TweenCoreType.Bounce)
-            .SetEase(TweenCoreEase.In);
+        Tween tween = Tween.Create();
+        TweenProperty<Vector3> testProp = tween.NewProperty(_target.transform, "position", _endPos, _time).From(_startPos)
+            .SetType(TweenType.Bounce)
+            .SetEase(TweenEase.In);
 
         tween.NewProperty(f => _target.transform.localScale = f, Vector2.zero, Vector2.one, _time * 2)
-            .SetType(TweenCoreType.Elastic).SetEase(TweenCoreEase.Out)
+            .SetType(TweenType.Elastic).SetEase(TweenEase.Out)
             .SetDelay(1f);
 
         tween.Chain()

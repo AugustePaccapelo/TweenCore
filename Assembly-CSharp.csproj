@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <!-- Generated file, do not modify, your changes will be overwritten (use AssetPostprocessor.OnGeneratedCSProject) -->
   <PropertyGroup>
     <BaseIntermediateOutputPath>Temp\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
@@ -53,14 +53,16 @@
     <Compile Include="Assets\TweenCore\TweenCoreComponent.cs" />
     <Compile Include="Assets\TweenCore\EditorScripts\TweenCorePropertyBaseEditor.cs" />
     <Compile Include="Assets\Scripts\DefaultScript.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreProperty.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenProperty.cs" />
     <Compile Include="Assets\TweenCore\TweenScripts\Tween.cs" />
-    <Compile Include="Assets\TweenCore\TweenCoreManager.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenCore.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreProperty.cs" />
+    <Compile Include="Assets\TweenCore\TweenManager.cs" />
     <Compile Include="Assets\TweenCore\EditorScripts\TweenCoreComponentEditor.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreEnums.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenEnums.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\TestTween.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenCorePropertyBase.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\TweenPropertyBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
