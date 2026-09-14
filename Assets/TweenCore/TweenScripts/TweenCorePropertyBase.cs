@@ -114,7 +114,20 @@ public abstract class TweenCorePropertyBase
         {typeof(Vector2), (a, b) => (Vector2)a + (Vector2)b },
         {typeof(Vector3), (a, b) => (Vector3)a + (Vector3)b },
         {typeof(Vector4), (a, b) => (Vector4)a + (Vector4)b },
-        {typeof(Color), (a, b) => (Color)a + (Color)b }
+        {typeof(Quaternion), (a, b) => (Quaternion)a * (Quaternion)b },
+        {typeof(Color), (a, b) => (Color)a + (Color)b },
+        {typeof(Color32), (a, b) =>
+        {
+            Color32 colorA = (Color32)a;
+            Color32 colorB = (Color32)b;
+
+            return new Color32(
+                (byte)Mathf.Clamp(colorA.r + colorB.r, 0, 255),
+                (byte)Mathf.Clamp(colorA.g + colorB.g, 0, 255),
+                (byte)Mathf.Clamp(colorA.b + colorB.b, 0, 255),
+                (byte)Mathf.Clamp(colorA.a + colorB.a, 0, 255)
+            );
+        }}
     };
 
     // ---------- FUNCTIONS ---------- \\

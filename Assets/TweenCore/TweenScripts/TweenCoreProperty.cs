@@ -248,11 +248,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         if (lerpsFunc.ContainsKey(typeof(TweenValueType)))
         {
 
-            TweenValueType endVal = fromCurrentValue && isIncreasingValue ?
-                (TweenValueType)addFuncs[typeof(TweenValueType)](_startValue, _finalValue) :
-                _finalValue;
-
-            TweenValueType value = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, endVal, w);
+            TweenValueType value = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, GetEndValue(), w);
             SetValue(value);
         }
         else
@@ -513,10 +509,16 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public TweenCoreProperty<TweenValueType> SetIsAdditive(bool isAdd)
     {
-        isIncreasingValue = isAdd;
+        isIncreasingValue = isAdd && CanUseAdditive();
+
+        if (isAdd && !isIncreasingValue)
+        {
+            Debug.LogError("Additive tween is not supported for type : " + typeof(TweenValueType));
+        }
+
         if (isAdd)
         {
-            fromCurrentValue = isAdd;
+            fromCurrentValue = true;
         }
         
         return this;
@@ -639,13 +641,31 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     }
 
+    private bool CanUseAdditive()
+    {
+        return addFuncs.ContainsKey(typeof(TweenValueType));
+    }
+
+    private TweenValueType GetEndValue()
+    {
+        if (!fromCurrentValue || !isIncreasingValue)
+        {
+            return _finalValue;
+        }
+
+        if (!addFuncs.TryGetValue(typeof(TweenValueType), out Func<object, object, object> addFunc))
+        {
+            Debug.LogError("Additive tween is not supported for type : " + typeof(TweenValueType));
+            isIncreasingValue = false;
+            return _finalValue;
+        }
+
+        return (TweenValueType)addFunc(_startValue, _finalValue);
+    }
+
     public override TweenCorePropertyBase SetToFinalVals()
     {
-        TweenValueType endVal = fromCurrentValue && isIncreasingValue ?
-                (TweenValueType)addFuncs[typeof(TweenValueType)](_startValue, _finalValue) :
-                _finalValue;
-
-        SetValue((TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, endVal, RealWeight(1)));
+        SetValue((TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, GetEndValue(), RealWeight(1)));
 
         return this;
     }
