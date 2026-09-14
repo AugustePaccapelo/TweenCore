@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
@@ -29,7 +28,12 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     private MethodUse _currentMethod;
     private PropertyInfo _property;
     private FieldInfo _field;
+    private Func<TweenValueType> _getter;
+    private Action<TweenValueType> _setter;
     private Action<TweenValueType> _function;
+    private Func<object, object, float, object> _lerpFunc;
+    private Func<object, object, object> _addFunc;
+    private TweenValueType _cachedEndValue;
     private bool _isValid = true;
 
     [Serializable]
@@ -134,6 +138,8 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public override TweenCorePropertyBase SetBaseValues()
     {
+        SetValueFuncs();
+
         if (type == TweenCoreType.CustomCurve)
         {
             SetType(typeAnimationCurve);
@@ -169,14 +175,23 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         _finalValue = finalVal;
         base.duration = duration;
         base.propertyName = propertyName;
+        SetValueFuncs();
         SetType(type);
         SetEase(ease);
+    }
+
+    private void SetValueFuncs()
+    {
+        lerpsFunc.TryGetValue(typeof(TweenValueType), out _lerpFunc);
+        addFuncs.TryGetValue(typeof(TweenValueType), out _addFunc);
     }
 
     private void SetReflexionFiels(string method)
     {
         _property = null;
         _field = null;
+        _getter = null;
+        _setter = null;
 
         if (obj == null)
         {
@@ -223,6 +238,17 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
             return;
         }
 
+        if (_property != null)
+        {
+            _getter = () => (TweenValueType)_property.GetValue(obj);
+            _setter = value => _property.SetValue(obj, value);
+        }
+        else
+        {
+            _getter = () => (TweenValueType)_field.GetValue(obj);
+            _setter = value => _field.SetValue(obj, value);
+        }
+
         _isValid = true;
     }
 
@@ -234,6 +260,14 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         isPaused = false;
         isPlaying = true;
         isFinish = false;
+
+        if (_lerpFunc == null)
+        {
+            Debug.LogError("The ValueType given is not supported (" + typeof(TweenValueType) + ").");
+            TriggerOnStart();
+            Stop(false);
+            return;
+        }
 
         if (_currentMethod == MethodUse.Reflexion)
         {
@@ -258,6 +292,8 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
                 _startValue = GetObjValue();
             }
         }
+
+        _cachedEndValue = ComputeEndValue();
 
         TriggerOnStart();
 
@@ -288,16 +324,8 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         w = RealWeight(w);
 
-        if (lerpsFunc.ContainsKey(typeof(TweenValueType)))
-        {
-
-            TweenValueType value = (TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, GetEndValue(), w);
-            SetValue(value);
-        }
-        else
-        { 
-            throw new ArgumentException("The ValueType given is not supported (" + typeof(TweenValueType) + ").");
-        }
+        TweenValueType value = (TweenValueType)_lerpFunc(_startValue, _cachedEndValue, w);
+        SetValue(value);
 
         TriggerOnUpdate();
 
@@ -306,7 +334,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private void StrategyMethod()
     {
-        _function.Invoke(_currentValue);
+        _function?.Invoke(_currentValue);
     }
 
     private void ReflexionMethod()
@@ -327,11 +355,11 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
                     return;
                 }
 
-                _property.SetValue(obj, _currentValue);
+                _setter?.Invoke(_currentValue);
             }
             else if (_field != null)
             {
-                _field.SetValue(obj, _currentValue);
+                _setter?.Invoke(_currentValue);
             }
             else
             {
@@ -348,8 +376,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     {
         object value = default;
 
-        if (_property != null) value = _property.GetValue(obj);
-        else if (_field != null) value = _field.GetValue(obj);
+        if (_getter != null) value = _getter();
 
         return (TweenValueType)value;
     }
@@ -674,29 +701,40 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private bool CanUseAdditive()
     {
-        return addFuncs.ContainsKey(typeof(TweenValueType));
+        return _addFunc != null || addFuncs.ContainsKey(typeof(TweenValueType));
     }
 
-    private TweenValueType GetEndValue()
+    private TweenValueType ComputeEndValue()
     {
         if (!fromCurrentValue || !isIncreasingValue)
         {
             return _finalValue;
         }
 
-        if (!addFuncs.TryGetValue(typeof(TweenValueType), out Func<object, object, object> addFunc))
+        if (_addFunc == null)
         {
             Debug.LogError("Additive tween is not supported for type : " + typeof(TweenValueType));
             isIncreasingValue = false;
             return _finalValue;
         }
 
-        return (TweenValueType)addFunc(_startValue, _finalValue);
+        return (TweenValueType)_addFunc(_startValue, _finalValue);
     }
 
     public override TweenCorePropertyBase SetToFinalVals()
     {
-        SetValue((TweenValueType)lerpsFunc[typeof(TweenValueType)](_startValue, GetEndValue(), RealWeight(1)));
+        if (_lerpFunc == null)
+        {
+            SetValueFuncs();
+        }
+
+        if (_lerpFunc == null)
+        {
+            Debug.LogError("The ValueType given is not supported (" + typeof(TweenValueType) + ").");
+            return this;
+        }
+
+        SetValue((TweenValueType)_lerpFunc(_startValue, ComputeEndValue(), RealWeight(1)));
 
         return this;
     }
