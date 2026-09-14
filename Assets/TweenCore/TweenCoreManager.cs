@@ -40,6 +40,13 @@ public class TweenCoreManager : MonoBehaviour
 
     // ----- Buil-in ----- \\
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStaticState()
+    {
+        _instance = null;
+        _canBeInstantiate = true;
+    }
+
     private void Awake()
     {
         // Singleton

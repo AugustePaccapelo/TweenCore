@@ -30,8 +30,7 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
     private PropertyInfo _property;
     private FieldInfo _field;
     private Action<TweenValueType> _function;
-    
-    private List<TweenCorePropertyBase> _nextProperties = new List<TweenCorePropertyBase>();
+    private bool _isValid = true;
 
     [Serializable]
     private class TweenPropertyUnityEvents
@@ -176,9 +175,13 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private void SetReflexionFiels(string method)
     {
+        _property = null;
+        _field = null;
+
         if (obj == null)
         {
             Debug.LogError("Given object to tween is null");
+            _isValid = false;
             return;
         }
 
@@ -188,8 +191,39 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         if (_property == null && _field == null)
         {
             Debug.LogError("No property or field found : " + method);
+            _isValid = false;
             return;
         }
+
+        Type valueType = typeof(TweenValueType);
+        Type memberType = _property != null ? _property.PropertyType : _field.FieldType;
+
+        if (memberType != valueType)
+        {
+            Debug.LogError("Tween value type does not match " + method + " type. Expected " + memberType + ", got " + valueType + ".");
+            _property = null;
+            _field = null;
+            _isValid = false;
+            return;
+        }
+
+        if (_property != null && !_property.CanWrite)
+        {
+            Debug.LogError("Property can't be set : " + method);
+            _property = null;
+            _isValid = false;
+            return;
+        }
+
+        if (_field != null && _field.IsInitOnly)
+        {
+            Debug.LogError("Field can't be set : " + method);
+            _field = null;
+            _isValid = false;
+            return;
+        }
+
+        _isValid = true;
     }
 
     public override void Start()
@@ -203,6 +237,15 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
         if (_currentMethod == MethodUse.Reflexion)
         {
+            SetReflexionFiels(propertyName);
+
+            if (!_isValid)
+            {
+                TriggerOnStart();
+                Stop(false);
+                return;
+            }
+
             if (obj == null)
             {
                 TriggerOnStart();
@@ -526,7 +569,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     public override TweenCorePropertyBase AddNextProperty(TweenCorePropertyBase property)
     {
-        _nextProperties.Add(property);
         return this;
     }
 
@@ -604,21 +646,10 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         isPaused = true;
         isFinish = true;
 
-        StartNextProperties();
-
         elapseTime = 0;
         hasStarted = false;
 
         TriggerOnFinish();
-    }
-
-    private void StartNextProperties()
-    {
-        int length = _nextProperties.Count;
-        for (int i = 0; i < length; i++)
-        {
-            _nextProperties[i].Start();
-        }        
     }
 
     private void SetValue(TweenValueType value)

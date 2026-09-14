@@ -54,6 +54,7 @@ public class TweenCore
     public int CurrentIteration => _currentIteration;
 
     private bool _isStopping = false;
+    private bool _isDestroyed = false;
 
     public event Action<TweenCore> OnStart;
     public event Action<TweenCore> OnUpdate;
@@ -70,7 +71,7 @@ public class TweenCore
     /// <returns>This tween.</returns>
     public TweenCore Update(float deltaTime)
     {
-        if (!_isPlaying || _isPaused) return this;
+        if (_isDestroyed || !_isPlaying || _isPaused) return this;
         
         OnUpdate?.Invoke(this);
         _elapseTime += deltaTime;
@@ -80,7 +81,7 @@ public class TweenCore
             _tweenProperties[i].Update(deltaTime);
         }
 
-        if (_numPropertiesFinished == _exeptedNumProperties)
+        if (_exeptedNumProperties > 0 && _numPropertiesFinished == _exeptedNumProperties)
         {
             _currentIteration++;
             
@@ -102,11 +103,7 @@ public class TweenCore
         OnLoopFinish?.Invoke(this);
         _numPropertiesFinished = 0;
 
-        if (!_isParallel) _tweenProperties[0].Start();
-        else
-        {
-            foreach (TweenCorePropertyBase property in _tweenProperties) property.Start();
-        }
+        StartProperties();
     }
 
     /// <summary>
@@ -139,7 +136,7 @@ public class TweenCore
     public TweenCore Play()
     {
         // Can't start 2 times
-        if (_hasStarted) return this;
+        if (_isDestroyed || _hasStarted) return this;
         
         // Set values
         _numPropertiesFinished = 0;
@@ -153,39 +150,38 @@ public class TweenCore
 
         OnStart?.Invoke(this);
 
-        TweenCorePropertyBase property;
-
         int numProperties = _tweenProperties.Count;
 
-        // Iterrate on each property
-        for (int i = 0; i < numProperties; i++)
-        {
-            property = _tweenProperties[i];
-            
-            // If parallel, start all properties
-            if (_isParallel) property.Start();
-            // If chain, build the chain and skip last
-            else if (i < numProperties - 1)
-            {
-                property.AddNextProperty(_tweenProperties[i + 1]);
-            }
-        }
-
-        // If in chain, start first property after the chain is built
-        if (!_isParallel && numProperties > 0)
-        {
-            _tweenProperties[0].Start();
-        }
-
         // Tracking of finished properties
-        _exeptedNumProperties = _tweenProperties.Count;
+        _exeptedNumProperties = numProperties;
 
-        if (_isLoop && _numIteration == 0)
+        if (numProperties == 0 || (_isLoop && _numIteration == 0))
         {
-            Stop();
+            Stop(false);
+        }
+        else
+        {
+            StartProperties();
         }
 
         return this;
+    }
+
+    private void StartProperties()
+    {
+        int numProperties = _tweenProperties.Count;
+        if (numProperties == 0) return;
+
+        if (!_isParallel)
+        {
+            _tweenProperties[0].Start();
+            return;
+        }
+
+        for (int i = 0; i < numProperties; i++)
+        {
+            _tweenProperties[i].Start();
+        }
     }
 
     private void DestroyTweenProperty(TweenCorePropertyBase property)
@@ -198,12 +194,22 @@ public class TweenCore
     {
         if (_isStopping) return;
 
+        int propertyIndex = _tweenProperties.IndexOf(property);
+        TweenCorePropertyBase nextProperty = null;
+
+        if (!_isParallel && propertyIndex >= 0 && propertyIndex < _tweenProperties.Count - 1)
+        {
+            nextProperty = _tweenProperties[propertyIndex + 1];
+        }
+
         _numPropertiesFinished++;
         
         if (!_isLoop && _destroyOnFinish)
         {
             DestroyTweenProperty(property);
         }
+
+        nextProperty?.Start();
     }
 
     /// <summary>
@@ -221,19 +227,24 @@ public class TweenCore
         _currentIteration = 0;
         _numPropertiesFinished = 0;
 
-        _isStopping = true;
-
-        TweenCorePropertyBase[] propertiesToStop = _tweenProperties.ToArray();
-
-        for (int i = 0; i < propertiesToStop.Length; i++)
+        try
         {
-            if (propertiesToStop[i].HasStarted)
+            _isStopping = true;
+
+            TweenCorePropertyBase[] propertiesToStop = _tweenProperties.ToArray();
+
+            for (int i = 0; i < propertiesToStop.Length; i++)
             {
-                propertiesToStop[i].Stop(setToFinalValue);
+                if (propertiesToStop[i].HasStarted)
+                {
+                    propertiesToStop[i].Stop(setToFinalValue);
+                }
             }
         }
-
-        _isStopping = false;
+        finally
+        {
+            _isStopping = false;
+        }
 
         _isFinished = true;
         OnFinish?.Invoke(this);
@@ -453,6 +464,7 @@ public class TweenCore
     /// </summary>
     public void DestroyTween()
     {
+        _isDestroyed = true;
         TweenCoreManager.Instance?.RemoveTween(this);
     }
 }
