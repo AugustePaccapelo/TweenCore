@@ -53,6 +53,8 @@ public class TweenCore
     private int _currentIteration = 0;
     public int CurrentIteration => _currentIteration;
 
+    private bool _isStopping = false;
+
     public event Action<TweenCore> OnStart;
     public event Action<TweenCore> OnUpdate;
     public event Action<TweenCore> OnFinish;
@@ -194,6 +196,8 @@ public class TweenCore
 
     private void NewPropertyFinished(TweenCorePropertyBase property)
     {
+        if (_isStopping) return;
+
         _numPropertiesFinished++;
         
         if (!_isLoop && _destroyOnFinish)
@@ -217,12 +221,20 @@ public class TweenCore
         _currentIteration = 0;
         _numPropertiesFinished = 0;
 
-        int length = _tweenProperties.Count - 1;
-        for (int i = length; i >= 0; i --)
+        _isStopping = true;
+
+        TweenCorePropertyBase[] propertiesToStop = _tweenProperties.ToArray();
+
+        for (int i = 0; i < propertiesToStop.Length; i++)
         {
-            //if (_tweenProperties[i].HasStarted) _tweenProperties[i].Stop(setToFinalValue);
-            if (_tweenProperties[0].HasStarted) _tweenProperties[0].Stop(setToFinalValue);
+            if (propertiesToStop[i].HasStarted)
+            {
+                propertiesToStop[i].Stop(setToFinalValue);
+            }
         }
+
+        _isStopping = false;
+
         _isFinished = true;
         OnFinish?.Invoke(this);
         if (_destroyOnFinish) DestroyTween();
