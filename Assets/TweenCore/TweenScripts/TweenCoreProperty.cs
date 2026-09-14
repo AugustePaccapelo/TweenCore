@@ -272,8 +272,37 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 
     private void ReflexionMethod()
     {
-        if (_property != null) _property.SetValue(obj, _currentValue);
-        else _field.SetValue(obj, _currentValue);
+        if (obj == null)
+        {
+            Debug.LogError("Given object to tween is null");
+            return;
+        }
+
+        try
+        {
+            if (_property != null)
+            {
+                if (!_property.CanWrite)
+                {
+                    Debug.LogError("Property can't be set : " + propertyName);
+                    return;
+                }
+
+                _property.SetValue(obj, _currentValue);
+            }
+            else if (_field != null)
+            {
+                _field.SetValue(obj, _currentValue);
+            }
+            else
+            {
+                Debug.LogError("No property or field found : " + propertyName);
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogError("Failed to set tween value on " + propertyName + " : " + exception.Message);
+        }
     }
 
     private TweenValueType GetObjValue()
@@ -608,7 +637,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
                 throw new NotImplementedException();
         }
 
-        OnUpdateValue?.Invoke(this, _currentValue);
     }
 
     public override TweenCorePropertyBase SetToFinalVals()
