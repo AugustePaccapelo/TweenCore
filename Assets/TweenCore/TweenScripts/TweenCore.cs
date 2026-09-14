@@ -53,6 +53,7 @@ public class TweenCore
     private int _currentIteration = 0;
     public int CurrentIteration => _currentIteration;
 
+    private int _currentChainIndex = 0;
     private bool _isStopping = false;
     private bool _isDestroyed = false;
 
@@ -102,6 +103,7 @@ public class TweenCore
     {
         OnLoopFinish?.Invoke(this);
         _numPropertiesFinished = 0;
+        _currentChainIndex = 0;
 
         StartProperties();
     }
@@ -141,6 +143,7 @@ public class TweenCore
         // Set values
         _numPropertiesFinished = 0;
         _currentIteration = 0;
+        _currentChainIndex = 0;
         _hasStarted = true;
         _isPaused = false;
         _isPlaying = true;
@@ -174,6 +177,7 @@ public class TweenCore
 
         if (!_isParallel)
         {
+            _currentChainIndex = 0;
             _tweenProperties[0].Start();
             return;
         }
@@ -194,12 +198,18 @@ public class TweenCore
     {
         if (_isStopping) return;
 
-        int propertyIndex = _tweenProperties.IndexOf(property);
         TweenCorePropertyBase nextProperty = null;
 
-        if (!_isParallel && propertyIndex >= 0 && propertyIndex < _tweenProperties.Count - 1)
+        if (!_isParallel && _currentChainIndex < _tweenProperties.Count && _tweenProperties[_currentChainIndex] == property)
         {
-            nextProperty = _tweenProperties[propertyIndex + 1];
+            int nextPropertyIndex = _destroyOnFinish && !_isLoop ? _currentChainIndex : _currentChainIndex + 1;
+
+            if (nextPropertyIndex < _tweenProperties.Count)
+            {
+                nextProperty = _tweenProperties[nextPropertyIndex];
+            }
+
+            _currentChainIndex++;
         }
 
         _numPropertiesFinished++;
@@ -225,6 +235,7 @@ public class TweenCore
         _isPlaying = false;
         _elapseTime = 0;
         _currentIteration = 0;
+        _currentChainIndex = 0;
         _numPropertiesFinished = 0;
 
         try
