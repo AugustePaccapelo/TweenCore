@@ -91,20 +91,25 @@ public class TweenCoreComponentEditor : Editor
 
     private void GetProperties()
     {
-        _name = serializedObject.FindProperty("_name");
-        _playOnStart = serializedObject.FindProperty("_playOnStart");
-        _isParallel = serializedObject.FindProperty("_isParallel");
-        _isLoop = serializedObject.FindProperty("_isLoop");
-        _isInfinite = serializedObject.FindProperty("_isInfinite");
-        _numIteration = serializedObject.FindProperty("_numIteration");
-        _destroyWhenFinish = serializedObject.FindProperty("_DestroyWhenFinished");
-        _surviveOnUnload = serializedObject.FindProperty("_surviveOnUnload");
-        _unityEvents = serializedObject.FindProperty("_unityEvents");
+        _name = FindProperty(TweenCoreComponent.NAME_PROPERTY);
+        _playOnStart = FindProperty(TweenCoreComponent.PLAY_ON_START_PROPERTY);
+        _isParallel = FindProperty(TweenCoreComponent.IS_PARALLEL_PROPERTY);
+        _isLoop = FindProperty(TweenCoreComponent.IS_LOOP_PROPERTY);
+        _isInfinite = FindProperty(TweenCoreComponent.IS_INFINITE_PROPERTY);
+        _numIteration = FindProperty(TweenCoreComponent.NUM_ITERATION_PROPERTY);
+        _destroyWhenFinish = FindProperty(TweenCoreComponent.DESTROY_WHEN_FINISHED_PROPERTY);
+        _surviveOnUnload = FindProperty(TweenCoreComponent.SURVIVE_ON_UNLOAD_PROPERTY);
+        _unityEvents = FindProperty(TweenCoreComponent.UNITY_EVENTS_PROPERTY);
+    }
+
+    private SerializedProperty FindProperty(string propertyName)
+    {
+        return serializedObject.FindProperty(propertyName);
     }
 
     private void SetPropertiesList()
     {
-        SerializedProperty property = serializedObject.FindProperty("_properties");
+        SerializedProperty property = FindProperty(TweenCoreComponent.PROPERTIES_PROPERTY);
 
         _propertiesEditorList = new ReorderableList(serializedObject, property, true, true, true, true);
 

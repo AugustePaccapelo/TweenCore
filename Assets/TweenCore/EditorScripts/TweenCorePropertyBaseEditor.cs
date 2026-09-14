@@ -108,26 +108,31 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
 
             this.property = property;
 
-            propTweenTargetObj = property.FindPropertyRelative("_tweenTargetObj");
-            propLastKnownTweenTargetGO = property.FindPropertyRelative("_lastKnownTweenTargetGO");
+            propTweenTargetObj = FindRelative(TweenCorePropertyBase.TWEEN_TARGET_OBJ_PROPERTY);
+            propLastKnownTweenTargetGO = FindRelative(TweenCorePropertyBase.LAST_KNOWN_TWEEN_TARGET_GO_PROPERTY);
 
-            propCurrentObject = property.FindPropertyRelative("obj");
-            propLastKnownObject = property.FindPropertyRelative("_lastKnownObject");
-            propCurrentPropertyChoosedIndex = property.FindPropertyRelative("propertyIndex");
-            propPropertyChoosedName = property.FindPropertyRelative("propertyName");
+            propCurrentObject = FindRelative(TweenCorePropertyBase.TARGET_OBJECT_PROPERTY);
+            propLastKnownObject = FindRelative(TweenCorePropertyBase.LAST_KNOWN_OBJECT_PROPERTY);
+            propCurrentPropertyChoosedIndex = FindRelative(TweenCorePropertyBase.PROPERTY_INDEX_PROPERTY);
+            propPropertyChoosedName = FindRelative(TweenCorePropertyBase.PROPERTY_NAME_PROPERTY);
 
-            propIsEmpty = property.FindPropertyRelative("isEmpty");
-            propTweenType = property.FindPropertyRelative("type");
-            propTweenEase = property.FindPropertyRelative("ease");
-            propDuration = property.FindPropertyRelative("duration");
-            propDelay = property.FindPropertyRelative("delay");
-            propTypeAnimCurve = property.FindPropertyRelative("typeAnimationCurve");
-            propEaseAnimCurve = property.FindPropertyRelative("easeAnimationCurve");
-            propFromCurrentValue = property.FindPropertyRelative("fromCurrentValue");
-            propIsAdd = property.FindPropertyRelative("isIncreasingValue");
-            propStartValue = property.FindPropertyRelative("_startValue");
-            propEndValue = property.FindPropertyRelative("_finalValue");
-            propUnityEvents = property.FindPropertyRelative("_unityEvents");
+            propIsEmpty = FindRelative(TweenCorePropertyBase.IS_EMPTY_PROPERTY);
+            propTweenType = FindRelative(TweenCorePropertyBase.TYPE_PROPERTY);
+            propTweenEase = FindRelative(TweenCorePropertyBase.EASE_PROPERTY);
+            propDuration = FindRelative(TweenCorePropertyBase.DURATION_PROPERTY);
+            propDelay = FindRelative(TweenCorePropertyBase.DELAY_PROPERTY);
+            propTypeAnimCurve = FindRelative(TweenCorePropertyBase.TYPE_ANIMATION_CURVE_PROPERTY);
+            propEaseAnimCurve = FindRelative(TweenCorePropertyBase.EASE_ANIMATION_CURVE_PROPERTY);
+            propFromCurrentValue = FindRelative(TweenCorePropertyBase.FROM_CURRENT_VALUE_PROPERTY);
+            propIsAdd = FindRelative(TweenCorePropertyBase.IS_INCREASING_VALUE_PROPERTY);
+            propStartValue = FindRelative(TweenCoreProperty<object>.START_VALUE_PROPERTY);
+            propEndValue = FindRelative(TweenCoreProperty<object>.FINAL_VALUE_PROPERTY);
+            propUnityEvents = FindRelative(TweenCoreProperty<object>.UNITY_EVENTS_PROPERTY);
+        }
+
+        private SerializedProperty FindRelative(string propertyName)
+        {
+            return property.FindPropertyRelative(propertyName);
         }
 
         public void InitVariables()

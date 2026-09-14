@@ -10,6 +10,12 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
 {
     // ---------- VARIABLES ---------- \\
 
+    // ----- Serialized Property Names ----- \\
+
+    public const string START_VALUE_PROPERTY = nameof(_startValue);
+    public const string FINAL_VALUE_PROPERTY = nameof(_finalValue);
+    public const string UNITY_EVENTS_PROPERTY = nameof(_unityEvents);
+
     // ----- Others ----- \\
 
     [SerializeField] private TweenValueType _startValue;

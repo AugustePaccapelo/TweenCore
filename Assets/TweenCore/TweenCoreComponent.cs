@@ -9,6 +9,19 @@ public class TweenCoreComponent : MonoBehaviour
 {
     // ---------- VARIABLES ---------- \\
 
+    // ----- Serialized Property Names ----- \\
+
+    public const string NAME_PROPERTY = nameof(_name);
+    public const string PLAY_ON_START_PROPERTY = nameof(_playOnStart);
+    public const string IS_PARALLEL_PROPERTY = nameof(_isParallel);
+    public const string IS_LOOP_PROPERTY = nameof(_isLoop);
+    public const string IS_INFINITE_PROPERTY = nameof(_isInfinite);
+    public const string NUM_ITERATION_PROPERTY = nameof(_numIteration);
+    public const string DESTROY_WHEN_FINISHED_PROPERTY = nameof(_DestroyWhenFinished);
+    public const string SURVIVE_ON_UNLOAD_PROPERTY = nameof(_surviveOnUnload);
+    public const string PROPERTIES_PROPERTY = nameof(_properties);
+    public const string UNITY_EVENTS_PROPERTY = nameof(_unityEvents);
+
     // ----- Prefabs & Assets ----- \\
 
     // ----- Objects ----- \\

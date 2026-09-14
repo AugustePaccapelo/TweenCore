@@ -9,6 +9,24 @@ public abstract class TweenCorePropertyBase
 {
     // ---------- VARIABLES ---------- \\
 
+    // ----- Serialized Property Names ----- \\
+
+    public const string TWEEN_TARGET_OBJ_PROPERTY = nameof(_tweenTargetObj);
+    public const string TARGET_OBJECT_PROPERTY = nameof(obj);
+    public const string LAST_KNOWN_OBJECT_PROPERTY = nameof(_lastKnownObject);
+    public const string LAST_KNOWN_TWEEN_TARGET_GO_PROPERTY = nameof(_lastKnownTweenTargetGO);
+    public const string TYPE_PROPERTY = nameof(type);
+    public const string EASE_PROPERTY = nameof(ease);
+    public const string DURATION_PROPERTY = nameof(duration);
+    public const string DELAY_PROPERTY = nameof(delay);
+    public const string FROM_CURRENT_VALUE_PROPERTY = nameof(fromCurrentValue);
+    public const string IS_INCREASING_VALUE_PROPERTY = nameof(isIncreasingValue);
+    public const string EASE_ANIMATION_CURVE_PROPERTY = nameof(easeAnimationCurve);
+    public const string TYPE_ANIMATION_CURVE_PROPERTY = nameof(typeAnimationCurve);
+    public const string PROPERTY_NAME_PROPERTY = nameof(propertyName);
+    public const string PROPERTY_INDEX_PROPERTY = nameof(propertyIndex);
+    public const string IS_EMPTY_PROPERTY = nameof(isEmpty);
+
     // ----- Objects ----- \\
 
     [SerializeField] private GameObject _tweenTargetObj;
