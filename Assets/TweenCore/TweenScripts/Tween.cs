@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 // Author : Auguste Paccapelo
 
-public class TweenCore
+namespace TweenCore.Runtime
 {
-    // ---------- VARIABLES ---------- \\
+    public class Tween
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Objects ----- \\
 
@@ -57,10 +59,10 @@ public class TweenCore
     private bool _isStopping = false;
     private bool _isDestroyed = false;
 
-    public event Action<TweenCore> OnStart;
-    public event Action<TweenCore> OnUpdate;
-    public event Action<TweenCore> OnFinish;
-    public event Action<TweenCore> OnLoopFinish;
+    public event Action<Tween> OnStart;
+    public event Action<Tween> OnUpdate;
+    public event Action<Tween> OnFinish;
+    public event Action<Tween> OnLoopFinish;
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -70,7 +72,7 @@ public class TweenCore
     /// </summary>
     /// <param name="deltaTime">Time since last call.</param>
     /// <returns>This tween.</returns>
-    public TweenCore Update(float deltaTime)
+    public Tween Update(float deltaTime)
     {
         if (_isDestroyed || !_isPlaying || _isPaused) return this;
         
@@ -112,7 +114,7 @@ public class TweenCore
     /// Pause the tween and all properties attached.
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Pause().Resume();).</returns>
-    public TweenCore Pause()
+    public Tween Pause()
     {
         _isPaused = true;
 
@@ -123,7 +125,7 @@ public class TweenCore
     /// Resume the tween and all properties attached at the state it was paused.
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Resume().Pause();).</returns>
-    public TweenCore Resume()
+    public Tween Resume()
     {
         _isPaused = false;
 
@@ -135,7 +137,7 @@ public class TweenCore
     /// In parrele mode, all properties start at the same time, in chain mode only one is executed at the time.
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.Play().Pause();).</returns>
-    public TweenCore Play()
+    public Tween Play()
     {
         // Can't start 2 times
         if (_isDestroyed || _hasStarted) return this;
@@ -270,9 +272,9 @@ public class TweenCore
     /// A Tween handle one or multiples TweenProperty.
     /// </summary>
     /// <returns>The tween created.</returns>
-    public static TweenCore CreateTween()
+    public static Tween CreateTween()
     {
-        TweenCore tween = new TweenCore();
+        Tween tween = new Tween();
         TweenCoreManager.Instance?.AddTween(tween);
         return tween;
     }
@@ -347,7 +349,7 @@ public class TweenCore
         return property;
     }
 
-    public TweenCore AddProperty(TweenCorePropertyBase property)
+    public Tween AddProperty(TweenCorePropertyBase property)
     {
         _tweenProperties.Add(property);
         property.OnFinish += NewPropertyFinished;
@@ -360,7 +362,7 @@ public class TweenCore
     /// </summary>
     /// <param name="isParallel">If is in parallel.</param>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetParallel(true).Play();).</returns>
-    public TweenCore SetParallel(bool isParallel)
+    public Tween SetParallel(bool isParallel)
     {
         _isParallel = isParallel;
         return this;
@@ -372,7 +374,7 @@ public class TweenCore
     /// </summary>
     /// <param name="isChain">If is in chain.</param>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetChain(true).Play();).</returns>
-    public TweenCore SetChain(bool isChain)
+    public Tween SetChain(bool isChain)
     {
         _isParallel = !isChain;
         return this;
@@ -383,7 +385,7 @@ public class TweenCore
     /// Parallel is true by default;
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetChain(true).Play();).</returns>
-    public TweenCore Parallel()
+    public Tween Parallel()
     {
         _isParallel = true;
         return this;
@@ -395,7 +397,7 @@ public class TweenCore
     /// <param name="isLoop">If loop mode.</param>
     /// <param name="numIteration"> Number of iteration, negative for infinte. </param>
     /// <returns>This tween.</returns>
-    public TweenCore SetLoop(bool isLoop, int numIteration = -1)
+    public Tween SetLoop(bool isLoop, int numIteration = -1)
     {
         _isLoop = isLoop;
         _numIteration = numIteration;
@@ -407,7 +409,7 @@ public class TweenCore
     /// Parallel is true by default;
     /// </summary>
     /// <returns>This tween, so you can chained the methods calls (e.g. tween.SetChain(true).Play();).</returns>
-    public TweenCore Chain()
+    public Tween Chain()
     {
         _isParallel = false;
         return this;
@@ -417,7 +419,7 @@ public class TweenCore
     /// The tween will then survive when the scene unloads.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public TweenCore SurviveOnSceneLoad()
+    public Tween SurviveOnSceneLoad()
     {
         _surviveOnSceneUnload = true;
         return this;
@@ -427,7 +429,7 @@ public class TweenCore
     /// The tween will not survive when the scene unloads.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public TweenCore KillOnSceneUnLoad()
+    public Tween KillOnSceneUnLoad()
     {
         _surviveOnSceneUnload = false;
         return this;
@@ -437,7 +439,7 @@ public class TweenCore
     /// Set if the tween should survive or not on scene unloads.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public TweenCore SetSurviveOnUnload(bool survive)
+    public Tween SetSurviveOnUnload(bool survive)
     {
         _surviveOnSceneUnload = survive;
         return this;
@@ -447,7 +449,7 @@ public class TweenCore
     /// This tween and properties attached will be destroyed when finished.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public TweenCore DestroyWhenFinish()
+    public Tween DestroyWhenFinish()
     {
         _destroyOnFinish = true;
         return this;
@@ -457,7 +459,7 @@ public class TweenCore
     /// This tween and propreties attached will not be destroyed when finished.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public TweenCore DontDestroyWhenFinish()
+    public Tween DontDestroyWhenFinish()
     {
         _destroyOnFinish = false;
         return this;
@@ -467,18 +469,20 @@ public class TweenCore
     /// Set if this tween and properties attached should be destroyed when finished.
     /// </summary>
     /// <returns>This Tween.</returns>
-    public TweenCore SetDestroyWhenFinish(bool destroy)
+    public Tween SetDestroyWhenFinish(bool destroy)
     {
         _destroyOnFinish = destroy;
         return this;
     }
 
     /// <summary>
-    /// Destroy this TweenCore without modifying the value.
+    /// Destroy this Tween without modifying the value.
     /// </summary>
     public void DestroyTween()
     {
         _isDestroyed = true;
         TweenCoreManager.Instance?.RemoveTween(this);
     }
+    }
 }
+

@@ -5,10 +5,12 @@ using UnityEngine.Events;
 
 // Author : Auguste Paccapelo
 
-[Serializable]
-public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
+namespace TweenCore.Runtime
 {
-    // ---------- VARIABLES ---------- \\
+    [Serializable]
+    public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Serialized Property Names ----- \\
 
@@ -768,5 +770,6 @@ public class TweenCoreProperty<TweenValueType> : TweenCorePropertyBase
         SetValue((TweenValueType)_lerpFunc(_startValue, ComputeEndValue(), RealWeight(1)));
 
         return this;
+    }
     }
 }

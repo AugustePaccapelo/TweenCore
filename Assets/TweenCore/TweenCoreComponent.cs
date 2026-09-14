@@ -5,9 +5,11 @@ using UnityEngine.Events;
 
 // Author : Auguste Paccapelo
 
-public class TweenCoreComponent : MonoBehaviour
+namespace TweenCore.Runtime
 {
-    // ---------- VARIABLES ---------- \\
+    public class TweenCoreComponent : MonoBehaviour
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Serialized Property Names ----- \\
 
@@ -26,8 +28,8 @@ public class TweenCoreComponent : MonoBehaviour
 
     // ----- Objects ----- \\
 
-    private TweenCore _tween;
-    public TweenCore Tween => _tween;
+    private Tween _tween;
+    public Tween Tween => _tween;
 
     // ----- Others ----- \\
 
@@ -51,10 +53,10 @@ public class TweenCoreComponent : MonoBehaviour
     [Serializable]
     private class TweenUnityEvents
     {
-        public UnityEvent<TweenCore> OnStart;
-        public UnityEvent<TweenCore> OnUpdate;
-        public UnityEvent<TweenCore> OnFinish;
-        public UnityEvent<TweenCore> OnLoopFinish;
+        public UnityEvent<Tween> OnStart;
+        public UnityEvent<Tween> OnUpdate;
+        public UnityEvent<Tween> OnFinish;
+        public UnityEvent<Tween> OnLoopFinish;
     }
 
     [SerializeField] private TweenUnityEvents _unityEvents = new TweenUnityEvents();
@@ -65,7 +67,7 @@ public class TweenCoreComponent : MonoBehaviour
 
     private void Awake()
     {
-        _tween = TweenCore.CreateTween();
+        _tween = Tween.CreateTween();
     }
 
     private void Start()
@@ -120,22 +122,22 @@ public class TweenCoreComponent : MonoBehaviour
         _tween.Stop(false);
     }
 
-    private void OnTweenStart(TweenCore tween)
+    private void OnTweenStart(Tween tween)
     {
         _unityEvents.OnStart?.Invoke(tween);
     }
 
-    private void OnTweenUpdate(TweenCore tween)
+    private void OnTweenUpdate(Tween tween)
     {
         _unityEvents.OnUpdate?.Invoke(tween);
     }
 
-    private void OnTweenFinish(TweenCore tween)
+    private void OnTweenFinish(Tween tween)
     {
         _unityEvents.OnFinish?.Invoke(tween);
     }
 
-    private void OnTweenLoopFinish(TweenCore tween)
+    private void OnTweenLoopFinish(Tween tween)
     {
         _unityEvents.OnLoopFinish?.Invoke(tween);
     }
@@ -146,5 +148,6 @@ public class TweenCoreComponent : MonoBehaviour
     {
         _tween?.Stop(false);
         _tween?.DestroyTween();
+    }
     }
 }

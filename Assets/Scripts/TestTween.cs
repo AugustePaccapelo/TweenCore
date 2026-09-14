@@ -1,10 +1,13 @@
 using UnityEngine;
+using TweenCore.Runtime;
 
 // Author : Auguste Paccapelo
 
-public class TestTween : MonoBehaviour
+namespace TweenCore.Samples
 {
-    // ---------- VARIABLES ---------- \\
+    public class TestTween : MonoBehaviour
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Prefabs & Assets ----- \\
 
@@ -35,7 +38,7 @@ public class TestTween : MonoBehaviour
         _startPos = _startObj.transform.position;
         _endPos = _endObj.transform.position;
 
-        TweenCore tween = TweenCore.CreateTween();
+        Tween tween = Tween.CreateTween();
         TweenCoreProperty<Vector3> testProp = tween.NewProperty(_target.transform, "position", _endPos, _time).From(_startPos)
             .SetType(TweenCoreType.Bounce)
             .SetEase(TweenCoreEase.In);
@@ -55,4 +58,5 @@ public class TestTween : MonoBehaviour
     // ----- Destructor ----- \\
 
     private void OnDestroy() { }
+    }
 }

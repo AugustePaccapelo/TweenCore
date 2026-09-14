@@ -13,6 +13,12 @@ TweenCore is a lightweight tween system for Unity. It is built around a small ru
 
 ## Basic Usage
 
+Runtime types live in the `TweenCore.Runtime` namespace:
+
+```csharp
+using TweenCore.Runtime;
+```
+
 ### Inspector Workflow
 
 Add `TweenCoreComponent` to a GameObject, then add one or more tween properties in the Inspector.
@@ -29,7 +35,7 @@ For each property:
 ### Reflection From Code
 
 ```csharp
-TweenCore tween = TweenCore.CreateTween();
+Tween tween = Tween.CreateTween();
 
 tween.NewProperty(
         transform,
@@ -46,7 +52,7 @@ tween.Play();
 If you want the tween to start from the current value, use the overload without an explicit start value:
 
 ```csharp
-TweenCore tween = TweenCore.CreateTween();
+Tween tween = Tween.CreateTween();
 
 tween.NewProperty(
         transform,
@@ -64,7 +70,7 @@ tween.Play();
 This avoids reflected setting during updates and is the preferred code path when writing tweens by script.
 
 ```csharp
-TweenCore tween = TweenCore.CreateTween();
+Tween tween = Tween.CreateTween();
 
 tween.NewProperty(
         value => transform.localScale = value,
@@ -82,7 +88,7 @@ tween.Play();
 Use this when you want TweenCore to calculate the value but apply it yourself.
 
 ```csharp
-TweenCore tween = TweenCore.CreateTween();
+Tween tween = Tween.CreateTween();
 
 TweenCoreProperty<Vector3> property = tween.NewProperty(
         Vector3.zero,
@@ -194,12 +200,11 @@ The current Inspector add menu supports:
 - `Color`
 - `Color32`
 
-## TweenCore
-
+## Tween API
 Create a tween with:
 
 ```csharp
-TweenCore tween = TweenCore.CreateTween();
+Tween tween = Tween.CreateTween();
 ```
 
 Common methods:

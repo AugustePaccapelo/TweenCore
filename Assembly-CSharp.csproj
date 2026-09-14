@@ -54,8 +54,8 @@
     <Compile Include="Assets\TweenCore\EditorScripts\TweenCorePropertyBaseEditor.cs" />
     <Compile Include="Assets\Scripts\DefaultScript.cs" />
     <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreProperty.cs" />
+    <Compile Include="Assets\TweenCore\TweenScripts\Tween.cs" />
     <Compile Include="Assets\TweenCore\TweenCoreManager.cs" />
-    <Compile Include="Assets\TweenCore\TweenScripts\TweenCore.cs" />
     <Compile Include="Assets\TweenCore\EditorScripts\TweenCoreComponentEditor.cs" />
     <Compile Include="Assets\TweenCore\TweenScripts\TweenCoreEnums.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />

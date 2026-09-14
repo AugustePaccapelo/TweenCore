@@ -4,10 +4,12 @@ using UnityEngine;
 
 // Author : Auguste Paccapelo
 
-[Serializable]
-public abstract class TweenCorePropertyBase
+namespace TweenCore.Runtime
 {
-    // ---------- VARIABLES ---------- \\
+    [Serializable]
+    public abstract class TweenCorePropertyBase
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Serialized Property Names ----- \\
 
@@ -352,5 +354,6 @@ public abstract class TweenCorePropertyBase
             0.5f * (1 - TypeFunc(1 - t * 2)) :
             0.5f + 0.5f * TypeFunc((t - 0.5f) * 2f);
             
+    }
     }
 }

@@ -6,18 +6,21 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using TweenCore.Runtime;
 
 // Author : Auguste Paccapelo
 
-[CustomEditor(typeof(TweenCoreComponent))]
-public class TweenCoreComponentEditor : Editor
+namespace TweenCore.Editor
 {
-    // ---------- VARIABLES ---------- \\
+    [CustomEditor(typeof(TweenCoreComponent))]
+    public class TweenCoreComponentEditor : UnityEditor.Editor
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Objects ----- \\
 
-    private SerializedProperty _name;
-    private SerializedProperty _playOnStart;
+        private SerializedProperty _name;
+        private SerializedProperty _playOnStart;
     private SerializedProperty _isParallel;
     private SerializedProperty _isLoop;
     private SerializedProperty _isInfinite;
@@ -164,6 +167,7 @@ public class TweenCoreComponentEditor : Editor
         }
 
         menu.ShowAsContext();
+    }
     }
 }
 #endif

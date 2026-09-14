@@ -1,17 +1,20 @@
 using System.Collections;
 using UnityEngine;
+using TweenCore.Runtime;
 
 // Author : Auguste Paccapelo
 
-public class DefaultScript : MonoBehaviour
+namespace TweenCore.Samples
 {
-    // ---------- VARIABLES ---------- \\
+    public class DefaultScript : MonoBehaviour
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Prefabs & Assets ----- \\
 
     // ----- Objects ----- \\
 
-    private TweenCore _myTween;
+    private Tween _myTween;
 
     [SerializeField] private TweenCoreComponent comp;
 
@@ -32,7 +35,7 @@ public class DefaultScript : MonoBehaviour
 
     private void Start()
     {
-        _myTween = TweenCore.CreateTween().SurviveOnSceneLoad();
+        _myTween = Tween.CreateTween().SurviveOnSceneLoad();
         _myTween.NewProperty(TweenFunc, Vector3.zero, new Vector3(5, 5, 0), 2f)
             .SetEase(TweenCoreEase.Out).SetType(TweenCoreType.Elastic);
         //StartCoroutine(TweenCoroutine());
@@ -62,4 +65,5 @@ public class DefaultScript : MonoBehaviour
     // ----- Destructor ----- \\
 
     private void OnDestroy() { }
+    }
 }

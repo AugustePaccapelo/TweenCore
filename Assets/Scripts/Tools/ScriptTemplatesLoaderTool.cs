@@ -9,9 +9,11 @@ using UnityEngine;
 
 // Author : Auguste Paccapelo
 
-public class ScriptTemplatesLoaderTool : EditorWindow
+namespace TweenCore.Editor
 {
-    // Templates
+    public class ScriptTemplatesLoaderTool : EditorWindow
+    {
+        // Templates
     // Path of your templates
     private const string TEMPLATES_FOLDER_PATH = "C:\\Documents\\Programmation\\Templates\\Unity\\Scripts";
     // Template availables Macros
@@ -172,6 +174,7 @@ public class ScriptTemplatesLoaderTool : EditorWindow
             templatesNames.Add(Path.GetFileNameWithoutExtension(templatePath));
         }
         return templatesNames;
+    }
     }
 }
 #endif

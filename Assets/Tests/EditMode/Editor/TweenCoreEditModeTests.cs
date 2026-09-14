@@ -1,18 +1,21 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using TweenCore.Runtime;
 
-public class TweenCoreEditModeTests
+namespace TweenCore.Tests.EditMode
 {
-    private class ReflectionTarget : ScriptableObject
+    public class TweenCoreEditModeTests
     {
-        public float Value { get; set; }
-    }
+        private class ReflectionTarget : ScriptableObject
+        {
+            public float Value { get; set; }
+        }
 
     [Test]
     public void Stop_StopsStartedPropertiesInOriginalOrder()
     {
-        TweenCore tween = new TweenCore().DontDestroyWhenFinish();
+        Tween tween = new Tween().DontDestroyWhenFinish();
         TweenCoreProperty<float> first = tween.NewProperty(0f, 1f, 10f);
         TweenCoreProperty<float> second = tween.NewProperty(0f, 1f, 10f);
         List<string> finishOrder = new List<string>();
@@ -30,7 +33,7 @@ public class TweenCoreEditModeTests
     [Test]
     public void Update_InvokesValueUpdateOnlyOncePerFrame()
     {
-        TweenCore tween = new TweenCore().DontDestroyWhenFinish();
+        Tween tween = new Tween().DontDestroyWhenFinish();
         TweenCoreProperty<float> property = tween.NewProperty(0f, 10f, 1f);
         int updateCount = 0;
         float lastValue = 0f;
@@ -51,7 +54,7 @@ public class TweenCoreEditModeTests
     [Test]
     public void AdditiveColor32_ClampsFinalChannels()
     {
-        TweenCore tween = new TweenCore().DontDestroyWhenFinish();
+        Tween tween = new Tween().DontDestroyWhenFinish();
         TweenCoreProperty<Color32> property = tween.NewProperty(
             new Color32(250, 10, 20, 250),
             new Color32(10, 20, 250, 10),
@@ -68,7 +71,7 @@ public class TweenCoreEditModeTests
     [Test]
     public void AdditiveQuaternion_ComposesRelativeRotation()
     {
-        TweenCore tween = new TweenCore().DontDestroyWhenFinish();
+        Tween tween = new Tween().DontDestroyWhenFinish();
         Quaternion start = Quaternion.Euler(0f, 30f, 0f);
         Quaternion delta = Quaternion.Euler(0f, 45f, 0f);
         TweenCoreProperty<Quaternion> property = tween.NewProperty(start, delta, 1f);
@@ -85,7 +88,7 @@ public class TweenCoreEditModeTests
     public void ReflectionTween_SetsPropertyValue()
     {
         ReflectionTarget target = ScriptableObject.CreateInstance<ReflectionTarget>();
-        TweenCore tween = new TweenCore().DontDestroyWhenFinish();
+        Tween tween = new Tween().DontDestroyWhenFinish();
 
         tween.NewProperty(target, nameof(ReflectionTarget.Value), 0f, 10f, 1f);
 
@@ -99,7 +102,7 @@ public class TweenCoreEditModeTests
     [Test]
     public void ChainWithDestroyOnFinish_StartsNextPropertyAfterRemovingCurrent()
     {
-        TweenCore tween = new TweenCore().Chain();
+        Tween tween = new Tween().Chain();
         TweenCoreProperty<float> first = tween.NewProperty(0f, 1f, 0.1f);
         TweenCoreProperty<float> second = tween.NewProperty(0f, 1f, 0.1f);
 
@@ -108,5 +111,6 @@ public class TweenCoreEditModeTests
 
         Assert.IsTrue(first.IsFinish);
         Assert.IsTrue(second.HasStarted);
+    }
     }
 }

@@ -7,20 +7,23 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using TweenCore.Runtime;
 
 // Author : Auguste Paccapelo
 
-[CustomPropertyDrawer(typeof(TweenCorePropertyBase), true)]
-public class TweenCorePropertyBaseEditor : PropertyDrawer
+namespace TweenCore.Editor
 {
-    // ----- CLASS ----- \\
-    private class TweenPropertyEditorContext
+    [CustomPropertyDrawer(typeof(TweenCorePropertyBase), true)]
+    public class TweenCorePropertyBaseEditor : PropertyDrawer
     {
-        // ----- VARIABLES ----- \\
+        // ----- CLASS ----- \\
+        private class TweenPropertyEditorContext
+        {
+            // ----- VARIABLES ----- \\
 
         // Tween related \\
 
-        public SerializedProperty propTweenTargetObj;
+            public SerializedProperty propTweenTargetObj;
         public GameObject currentTweenTargetObj;
         public SerializedProperty propLastKnownTweenTargetGO;
         public GameObject lastTweenTargetObjKnown;
@@ -564,6 +567,7 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
             propContext.property.serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(propContext.property.serializedObject.targetObject);
         }
+    }
     }
 }
 #endif

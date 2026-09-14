@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 
 // Author : Auguste Paccapelo
 
-public class TweenCoreManager : MonoBehaviour
+namespace TweenCore.Runtime
 {
-    // ---------- VARIABLES ---------- \\
+    public class TweenCoreManager : MonoBehaviour
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Singleton ----- \\
 
@@ -28,7 +30,7 @@ public class TweenCoreManager : MonoBehaviour
 
     // ----- Objects ----- \\
 
-    private List<TweenCore> _tweens = new List<TweenCore>();
+    private List<Tween> _tweens = new List<Tween>();
 
     // ----- Others ----- \\
 
@@ -115,12 +117,12 @@ public class TweenCoreManager : MonoBehaviour
         }
     }
 
-    public void AddTween(TweenCore tween)
+    public void AddTween(Tween tween)
     {
         if (!_tweens.Contains(tween)) _tweens.Add(tween);
     }
 
-    public void RemoveTween(TweenCore tween)
+    public void RemoveTween(Tween tween)
     {
         if (_tweens.Contains(tween)) _tweens.Remove(tween);
     }
@@ -130,5 +132,6 @@ public class TweenCoreManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         if (_instance == this) _instance = null;
+    }
     }
 }

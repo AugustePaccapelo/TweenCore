@@ -1,12 +1,15 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TweenCore.Runtime;
 
 // Author : Auguste Paccapelo
 
-public class GameManager : MonoBehaviour
+namespace TweenCore.Samples
 {
-    // ---------- VARIABLES ---------- \\
+    public class GameManager : MonoBehaviour
+    {
+        // ---------- VARIABLES ---------- \\
 
     // ----- Singleton ----- \\
 
@@ -60,5 +63,6 @@ public class GameManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         if (Instance == this) Instance = null;
+    }
     }
 }
