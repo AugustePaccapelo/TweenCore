@@ -1,153 +1,253 @@
-# TweenCore - Documentation
+# TweenCore
 
-## Overview
+TweenCore is a lightweight tween system for Unity. It is built around a small runtime API and a `TweenCoreComponent` that lets you create tweens directly from the Inspector, with a workflow inspired by Godot tweens.
 
-System used to make animations on objects, for example to move an object from a point to another.
-You can choose to use Reflection, a Function, or get the value and change it yourself.
+## Features
 
-Include a TweenCoreComponent to make any tween from the editor without any code. They only use Reflection.
+- Create tweens from the Unity Inspector with `TweenCoreComponent`.
+- Use tweens from code with a fluent API.
+- Tween reflected object properties, callback-driven values, or manually-read values.
+- Run multiple properties in parallel or as an ordered chain.
+- Add delays, loops, custom curves, and UnityEvents.
+- Use additive tweens for supported value types.
 
-## Examples of uses
+## Basic Usage
 
-**Reflection :**
-***Example 1 :***
+### Inspector Workflow
 
-TweenCore tween = TweenCore.CreateTween();
-TweenCoreProperty<Vector3> property = tween.NewProperty(transform, "position", Vector3.zero, new Vector3(5, 2, 0), 2f);
-property.SetEase(TweenEase.Out);
-property.SetType(TweenType.Bounce);
+Add `TweenCoreComponent` to a GameObject, then add one or more tween properties in the Inspector.
 
-tween.Play();
+For each property:
 
-***Example 2 :***
+- Choose the value type.
+- Assign a target GameObject.
+- Choose a component and property to tween.
+- Configure start/end value, duration, delay, type, ease, loop, and events.
 
-TweenCore tween = TweenCore.CreateTween();
-tween.NewProperty(transform, TweenTarget.Transform.GLOBAL_POSITION, new Vector3(5, 2, 0), 2f)
-    .SetEase(TweenEase.Out).SetType(TweenType.Bounce);
+`TweenCoreComponent` only uses reflected properties for Inspector-authored tweens.
 
-tween.Play();
+### Reflection From Code
 
-
-**Function :**
-
-TweenCore tween = TweenCore.CreateTween();
-
-tween.NewProperty(f => _target.transform.localScale = f, Vector3.zero, Vector3.one, _time * 2)
-    .SetType(TweenType.Bounce).SetEase(TweenEase.Out);
-
-tween.Play();
-
-
-**Manual :**
-
+```csharp
 TweenCore tween = TweenCore.CreateTween();
 
-TweenCoreProperty<Vector3> property = tween.NewProperty(Vector3.zero, Vector3.one, _time * 2)
-    .SetType(TweenType.Bounce).SetEase(TweenEase.Out);
+tween.NewProperty(
+        transform,
+        TweenCoreTarget.Transform.GLOBAL_POSITION,
+        Vector3.zero,
+        new Vector3(5f, 2f, 0f),
+        2f)
+    .SetEase(TweenCoreEase.Out)
+    .SetType(TweenCoreType.Bounce);
 
 tween.Play();
+```
 
-transform.localScale = property.CurrentValue;
+If you want the tween to start from the current value, use the overload without an explicit start value:
 
-## Classes
+```csharp
+TweenCore tween = TweenCore.CreateTween();
 
-### TweenCoreManager
-Need to be in the game, manage all tweens.
+tween.NewProperty(
+        transform,
+        TweenCoreTarget.Transform.LOCAL_SCALE,
+        Vector3.one * 2f,
+        0.5f)
+    .SetEase(TweenCoreEase.Out)
+    .SetType(TweenCoreType.Back);
 
-**Methods :**
-- "PauseAll()" // Do not set all tweens in pause mode, only the manager
-- "ResumeAll()" // Same as PauseAll()
-- "AddTween(TweenCore tween)"
-- "RemoveTween(TweenCore tween)"
-- "StopAll()"
+tween.Play();
+```
 
-### TweenCore
-Contain and manage one or multiple TweenProperty.
+### Callback Setter
 
-**Static Methods :**
-- "CreateTween()"
+This avoids reflected setting during updates and is the preferred code path when writing tweens by script.
 
-**Instance Methods :**
-- "Play()"
-- "Pause()"
-- "Resume()"
-- "Stop(bool setToFinalValue = true)"
-- "Update(float deltaTime)"
-- "NewProperty(...)" 4 overloads
+```csharp
+TweenCore tween = TweenCore.CreateTween();
 
-- "SetParallel(bool isParallel)"
-- "SetChain(bool isChain)"
-- "Parallel()"
-- "Chain()"
-- "SetLoop(bool isLoop, int numIteration = -1)" // Any negative value will be compute as infinite, 0 no iterration.
-- "SurviveOnSceneLoad()"
-- "KillOnSceneUnLoad()"
-- "SetSurviveOnUnload(bool survive)"
-- "DestroyWhenFinish()"
-- "DontDestroyWhenFinish()"
-- "SetDestroyWhenFinish(bool destroy)"
-- "DestroyTween()"
+tween.NewProperty(
+        value => transform.localScale = value,
+        Vector3.zero,
+        Vector3.one,
+        0.5f)
+    .SetEase(TweenCoreEase.Out)
+    .SetType(TweenCoreType.Back);
 
-- "AddProperty(TweenCorePropertyBase property)"
+tween.Play();
+```
 
-**Events :**
-- "OnStart<TweenCore>"
-- "OnFinish<TweenCore>"
-- "OnFinish<TweenCore>"
-- "OnLoopFinish<TweenCore>"
+### Manual Value
 
-### TweenCorePropertyBase
-Abstract class, parent of TweenCoreProperty<TweenValueType> to manage multiple properties of different TweenValueTypes.
+Use this when you want TweenCore to calculate the value but apply it yourself.
 
-**Methods :**
-- "Update(float deltaTime)"
-- "Start()"
-- "Stop(bool setToFinalValue = true)"
+```csharp
+TweenCore tween = TweenCore.CreateTween();
 
-- "SetToFinalVals()"
+TweenCoreProperty<Vector3> property = tween.NewProperty(
+        Vector3.zero,
+        Vector3.one,
+        1f)
+    .SetEase(TweenCoreEase.InOut)
+    .SetType(TweenCoreType.Sine);
 
-- "AddNextProperty(TweenCorePropertyBase property)"
+property.OnUpdateValue += (_, value) =>
+{
+    transform.localScale = value;
+};
 
-**Events :**
-- "OnStart<TweenCorePropertyBase>"
-- "OnUpdate<TweenCorePropertyBase>"
-- "OnFinish<TweenCorePropertyBase>"
+tween.Play();
+```
 
-### TweenCoreProperty<TweenValueType>
-Calculates the current value of type TweenValueType, and if wanted set the given property or field.
+## Tween Modes
 
-**Methods :**
-- "SetDelay(float tweenDelay)"
-- "SetType()" 5 overloads
-- "SetEase()" 5 overloads
-- "GetCurrentValue()"
-- "From(TweenValueType value)"
-- "FromCurrent()"
-- "Pause()"
-- "Resume()"
-- "Stop(bool setToFinalValue = true)"
-- "SetToFinalVals()"
-- "SetIsAdditive(bool isAdd)" // This need to also be fromCurrent, if isAdd is true, property will set fromCurrent to true, if false, it will not modify fromCurrent
-// Quaternion and Color32 is not supported in this unique case
+### Parallel
 
-**Events :**
-- "OnUpdate<TweenValueType>"
+Parallel mode starts all properties at the same time. It is the default.
 
-## Supported types
+```csharp
+tween.Parallel();
+```
 
-**C# :**
-- float
-- double
-- int
-- uint
-- long
-- ulong
-- decimal
+### Chain
 
-**Unity :**
-- Vector2
-- Vector3
-- Vector4
-- Quaternion
-- Color
-- Color32
+Chain mode starts properties one after another in the order they are stored in the tween.
+
+```csharp
+tween.Chain();
+```
+
+## Loops
+
+```csharp
+tween.SetLoop(true, 3);
+```
+
+`numIteration` controls how many times the tween runs:
+
+- Negative values loop forever.
+- `0` stops immediately.
+- Positive values run that many iterations.
+
+## Additive Tweens
+
+Additive tweens treat the final value as a value to add to the current start value.
+
+```csharp
+tween.NewProperty(transform, TweenCoreTarget.Transform.GLOBAL_POSITION, Vector3.right * 2f, 1f)
+    .SetIsAdditive(true);
+```
+
+For example, if the current position is `(10, 0, 0)` and the final value is `(2, 0, 0)`, the tween ends at `(12, 0, 0)`.
+
+Supported additive types:
+
+- `float`
+- `double`
+- `int`
+- `uint`
+- `long`
+- `ulong`
+- `decimal`
+- `Vector2`
+- `Vector3`
+- `Vector4`
+- `Quaternion`
+- `Color`
+- `Color32`
+
+For `Quaternion`, additive means relative rotation composition: `start * deltaRotation`.
+
+For `Color32`, channels are added and clamped between `0` and `255`.
+
+## Supported Tween Value Types
+
+Runtime interpolation supports:
+
+- `float`
+- `double`
+- `int`
+- `uint`
+- `long`
+- `ulong`
+- `decimal`
+- `Vector2`
+- `Vector3`
+- `Vector4`
+- `Quaternion`
+- `Color`
+- `Color32`
+
+The current Inspector add menu supports:
+
+- `float`
+- `Vector2`
+- `Vector3`
+- `Vector4`
+- `Color`
+
+## TweenCore
+
+Create a tween with:
+
+```csharp
+TweenCore tween = TweenCore.CreateTween();
+```
+
+Common methods:
+
+- `Play()`
+- `Pause()`
+- `Resume()`
+- `Stop(bool setToFinalValue = true)`
+- `Parallel()`
+- `Chain()`
+- `SetLoop(bool isLoop, int numIteration = -1)`
+- `SetDestroyWhenFinish(bool destroy)`
+- `SetSurviveOnUnload(bool survive)`
+- `DestroyTween()`
+
+Events:
+
+- `OnStart`
+- `OnUpdate`
+- `OnFinish`
+- `OnLoopFinish`
+
+## TweenCoreProperty
+
+Common methods:
+
+- `SetDelay(float tweenDelay)`
+- `SetType(TweenCoreType type)`
+- `SetType(AnimationCurve curve)`
+- `SetEase(TweenCoreEase ease)`
+- `SetEase(AnimationCurve curve)`
+- `From(TweenValueType value)`
+- `FromCurrent()`
+- `SetIsAdditive(bool isAdditive)`
+- `Pause()`
+- `Resume()`
+- `Stop(bool setToFinalValue = true)`
+- `SetToFinalVals()`
+
+Events:
+
+- `OnStart`
+- `OnUpdate`
+- `OnUpdateValue`
+- `OnFinish`
+
+## Performance Notes
+
+- Callback setter tweens are the fastest code path.
+- Reflected tweens resolve their target member once, then use cached accessors when possible.
+- Inspector-authored tweens use reflection for convenience.
+- Avoid using per-frame UnityEvents for large numbers of tweens unless you need Inspector wiring.
+
+## Notes
+
+- A `TweenCoreManager` is created automatically when needed.
+- `TweenCoreComponent` can optionally play on start.
+- `DestroyWhenFinish` removes the tween from the manager when it completes.
+- Editor scripts are wrapped in `#if UNITY_EDITOR`, so they are excluded from builds.
