@@ -175,6 +175,9 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         { TweenCoreType.CustomCurve, "CustomCurve"},
     };
 
+    private static readonly TweenCoreType[] _possibleTypeKeys = _possibleTypes.Keys.ToArray();
+    private static readonly string[] _possibleTypeNames = _possibleTypes.Values.ToArray();
+
     private static readonly Dictionary<TweenCoreEase, string> _possibleEases = new Dictionary<TweenCoreEase, string>
     {
         { TweenCoreEase.In, "In"},
@@ -183,6 +186,9 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
         { TweenCoreEase.OutIn, "OutIn"},
         { TweenCoreEase.CustomCurve, "CustomCurve" }
     };
+
+    private static readonly TweenCoreEase[] _possibleEaseKeys = _possibleEases.Keys.ToArray();
+    private static readonly string[] _possibleEaseNames = _possibleEases.Values.ToArray();
 
     // ---------- FUNCTIONS ---------- \\
 
@@ -312,30 +318,30 @@ public class TweenCorePropertyBaseEditor : PropertyDrawer
     {
         TweenCoreEase currentEase = (TweenCoreEase)propContext.propTweenEase.enumValueIndex;
 
-        int currentIndex = Array.IndexOf(_possibleEases.Keys.ToArray(), currentEase);
+        int currentIndex = Array.IndexOf(_possibleEaseKeys, currentEase);
         if (currentIndex < 0)
         {
             currentIndex = 0;
         }
 
         propContext.NewLine();
-        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Ease", currentIndex, _possibleEases.Values.ToArray());
-        propContext.propTweenEase.enumValueIndex = (int)_possibleEases.Keys.ToArray()[newIndex];
+        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Ease", currentIndex, _possibleEaseNames);
+        propContext.propTweenEase.enumValueIndex = (int)_possibleEaseKeys[newIndex];
     }
 
     private void DrawTypePopup(TweenPropertyEditorContext propContext)
     {
         TweenCoreType currentType = (TweenCoreType)propContext.propTweenType.enumValueIndex;
 
-        int currentIndex = Array.IndexOf(_possibleTypes.Keys.ToArray(), currentType);
+        int currentIndex = Array.IndexOf(_possibleTypeKeys, currentType);
         if (currentIndex < 0)
         {
             currentIndex = 0;
         }
 
         propContext.NewLine();
-        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Type", currentIndex, _possibleTypes.Values.ToArray());
-        propContext.propTweenType.enumValueIndex = (int)_possibleTypes.Keys.ToArray()[newIndex];
+        int newIndex = EditorGUI.Popup(propContext.PropertyPos, "Type", currentIndex, _possibleTypeNames);
+        propContext.propTweenType.enumValueIndex = (int)_possibleTypeKeys[newIndex];
     }
 
     private void HandlePropertyIsExpand(TweenPropertyEditorContext propContext)
